@@ -58,3 +58,7 @@ exclude_patterns = []
 
 #html_theme = 'alabaster'
 #html_static_path = ['_static']
+
+
+html_baseurl = 'https://uncertaintyhub.github.io/sgpykit-doc/'
+html_static_path = ['_static']  # Ensure static files are included
