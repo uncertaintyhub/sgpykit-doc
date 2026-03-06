@@ -1,0 +1,18 @@
+sgpykit.tools.idxset\_functions
+===============================
+
+.. automodule:: sgpykit.tools.idxset_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_index_admissibility
+      check_set_admissibility
+      define_functions_for_rule
+      fast_TD_set
+      multiidx_box_set
+      multiidx_gen
+      plot_multiidx_set
+   

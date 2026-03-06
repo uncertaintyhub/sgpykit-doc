@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.src.lookup_merge_and_diff &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.src.lookup_merge_and_diff</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.src.lookup_merge_and_diff</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.detect_insufficient_tolerance</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_insufficient_tolerance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.mysortrows</span><span class="w"> </span><span class="kn">import</span> <span class="n">mysortrows</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="lookup_merge_and_diff">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.src.html#sgpykit.src.lookup_merge_and_diff">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">lookup_merge_and_diff</span><span class="p">(</span><span class="n">pts_list</span><span class="p">,</span> <span class="n">pts_list_old</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Identify points to compute, recycle, and discard between two sparse grids.</span>
+
+<span class="sd">    This function compares two sets of points (from new and old sparse grids)</span>
+<span class="sd">    and categorizes them based on their presence in both grids, using a specified</span>
+<span class="sd">    tolerance to determine equality. It is used in adaptive sparse grid algorithms</span>
+<span class="sd">    to efficiently manage point evaluations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pts_list : numpy.ndarray</span>
+<span class="sd">        Array of points from the new sparse grid (shape: N x d, where N is the number</span>
+<span class="sd">        of points and d is the dimensionality).</span>
+<span class="sd">    pts_list_old : numpy.ndarray</span>
+<span class="sd">        Array of points from the old sparse grid (shape: N_old x d).</span>
+<span class="sd">    tol : float, optional</span>
+<span class="sd">        Tolerance for considering two points equal (default is 1e-14).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tocomp_list : numpy.ndarray</span>
+<span class="sd">        Indices of points in pts_list that need to be evaluated (not present in old grid).</span>
+<span class="sd">    recycle_list : numpy.ndarray</span>
+<span class="sd">        Indices of points in pts_list that can be recycled from old grid.</span>
+<span class="sd">    recycle_list_old : numpy.ndarray</span>
+<span class="sd">        Corresponding indices in pts_list_old for recycled points.</span>
+<span class="sd">    discard_list : numpy.ndarray</span>
+<span class="sd">        Indices of points in pts_list_old that are no longer in the new grid.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The function uses lexicographic sorting with tolerance to identify matching points.</span>
+<span class="sd">    - For non-nested grids, some points from the old grid may be discarded.</span>
+<span class="sd">    - The function performs several sanity checks to ensure correctness.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># [tocomp_list,recycle_list,recycle_list_old,discard_list] = lookup_merge_and_diff(pts_list,pts_list_old,tol)</span>
+    <span class="c1"># looks for points of pts_list in pts_list_old using the same algorithm as reduce_sparse_grid. tol is</span>
+    <span class="c1"># the tolerance for two points to be considered equal. discard_list is the list of points that no longer belong to the grid</span>
+    <span class="c1"># (may happen for non-nested grids)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">pts_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N_old</span> <span class="o">=</span> <span class="n">pts_list_old</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># the list of indices of points to be evaluated. Init to its max length, will be cut after the search is over</span>
+    <span class="n">tocomp_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="c1"># if grid are not nested, not all of the old grid will be recycled. Thus,</span>
+    <span class="c1"># we also need 2 list of indices of points to be recycled, storing the</span>
+    <span class="c1"># positions  in the old grid and in the new one</span>
+    <span class="n">recycle_list_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_old</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">recycle_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">discard_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N_old</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="c1"># first, merge the two lists</span>
+    <span class="n">Merged</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pts_list_old</span><span class="p">,</span> <span class="n">pts_list</span><span class="p">))</span>
+    <span class="c1"># and a safety check: are we using a sufficiently fine tol when detecting identical points?</span>
+    <span class="n">detect_insufficient_tolerance</span><span class="p">(</span><span class="n">Merged</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+    <span class="c1"># next, let&#39;s order the rows of Merged in lexicographic order, obtaining Sorted. If I use mysortrows then two rows like</span>
+
+    <span class="c1"># [a b c d]</span>
+    <span class="c1"># [a-t b c+t d]</span>
+
+    <span class="c1"># are considered equal (if t &lt; tol ) and therefore placed one after the other</span>
+
+    <span class="c1"># sorter is an index vector that maps Merged into Sorted, i.e. Merged[sorter,:]==Sorted</span>
+
+    <span class="n">Sorted</span><span class="p">,</span> <span class="n">sorter</span> <span class="o">=</span> <span class="n">mysortrows</span><span class="p">(</span><span class="n">Merged</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>  <span class="c1">## same fix as reduce_sparse_grid mysortrows usage</span>
+    <span class="c1"># I also need to remember which points come from pts_list and which from</span>
+    <span class="c1"># pts_list_old, and from which original position.</span>
+    <span class="c1"># Thus I create a flag vector [-1 -2 ... -N_old 1 2 .. N], i.e. positive</span>
+    <span class="c1"># flags identify the new grid and negative ones the old grid, then I sort</span>
+    <span class="c1"># it according to sorter</span>
+
+    <span class="n">flags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N_old</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="n">flags_sorted</span> <span class="o">=</span> <span class="n">flags</span><span class="p">[</span><span class="n">sorter</span><span class="p">]</span>
+
+    <span class="c1"># next I take the difference of two consecutive rows. if the difference is small, then the rows are the same, i.e. the knot is the same</span>
+    <span class="n">dSorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Sorted</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># I measure the difference with infty norm instead of L2 norm:</span>
+    <span class="c1"># i take  the maximum component of each row (2 means &quot;operate on columns&quot;):</span>
+    <span class="c1">#       max(abs(dSorted),[],2)</span>
+    <span class="c1"># then I want to see which ones have this max bigger than tol</span>
+    <span class="c1">#       diff_eq=max(abs(dSorted),[],2)&gt;tol</span>
+    <span class="c1"># this command returns a vector of True and false</span>
+    <span class="c1">#       diff_eq=[1 1 0 1 1]</span>
+    <span class="c1"># this means that the 2nd point is different from the 1st, the 3rd from the 2nd, but</span>
+    <span class="c1"># the 4th is equal to the 3rd ( diff(3)=v(4)-v(3) ), hence in common between the</span>
+    <span class="c1"># grids.</span>
+    <span class="n">diff_eq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dSorted</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#diff_eq = np.amax(np.abs(dSorted), [], 2) &gt; Tol</span>
+    <span class="c1"># now I scroll diff_eq and sort out everything according to these rules:</span>
+
+    <span class="c1"># --&gt; if diff_eq(k)==0,</span>
+
+    <span class="c1"># in this case either Sorted(k+1) is in the new grid and Sorted(k)</span>
+    <span class="c1"># is in the old grid and both are equal or viceversa.</span>
+
+    <span class="c1"># Therefore, the point in the new grid goes into recycle_list and the</span>
+    <span class="c1"># old one in recycle_list_old.</span>
+
+    <span class="c1"># Then I can skip the following (since it&#39;s equal and I have sorted it</span>
+    <span class="c1"># already)</span>
+
+    <span class="c1"># --&gt; else, diff_eq(k)==1.</span>
+
+    <span class="c1"># In this case, 4 cases are possible but actually only two matters</span>
+
+    <span class="c1"># -----&gt; both Sorted(k) and Sorted(k+1) comes from the old_grid.</span>
+    <span class="c1">#   then, Sorted(k) is to discard</span>
+
+    <span class="c1"># -----&gt; both Sorted(k) and Sorted(k+1) comes from the new_grid.</span>
+    <span class="c1">#   then, Sorted(k) is to compute</span>
+
+    <span class="c1"># -----&gt; Sorted(k) is new, Sorted(k+1) is old.</span>
+    <span class="c1">#   then, Sorted(k) is to compute</span>
+
+    <span class="c1"># -----&gt; Sorted(k) is old, Sorted(k+1) is new.</span>
+    <span class="c1">#   then, Sorted(k) is to discard</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># scrolls recycle lists</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># scrolls compute_list</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># scrolls diff_eq</span>
+
+    <span class="n">L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">diff_eq</span><span class="p">)</span>
+    <span class="n">discard</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">L</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">diff_eq</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>  <span class="c1"># Two consecutive entries are different</span>
+            <span class="k">if</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">tocomp_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span> <span class="c1"># 0-based</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">discard_list</span><span class="p">[</span><span class="n">discard</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span> <span class="c1"># 0-based</span>
+                <span class="n">discard</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># then move to the following</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Two consecutive entries are equal</span>
+            <span class="k">if</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">recycle_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>           <span class="c1"># 0-based</span>
+                <span class="n">recycle_list_old</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>  <span class="c1"># 0-based</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">recycle_list_old</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+                <span class="n">recycle_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># then I can skip the k+1 because I have already sorted it</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">2</span>
+
+    <span class="c1"># need to handle the case k==L, since diff is 1 element shorter than sorted. Note</span>
+    <span class="c1"># that</span>
+    <span class="c1"># --&gt; the node in Sorted[L,:] has been already taken care of inside the while loop</span>
+    <span class="c1"># --&gt; we only need to do something if the diff_eq(L)==1. Indeed, if</span>
+    <span class="c1"># diff_eq(L)==0, then Sorted(L+1,:) is already taken care of (and in this</span>
+    <span class="c1"># case the final value of k is L+2)</span>
+    <span class="k">if</span> <span class="n">diff_eq</span><span class="p">[</span><span class="n">L</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>  <span class="c1"># 0-based indexing</span>
+        <span class="k">if</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">L</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tocomp_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">flags_sorted</span><span class="p">[</span><span class="n">L</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>  <span class="c1"># 0-based</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">discard_list</span><span class="p">[</span><span class="n">discard</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">flags_sorted</span><span class="p">[</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span> <span class="c1"># 0-based</span>
+            <span class="n">discard</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># show some statistics</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;new evaluation needed: </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1"> recycled evaluations: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">, discarded evaluations: </span><span class="si">{</span><span class="n">discard</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># remove the extra entries of tocomp_list, recycle_lists, discard_list. Pay attention to special cases</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>  <span class="c1"># in this case there are no points to recycle and we have completely filled  tocomp_list</span>
+        <span class="k">if</span> <span class="n">tocomp_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: tocomp_list[j]~=0&#39;</span><span class="p">)</span>
+        <span class="n">tocomp_list</span> <span class="o">=</span> <span class="n">tocomp_list</span><span class="p">[:</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;the two grids are the same!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">N</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: The code has detected more points to recycle than points in the new sparse grid! &#39;</span>
+                            <span class="s1">&#39;Double check the values of tolerances used to detect identical points (both here and in reduce_sparse_grid) &#39;</span>
+                            <span class="s1">&#39;and rerun the code. i&gt;N&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">recycle_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: recycle_list[i]~=0&#39;</span><span class="p">)</span>
+        <span class="n">recycle_list</span> <span class="o">=</span> <span class="n">recycle_list</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">recycle_list_old</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">recycle_list_old</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: recycle_list_old[i]~=0&#39;</span><span class="p">)</span>
+        <span class="n">recycle_list_old</span> <span class="o">=</span> <span class="n">recycle_list_old</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">discard</span> <span class="o">!=</span> <span class="n">N_old</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">discard_list</span><span class="p">[</span><span class="n">discard</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: discard_list[discard]~=0&#39;</span><span class="p">)</span>
+        <span class="n">discard_list</span> <span class="o">=</span> <span class="n">discard_list</span><span class="p">[:</span><span class="n">discard</span><span class="p">]</span>
+
+    <span class="c1"># safety checks</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="n">discard</span> <span class="o">!=</span> <span class="n">N_old</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: The code has lost track of some points of the old grid, i+discard~=N_old&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">recycle_list</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">recycle_list_old</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: mismatch between the two sets of recycling points. length(recycle_list)~=length(recycle_list_old)&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">tocomp_list</span><span class="p">,</span> <span class="n">recycle_list</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Failed sanity check: The code has lost track of some points of the new grid, or some points from the old grid have been mistaken as points of the new grid. Double check the values of tolerances use to detect identical points (both here and in reduce_sparse_grid) and try to rerun the code.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tocomp_list</span><span class="p">,</span> <span class="n">recycle_list</span><span class="p">,</span> <span class="n">recycle_list_old</span><span class="p">,</span> <span class="n">discard_list</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

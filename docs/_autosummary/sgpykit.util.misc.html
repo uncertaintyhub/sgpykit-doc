@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.misc &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.util.plot" href="sgpykit.util.plot.html" />
+    <link rel="prev" title="sgpykit.util.matlab" href="sgpykit.util.matlab.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.cell.html">sgpykit.util.cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.checks.html">sgpykit.util.checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.create_sparse_grid_construct.html">sgpykit.util.create_sparse_grid_construct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.definitions.html">sgpykit.util.definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.log.html">sgpykit.util.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.matlab.html">sgpykit.util.matlab</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.util.misc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.append"><code class="docutils literal notranslate"><span class="pre">append()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.apply_lev2knots"><code class="docutils literal notranslate"><span class="pre">apply_lev2knots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.generate_multi_indices"><code class="docutils literal notranslate"><span class="pre">generate_multi_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.get_shape_of_cells"><code class="docutils literal notranslate"><span class="pre">get_shape_of_cells()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.is_int_nan"><code class="docutils literal notranslate"><span class="pre">is_int_nan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.matlab_to_python_index"><code class="docutils literal notranslate"><span class="pre">matlab_to_python_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.merge_all_args_to_kwargs"><code class="docutils literal notranslate"><span class="pre">merge_all_args_to_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.print_plain_int"><code class="docutils literal notranslate"><span class="pre">print_plain_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.python_to_matlab_index"><code class="docutils literal notranslate"><span class="pre">python_to_matlab_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.reshape_nested_lists_to_nrows"><code class="docutils literal notranslate"><span class="pre">reshape_nested_lists_to_nrows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.safe_vstack"><code class="docutils literal notranslate"><span class="pre">safe_vstack()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.time_block"><code class="docutils literal notranslate"><span class="pre">time_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.to_array"><code class="docutils literal notranslate"><span class="pre">to_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.misc.unique_rows_stable"><code class="docutils literal notranslate"><span class="pre">unique_rows_stable()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.plot.html">sgpykit.util.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct.html">sgpykit.util.struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct_array.html">sgpykit.util.struct_array</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.util.html">sgpykit.util</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.misc</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.util.misc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.util.misc">
+<span id="sgpykit-util-misc"></span><h1>sgpykit.util.misc<a class="headerlink" href="#module-sgpykit.util.misc" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.misc.append" title="sgpykit.util.misc.append"><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code></a>(some_list, item)</p></td>
+<td><p>Append an item to a list and return as a numpy array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.apply_lev2knots" title="sgpykit.util.misc.apply_lev2knots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_lev2knots</span></code></a>(i, lev2knots[, N])</p></td>
+<td><p>Apply level-to-knots mapping to an index array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">contextmanager</span></code>(func)</p></td>
+<td><p>&#64;contextmanager decorator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.generate_multi_indices" title="sgpykit.util.misc.generate_multi_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_multi_indices</span></code></a>(shape[, min_idx])</p></td>
+<td><p>Generate all multi-indices for a given shape.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.misc.get_shape_of_cells" title="sgpykit.util.misc.get_shape_of_cells"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_shape_of_cells</span></code></a>(objects)</p></td>
+<td><p>Get the shape of the first Cell object in the list of objects.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.is_int_nan" title="sgpykit.util.misc.is_int_nan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_int_nan</span></code></a>(values)</p></td>
+<td><p>Check if values are the integer NaN workaround.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_numeric_scalar</span></code>(item)</p></td>
+<td><p>Check if an item is a numeric scalar.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.matlab_to_python_index" title="sgpykit.util.misc.matlab_to_python_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matlab_to_python_index</span></code></a>(var)</p></td>
+<td><p>Convert MATLAB-style index to Python-style index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.misc.merge_all_args_to_kwargs" title="sgpykit.util.misc.merge_all_args_to_kwargs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_all_args_to_kwargs</span></code></a>(args, kwargs[, ...])</p></td>
+<td><p>Merge positional and keyword arguments into a single dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.print_plain_int" title="sgpykit.util.misc.print_plain_int"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_plain_int</span></code></a>(x)</p></td>
+<td><p>Print integer values in a plain format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.misc.python_to_matlab_index" title="sgpykit.util.misc.python_to_matlab_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">python_to_matlab_index</span></code></a>(var)</p></td>
+<td><p>Convert Python-style index to MATLAB-style index.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.reshape_nested_lists_to_nrows" title="sgpykit.util.misc.reshape_nested_lists_to_nrows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reshape_nested_lists_to_nrows</span></code></a>(obj[, nrows])</p></td>
+<td><p>Reshape nested lists to a specified number of rows.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.misc.safe_vstack" title="sgpykit.util.misc.safe_vstack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_vstack</span></code></a>(*arrays)</p></td>
+<td><p>Safely stack arrays vertically, filtering out empty arrays.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.time_block" title="sgpykit.util.misc.time_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_block</span></code></a>([description])</p></td>
+<td><p>Measure and print the execution time of a code block.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.misc.to_array" title="sgpykit.util.misc.to_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_array</span></code></a>(item, n)</p></td>
+<td><p>Create an array of length n with the given item.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.misc.unique_rows_stable" title="sgpykit.util.misc.unique_rows_stable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique_rows_stable</span></code></a>(A, B)</p></td>
+<td><p>Find unique rows in the combined array of A and B, maintaining order.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code>(shape[, dtype])</p></td>
+<td><p>A 1D or 2D container class that extends Python's built-in list.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.append">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">some_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.append" title="Link to this definition"></a></dt>
+<dd><p>Append an item to a list and return as a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>some_list</strong><span class="classifier">list</span></dt><dd><p>List to append to.</p>
+</dd>
+<dt><strong>item</strong><span class="classifier">any</span></dt><dd><p>Item to append.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Array with the item appended.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.apply_lev2knots">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">apply_lev2knots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lev2knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#apply_lev2knots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.apply_lev2knots" title="Link to this definition"></a></dt>
+<dd><p>Apply level-to-knots mapping to an index array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>i</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of 0-based indices.</p>
+</dd>
+<dt><strong>lev2knots</strong><span class="classifier">list or Cell or callable</span></dt><dd><p>Level-to-knots mapping function or list of functions.</p>
+</dd>
+<dt><strong>N</strong><span class="classifier">int, optional</span></dt><dd><p>Number of dimensions (default is None).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Mapped indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.generate_multi_indices">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">generate_multi_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#generate_multi_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.generate_multi_indices" title="Link to this definition"></a></dt>
+<dd><p>Generate all multi-indices for a given shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>shape</strong><span class="classifier">tuple</span></dt><dd><p>Shape of the multi-indices to generate.</p>
+</dd>
+<dt><strong>min_idx</strong><span class="classifier">int, optional</span></dt><dd><p>Minimum index value (default is 0).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Array of multi-indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.get_shape_of_cells">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">get_shape_of_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objects</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#get_shape_of_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.get_shape_of_cells" title="Link to this definition"></a></dt>
+<dd><p>Get the shape of the first Cell object in the list of objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>objects</strong><span class="classifier">list</span></dt><dd><p>List of objects to check for Cell type and shape.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray or None</dt><dd><p>Shape of the first Cell object found, or None if no Cell object is found.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.is_int_nan">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">is_int_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#is_int_nan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.is_int_nan" title="Link to this definition"></a></dt>
+<dd><p>Check if values are the integer NaN workaround.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>values</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Values to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Boolean array indicating which values are the integer NaN workaround.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.matlab_to_python_index">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">matlab_to_python_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#matlab_to_python_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.matlab_to_python_index" title="Link to this definition"></a></dt>
+<dd><p>Convert MATLAB-style index to Python-style index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">int or numpy.ndarray</span></dt><dd><p>MATLAB-style index or array of indices.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int or numpy.ndarray</dt><dd><p>Python-style index or array of indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.merge_all_args_to_kwargs">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">merge_all_args_to_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_lowercase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#merge_all_args_to_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.merge_all_args_to_kwargs" title="Link to this definition"></a></dt>
+<dd><p>Merge positional and keyword arguments into a single dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>args</strong><span class="classifier">list</span></dt><dd><p>Positional arguments.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">dict</span></dt><dd><p>Keyword arguments.</p>
+</dd>
+<dt><strong>to_lowercase</strong><span class="classifier">bool, optional</span></dt><dd><p>Convert keys to lowercase (default is False).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Tuple of merged keyword arguments and format string.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.print_plain_int">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">print_plain_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#print_plain_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.print_plain_int" title="Link to this definition"></a></dt>
+<dd><p>Print integer values in a plain format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">int or list or tuple</span></dt><dd><p>Integer or list/tuple of integers to print.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.python_to_matlab_index">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">python_to_matlab_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#python_to_matlab_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.python_to_matlab_index" title="Link to this definition"></a></dt>
+<dd><p>Convert Python-style index to MATLAB-style index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">int or array-like</span></dt><dd><p>Python-style index or array of indices.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int or numpy.ndarray</dt><dd><p>MATLAB-style index or array of indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.reshape_nested_lists_to_nrows">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">reshape_nested_lists_to_nrows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#reshape_nested_lists_to_nrows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.reshape_nested_lists_to_nrows" title="Link to this definition"></a></dt>
+<dd><p>Reshape nested lists to a specified number of rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">list</span></dt><dd><p>Nested list to reshape.</p>
+</dd>
+<dt><strong>nrows</strong><span class="classifier">int, optional</span></dt><dd><p>Number of rows (default is 2).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>Reshaped list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.safe_vstack">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">safe_vstack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">arrays</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#safe_vstack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.safe_vstack" title="Link to this definition"></a></dt>
+<dd><p>Safely stack arrays vertically, filtering out empty arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>*arrays</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Arrays to stack.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Stacked array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.time_block">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">time_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#time_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.time_block" title="Link to this definition"></a></dt>
+<dd><p>Measure and print the execution time of a code block.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>description (str): Optional description of the timed block.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.to_array">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">to_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#to_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.to_array" title="Link to this definition"></a></dt>
+<dd><p>Create an array of length n with the given item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>item</strong><span class="classifier">any</span></dt><dd><p>Item to repeat.</p>
+</dd>
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Length of the array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>Array of length n with the given item.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.misc.unique_rows_stable">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.misc.</span></span><span class="sig-name descname"><span class="pre">unique_rows_stable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/misc.html#unique_rows_stable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.misc.unique_rows_stable" title="Link to this definition"></a></dt>
+<dd><p>Find unique rows in the combined array of A and B, maintaining order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>First array.</p>
+</dd>
+<dt><strong>B</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Second array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Array of unique rows.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.util.matlab.html" class="btn btn-neutral float-left" title="sgpykit.util.matlab" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.util.plot.html" class="btn btn-neutral float-right" title="sgpykit.util.plot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

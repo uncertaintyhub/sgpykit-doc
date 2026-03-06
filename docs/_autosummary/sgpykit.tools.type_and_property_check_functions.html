@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.type_and_property_check_functions &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.util" href="sgpykit.util.html" />
+    <link rel="prev" title="sgpykit.tools.rescaling_functions" href="sgpykit.tools.rescaling_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.converter_functions.html">sgpykit.tools.converter_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.idxset_functions.html">sgpykit.tools.idxset_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.knots_functions.html">sgpykit.tools.knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.lev2knots_functions.html">sgpykit.tools.lev2knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.polynomials_functions.html">sgpykit.tools.polynomials_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.rescaling_functions.html">sgpykit.tools.rescaling_functions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.tools.type_and_property_check_functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.is_sparse_grid"><code class="docutils literal notranslate"><span class="pre">is_sparse_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.is_tensor_grid"><code class="docutils literal notranslate"><span class="pre">is_tensor_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.isequal_sparse_grids"><code class="docutils literal notranslate"><span class="pre">isequal_sparse_grids()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.isequal_tensor_grids"><code class="docutils literal notranslate"><span class="pre">isequal_tensor_grids()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.islexico"><code class="docutils literal notranslate"><span class="pre">islexico()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.islexico_tol"><code class="docutils literal notranslate"><span class="pre">islexico_tol()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.isreduced"><code class="docutils literal notranslate"><span class="pre">isreduced()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.tools.html">sgpykit.tools</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.type_and_property_check_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.tools.type_and_property_check_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.tools.type_and_property_check_functions">
+<span id="sgpykit-tools-type-and-property-check-functions"></span><h1>sgpykit.tools.type_and_property_check_functions<a class="headerlink" href="#module-sgpykit.tools.type_and_property_check_functions" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.is_sparse_grid" title="sgpykit.tools.type_and_property_check_functions.is_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_sparse_grid</span></code></a>(S)</p></td>
+<td><p>Check if the input is a sparse grid.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.is_tensor_grid" title="sgpykit.tools.type_and_property_check_functions.is_tensor_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_tensor_grid</span></code></a>(S)</p></td>
+<td><p>Check if a given struct is a tensor grid or a tensor grid in a sparse grid struct.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.isequal_sparse_grids" title="sgpykit.tools.type_and_property_check_functions.isequal_sparse_grids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isequal_sparse_grids</span></code></a>(S1, S2[, tol])</p></td>
+<td><p>Compare two sparse grids for equality.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.isequal_tensor_grids" title="sgpykit.tools.type_and_property_check_functions.isequal_tensor_grids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isequal_tensor_grids</span></code></a>(T1, T2[, tol])</p></td>
+<td><p>Compare two tensor grids field by field, checking that the two grids are identical and accounting for numerical tolerance when comparing knots and weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.islexico" title="sgpykit.tools.type_and_property_check_functions.islexico"><code class="xref py py-obj docutils literal notranslate"><span class="pre">islexico</span></code></a>(a, b)</p></td>
+<td><p>Check lexicographic order of vectors.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.islexico_tol" title="sgpykit.tools.type_and_property_check_functions.islexico_tol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">islexico_tol</span></code></a>(a, b, tol)</p></td>
+<td><p>Check if vector a is lexicographically less-or-equal than vector b up to a numerical tolerance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.type_and_property_check_functions.isreduced" title="sgpykit.tools.type_and_property_check_functions.isreduced"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isreduced</span></code></a>(S)</p></td>
+<td><p>Check if a given object is a reduced sparse grid.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.is_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">is_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/is_sparse_grid.html#is_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.is_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Check if the input is a sparse grid.</p>
+<p>A sparse grid is a vector of structs with fields ‘knots’, ‘weights’, ‘size’,
+‘knots_per_dim’, ‘m’, ‘coeff’, ‘idx’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">object</span></dt><dd><p>Input object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if S is a sparse grid, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.is_tensor_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">is_tensor_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/is_tensor_grid.html#is_tensor_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.is_tensor_grid" title="Link to this definition"></a></dt>
+<dd><p>Check if a given struct is a tensor grid or a tensor grid in a sparse grid struct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>Input struct to be checked.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>1 if S is a tensor grid, -1 if S is a tensor grid in a sparse grid struct, 0 otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>A tensor grid is a struct with fields: ‘knots’, ‘weights’, ‘size’, ‘knots_per_dim’, ‘m’.
+A tensor grid in a sparse grid struct is a struct with two more fields: ‘coeff’, ‘idx’.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.isequal_sparse_grids">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">isequal_sparse_grids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/isequal_sparse_grids.html#isequal_sparse_grids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.isequal_sparse_grids" title="Link to this definition"></a></dt>
+<dd><p>Compare two sparse grids for equality.</p>
+<p>This function checks if two sparse grids are identical tensor grid by tensor grid,
+accounting for numerical tolerance when comparing knots and weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S1</strong><span class="classifier">StructArray</span></dt><dd><p>First sparse grid to compare.</p>
+</dd>
+<dt><strong>S2</strong><span class="classifier">StructArray</span></dt><dd><p>Second sparse grid to compare.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance used when comparing points and weights. Default is 1e-14.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>iseq</strong><span class="classifier">bool</span></dt><dd><p>True if the sparse grids are equal, False otherwise.</p>
+</dd>
+<dt><strong>whatfield</strong><span class="classifier">str</span></dt><dd><p>Name of the first field found to be different, or ‘length’ if the sparse grids
+have a different number of tensor grids.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function first checks if the inputs are valid sparse grids. Then, it compares the
+number of tensor grids in each sparse grid. If they differ, it returns False and ‘length’.
+Otherwise, it iterates through each tensor grid, comparing them using <cite>isequal_tensor_grids</cite>.
+If any tensor grid is found to be different, it returns False and the name of the field
+that differs. If all tensor grids are equal, it returns True and an empty string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.isequal_tensor_grids">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">isequal_tensor_grids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/isequal_tensor_grids.html#isequal_tensor_grids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.isequal_tensor_grids" title="Link to this definition"></a></dt>
+<dd><p>Compare two tensor grids field by field, checking that the two grids are identical
+and accounting for numerical tolerance when comparing knots and weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>T1</strong><span class="classifier">tensor grid</span></dt><dd><p>First tensor grid to compare.</p>
+</dd>
+<dt><strong>T2</strong><span class="classifier">tensor grid</span></dt><dd><p>Second tensor grid to compare.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance used when comparing points and weights. Default is 1e-14.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>iseq</strong><span class="classifier">bool</span></dt><dd><p>True if the tensor grids are equal, False otherwise.</p>
+</dd>
+<dt><strong>whatfield</strong><span class="classifier">str</span></dt><dd><p>The name of the first field of the two tensor grids that are found different,
+or ‘size’ if the two sparse grids have a different number of tensor grids.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.islexico">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">islexico</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/islexico.html#islexico"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.islexico" title="Link to this definition"></a></dt>
+<dd><p>Check lexicographic order of vectors.</p>
+<p>Checks if vector <cite>a</cite> is lexicographically less than or equal to vector <cite>b</cite>.
+Returns True if <cite>a</cite> &lt;= <cite>b</cite> in lexicographic sense, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>a</strong><span class="classifier">array_like</span></dt><dd><p>First vector for comparison.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">array_like</span></dt><dd><p>Second vector for comparison.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if <cite>a</cite> is lexicographically less than or equal to <cite>b</cite>, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">islexico</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.islexico_tol">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">islexico_tol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/islexico_tol.html#islexico_tol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.islexico_tol" title="Link to this definition"></a></dt>
+<dd><p>Check if vector a is lexicographically less-or-equal than vector b up to a numerical tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>a</strong><span class="classifier">array_like</span></dt><dd><p>First input vector.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">array_like</span></dt><dd><p>Second input vector.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float</span></dt><dd><p>Numerical tolerance for component-wise comparison.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if a is lexicographically less-or-equal than b up to the given tolerance, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ii</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jj</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico_tol</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">)</span>  <span class="c1"># Returns True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ii</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="mf">1e-13</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico_tol</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">)</span>  <span class="c1"># Returns True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">islexico_tol</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span> <span class="mf">1e-14</span><span class="p">)</span>  <span class="c1"># Returns False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.type_and_property_check_functions.isreduced">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.type_and_property_check_functions.</span></span><span class="sig-name descname"><span class="pre">isreduced</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/type_and_property_check_functions/isreduced.html#isreduced"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.type_and_property_check_functions.isreduced" title="Link to this definition"></a></dt>
+<dd><p>Check if a given object is a reduced sparse grid.</p>
+<p>A reduced sparse grid is a struct with fields ‘knots’, ‘m’, ‘weights’, ‘n’, ‘size’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">object</span></dt><dd><p>The object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>1 if S is a reduced sparse grid, 0 otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.tools.rescaling_functions.html" class="btn btn-neutral float-left" title="sgpykit.tools.rescaling_functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.util.html" class="btn btn-neutral float-right" title="sgpykit.util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+sgpykit.util.create\_sparse\_grid\_construct
+============================================
+
+.. automodule:: sgpykit.util.create_sparse_grid_construct
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_lev2knots
+      create_sparse_grid_construct
+      find_lexicographic
+      matlab_to_python_index
+      tensor_grid
+   

@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.polynomials_functions &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.tools.rescaling_functions" href="sgpykit.tools.rescaling_functions.html" />
+    <link rel="prev" title="sgpykit.tools.lev2knots_functions" href="sgpykit.tools.lev2knots_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.converter_functions.html">sgpykit.tools.converter_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.idxset_functions.html">sgpykit.tools.idxset_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.knots_functions.html">sgpykit.tools.knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.lev2knots_functions.html">sgpykit.tools.lev2knots_functions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.tools.polynomials_functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.cheb_eval"><code class="docutils literal notranslate"><span class="pre">cheb_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.cheb_eval_multidim"><code class="docutils literal notranslate"><span class="pre">cheb_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.generalized_lagu_eval"><code class="docutils literal notranslate"><span class="pre">generalized_lagu_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.generalized_lagu_eval_multidim"><code class="docutils literal notranslate"><span class="pre">generalized_lagu_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.herm_eval"><code class="docutils literal notranslate"><span class="pre">herm_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.herm_eval_multidim"><code class="docutils literal notranslate"><span class="pre">herm_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.jacobi_prob_eval"><code class="docutils literal notranslate"><span class="pre">jacobi_prob_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.jacobi_prob_eval_multidim"><code class="docutils literal notranslate"><span class="pre">jacobi_prob_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagr_eval"><code class="docutils literal notranslate"><span class="pre">lagr_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagr_eval_fast"><code class="docutils literal notranslate"><span class="pre">lagr_eval_fast()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagr_eval_multidim"><code class="docutils literal notranslate"><span class="pre">lagr_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagu_eval"><code class="docutils literal notranslate"><span class="pre">lagu_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagu_eval_multidim"><code class="docutils literal notranslate"><span class="pre">lagu_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lege_eval"><code class="docutils literal notranslate"><span class="pre">lege_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lege_eval_multidim"><code class="docutils literal notranslate"><span class="pre">lege_eval_multidim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.standard_lege_eval"><code class="docutils literal notranslate"><span class="pre">standard_lege_eval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.polynomials_functions.univariate_interpolant"><code class="docutils literal notranslate"><span class="pre">univariate_interpolant()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.rescaling_functions.html">sgpykit.tools.rescaling_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.type_and_property_check_functions.html">sgpykit.tools.type_and_property_check_functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.tools.html">sgpykit.tools</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.polynomials_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.tools.polynomials_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.tools.polynomials_functions">
+<span id="sgpykit-tools-polynomials-functions"></span><h1>sgpykit.tools.polynomials_functions<a class="headerlink" href="#module-sgpykit.tools.polynomials_functions" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.cheb_eval" title="sgpykit.tools.polynomials_functions.cheb_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cheb_eval</span></code></a>(x, k, a, b)</p></td>
+<td><p>Evaluate the k-th Chebyshev polynomial of the first kind on [a,b].</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.cheb_eval_multidim" title="sgpykit.tools.polynomials_functions.cheb_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cheb_eval_multidim</span></code></a>(X, k, a, b)</p></td>
+<td><p>Evaluate the multidimensional Chebyshev polynomial of the first kind of order k (multi-index) on [a,b]^N.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.generalized_lagu_eval" title="sgpykit.tools.polynomials_functions.generalized_lagu_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generalized_lagu_eval</span></code></a>(x, k, alpha, beta)</p></td>
+<td><p>Evaluate the k-th generalized Laguerre polynomial orthonormal in [0, +inf).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.generalized_lagu_eval_multidim" title="sgpykit.tools.polynomials_functions.generalized_lagu_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generalized_lagu_eval_multidim</span></code></a>(X, k, alpha, beta)</p></td>
+<td><p>Evaluate the multidimensional generalized Laguerre polynomial of order k (multi-index) orthonormal on [0, +inf)^N with respect to the weight function: rho = prod_i beta_i^(alpha_i+1)/Gamma(alpha_i+1) * x^alpha_i * exp(-beta_i * x), where alpha_i &gt; -1 and beta_i &gt; 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.herm_eval" title="sgpykit.tools.polynomials_functions.herm_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">herm_eval</span></code></a>(x, k, mi, sigma)</p></td>
+<td><p>Evaluate the k-th orthonormal Hermite polynomial at points x.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.herm_eval_multidim" title="sgpykit.tools.polynomials_functions.herm_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">herm_eval_multidim</span></code></a>(X, k, mu, sig)</p></td>
+<td><p>Evaluate the multidimensional Hermite polynomial of order k (multi-index) orthonormal on [-inf, +inf]^N with respect to the Gaussian weight function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.jacobi_prob_eval" title="sgpykit.tools.polynomials_functions.jacobi_prob_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jacobi_prob_eval</span></code></a>(x, k, alpha, beta, a, b)</p></td>
+<td><p>Evaluate the k-th Jacobi probabilistic polynomial orthonormal in [a,b].</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.jacobi_prob_eval_multidim" title="sgpykit.tools.polynomials_functions.jacobi_prob_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jacobi_prob_eval_multidim</span></code></a>(X, k, alpha, beta, ...)</p></td>
+<td><p>Evaluate the multidimensional probabilistic Jacobi polynomial of order k (multi-index) orthonormal on [a1,b1] x [a2,b2] x [a3,b3] x .</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagr_eval" title="sgpykit.tools.polynomials_functions.lagr_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagr_eval</span></code></a>(current_knot, other_knots, ...)</p></td>
+<td><p>Evaluate the Lagrange basis polynomial at non-grid points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagr_eval_fast" title="sgpykit.tools.polynomials_functions.lagr_eval_fast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagr_eval_fast</span></code></a>(current_knot, other_knots, ...)</p></td>
+<td><p>Evaluate the Lagrange basis polynomial at non-grid points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagr_eval_multidim" title="sgpykit.tools.polynomials_functions.lagr_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagr_eval_multidim</span></code></a>(current_knot, ...)</p></td>
+<td><p>Evaluate the multidimensional Lagrange function centered at current_knot in non_grid_points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagu_eval" title="sgpykit.tools.polynomials_functions.lagu_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagu_eval</span></code></a>(x, k, lambda_)</p></td>
+<td><p>Evaluate the k-th Laguerre polynomial orthonormal in [0, +inf) w.r.t.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lagu_eval_multidim" title="sgpykit.tools.polynomials_functions.lagu_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagu_eval_multidim</span></code></a>(X, k, lambda_)</p></td>
+<td><p>Evaluate the multidimensional Laguerre polynomial of order k (multi-index) orthonormal on [0, +inf)^N with respect to rho=prod_i lambda_i*exp(-lambda_i*x), lambda_i&gt;0 on the list of points X (each column is a point in R^N).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lege_eval" title="sgpykit.tools.polynomials_functions.lege_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lege_eval</span></code></a>(x, k, a, b)</p></td>
+<td><p>Evaluate the k-th orthonormal Legendre polynomial on the interval [a, b].</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.lege_eval_multidim" title="sgpykit.tools.polynomials_functions.lege_eval_multidim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lege_eval_multidim</span></code></a>(X, k, a, b)</p></td>
+<td><p>Evaluate the multidimensional Legendre polynomial of order k (multi-index) orthonormal on [a,b]^N on the list of points X (each column is a point in R^N).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.standard_lege_eval" title="sgpykit.tools.polynomials_functions.standard_lege_eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_lege_eval</span></code></a>(x, k)</p></td>
+<td><p>Evaluate the k-th standard Legendre polynomial.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.polynomials_functions.univariate_interpolant" title="sgpykit.tools.polynomials_functions.univariate_interpolant"><code class="xref py py-obj docutils literal notranslate"><span class="pre">univariate_interpolant</span></code></a>(grid_points, ...)</p></td>
+<td><p>Interpolates values at non_grid_points using a Lagrange interpolant built from given grid_points and tabulated function_on_grid.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.cheb_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">cheb_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/cheb_eval.html#cheb_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.cheb_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th Chebyshev polynomial of the first kind on [a,b].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>Points at which to evaluate the Chebyshev polynomial.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>Degree of the Chebyshev polynomial.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the k-th Chebyshev polynomial evaluated at x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.cheb_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">cheb_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/cheb_eval_multidim.html#cheb_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.cheb_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional Chebyshev polynomial of the first kind of order k (multi-index) on [a,b]^N.</p>
+<p>Evaluates the multidim Chebyshev polynomial of the first kind of order k (multi-index) on [a,b]^N
+on the list of points X (each column is a point in R^N). a,b are scalar values
+a,b may differ in each direction, so that actually the domain is not [a,b]^N, but
+[a1,b1] x [a2,b2] x [a3,b3] x … [aN,bN]
+in this case, a,b are defined as vectors, each with N components</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points, shape (N, nb_pts), where each column is a point in R^N.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Multi-index of the polynomial order, shape (N,).</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">numpy.ndarray or float</span></dt><dd><p>Lower bounds of the domain. If scalar, it is expanded to a vector of length N.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">numpy.ndarray or float</span></dt><dd><p>Upper bounds of the domain. If scalar, it is expanded to a vector of length N.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>C</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Evaluated polynomial values at each point, shape (nb_pts,).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.generalized_lagu_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">generalized_lagu_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/generalized_lagu_eval.html#generalized_lagu_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.generalized_lagu_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th generalized Laguerre polynomial orthonormal in [0, +inf).</p>
+<p>This function returns the values of the k-th generalized Laguerre polynomial
+orthonormal in [0, +inf) with respect to the weight function
+rho = beta^(alpha+1)/Gamma(alpha+1) * x^alpha * exp(-beta*x) at the points x.
+The polynomials start from k=0: L_0(x) = 1, L_1(x) = -x*beta + alpha + 1.
+This function expresses L as a function of the standard generalized Laguerre
+“probabilistic” polynomial (i.e., orthogonal w.r.t. rho = x^alpha * exp(-x)/Gamma(alpha+1)),
+which are recursively calculated through the function standard_generalized_lagu_eval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>Points at which to evaluate the polynomial. Can be a matrix.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>Degree of the polynomial.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Parameter of the generalized Laguerre polynomial.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">float</span></dt><dd><p>Parameter of the generalized Laguerre polynomial.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the k-th generalized Laguerre polynomial at the points x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.generalized_lagu_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">generalized_lagu_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/generalized_lagu_eval_multidim.html#generalized_lagu_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.generalized_lagu_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional generalized Laguerre polynomial of order k (multi-index)
+orthonormal on [0, +inf)^N with respect to the weight function:
+rho = prod_i beta_i^(alpha_i+1)/Gamma(alpha_i+1) * x^alpha_i * exp(-beta_i * x),
+where alpha_i &gt; -1 and beta_i &gt; 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points where the polynomial is evaluated. Each column is a point in R^N.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Multi-index defining the polynomial order.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">numpy.ndarray or scalar</span></dt><dd><p>Parameter alpha for the generalized Laguerre polynomial. Can be scalar or array.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">numpy.ndarray or scalar</span></dt><dd><p>Parameter beta for the generalized Laguerre polynomial. Can be scalar or array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of polynomial evaluations at the given points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.herm_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">herm_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/herm_eval.html#herm_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.herm_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th orthonormal Hermite polynomial at points x.</p>
+<p>This function returns the values of the k-th Hermite polynomial orthonormal in
+(-inf, +inf) with respect to the weight function rho = 1/sqrt(2 pi sigma^2) *
+exp(-(x-mi)^2/(2*sigma^2)) at the points x (x can be a matrix as well).</p>
+<p>The polynomials start from k=0: H_0(x) = 1, H_1(x) = (x - mi)/sigma.
+This function expresses H as a function of the standard Hermite “probabilistic”
+polynomial (i.e., orthogonal with respect to rho=1/sqrt(2 pi) * exp(-x^2/2)),
+which are recursively calculated through the function standard_herm_eval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>Points at which to evaluate the polynomial.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>Degree of the Hermite polynomial.</p>
+</dd>
+<dt><strong>mi</strong><span class="classifier">float</span></dt><dd><p>Mean of the Gaussian distribution.</p>
+</dd>
+<dt><strong>sigma</strong><span class="classifier">float</span></dt><dd><p>Standard deviation of the Gaussian distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>H</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the k-th orthonormal Hermite polynomial at points x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.herm_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">herm_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/herm_eval_multidim.html#herm_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.herm_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional Hermite polynomial of order k (multi-index)
+orthonormal on [-inf, +inf]^N with respect to the Gaussian weight function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points where the polynomial is evaluated. Each column is a point in R^N.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Multi-index defining the order of the polynomial in each dimension.</p>
+</dd>
+<dt><strong>mu</strong><span class="classifier">float or numpy.ndarray</span></dt><dd><p>Mean of the Gaussian weight function. Can be a scalar or a vector of length N.</p>
+</dd>
+<dt><strong>sig</strong><span class="classifier">float or numpy.ndarray</span></dt><dd><p>Standard deviation of the Gaussian weight function. Can be a scalar or a vector of length N.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>H</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of polynomial evaluations at the points in X.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.jacobi_prob_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">jacobi_prob_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/jacobi_prob_eval.html#jacobi_prob_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.jacobi_prob_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th Jacobi probabilistic polynomial orthonormal in [a,b].</p>
+<p>This function returns the values of the k-th Jacobi “probabilistic” polynomial
+orthonormal in [a,b] with respect to the weight function:
+rho(x) = Gamma(alpha+beta+2)/(Gamma(alpha+1)*Gamma(beta+1)*(b-a)^(alpha+beta+1)) * (x-a)^alpha * (b-x)^beta
+in the points x (x can be a matrix as well).</p>
+<p>Note that these are NOT the classical Jacobi polynomials (which are orthonormal
+in [a,b] w.r.t. (b-x)^alpha*(x-a)^beta).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>Points at which to evaluate the polynomial.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>Degree of the polynomial.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Parameter of the Jacobi polynomial.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">float</span></dt><dd><p>Parameter of the Jacobi polynomial.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the k-th Jacobi probabilistic polynomial at points x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The polynomials start from k=0: L_0(x) = 1,
+L_1(x) = 0.5*(alpha-beta) + 0.5*(alpha+beta+2)*(-2*x+a+b)/(b-a)</p>
+<p>This function expresses L as a function of the standard Jacobi polynomial (i.e. orthoGONAL w.r.t.
+rho(x)=(1-x)^alpha*(1+x)^beta, which are recursively calculated through the function standard_jac_eval.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.jacobi_prob_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">jacobi_prob_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/jacobi_prob_eval_multidim.html#jacobi_prob_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.jacobi_prob_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional probabilistic Jacobi polynomial of order k
+(multi-index) orthonormal on [a1,b1] x [a2,b2] x [a3,b3] x … [aN,bN]
+with respect to
+rho=prod_i Gamma(alpha_i+beta_i+2)/(Gamma(alpha_i+1)*Gamma(beta_i+1)*(b-a)^(alpha_i+beta_i+1))*(x-a)^alpha_i*(b-x)^beta_i,
+alpha_i,beta_i&gt;-1 on the list of points X (each column is a point in R^N).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points, shape (N, nb_pts), where N is the dimension and nb_pts is the number of points.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Multi-index of the polynomial, shape (N,).</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">numpy.ndarray or float</span></dt><dd><p>Parameter alpha for the Jacobi polynomial, can be scalar or array of shape (N,).</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">numpy.ndarray or float</span></dt><dd><p>Parameter beta for the Jacobi polynomial, can be scalar or array of shape (N,).</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">numpy.ndarray or float</span></dt><dd><p>Lower bound of the interval, can be scalar or array of shape (N,).</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">numpy.ndarray or float</span></dt><dd><p>Upper bound of the interval, can be scalar or array of shape (N,).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Evaluated polynomial values, shape (nb_pts,).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lagr_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lagr_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_knot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_grid_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lagr_eval.html#lagr_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lagr_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the Lagrange basis polynomial at non-grid points.</p>
+<p>Builds the Lagrange function L(x) such that:
+L(current_knot) = 1
+L(other_knots) = 0</p>
+<p>and returns L = L(non_grid_points)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>current_knot</strong><span class="classifier">float</span></dt><dd><p>The knot where the Lagrange function should be 1.</p>
+</dd>
+<dt><strong>other_knots</strong><span class="classifier">array_like</span></dt><dd><p>A list or array of knots where the Lagrange function should be 0.</p>
+</dd>
+<dt><strong>non_grid_points</strong><span class="classifier">array_like</span></dt><dd><p>The points at which to evaluate the Lagrange function.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>The evaluated Lagrange function at non_grid_points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lagr_eval_fast">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lagr_eval_fast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_knot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ok_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_grid_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lagr_eval_fast.html#lagr_eval_fast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lagr_eval_fast" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the Lagrange basis polynomial at non-grid points.</p>
+<p>This function builds the Lagrange function L(x) such that L(current_knot)=1
+and L(other_knots)=0, and returns L evaluated at non_grid_points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>current_knot</strong><span class="classifier">float</span></dt><dd><p>The knot where the Lagrange polynomial equals 1.</p>
+</dd>
+<dt><strong>other_knots</strong><span class="classifier">array_like</span></dt><dd><p>The knots where the Lagrange polynomial equals 0.</p>
+</dd>
+<dt><strong>ok_len</strong><span class="classifier">int</span></dt><dd><p>The length of other_knots.</p>
+</dd>
+<dt><strong>non_grid_points</strong><span class="classifier">array_like</span></dt><dd><p>The points at which to evaluate the Lagrange polynomial.</p>
+</dd>
+<dt><strong>ng_size</strong><span class="classifier">int or tuple</span></dt><dd><p>The size of non_grid_points. If scalar, it is treated as the size of a
+square matrix. If tuple, it is treated as the shape of non_grid_points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>The evaluated Lagrange polynomial at non_grid_points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lagr_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lagr_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_knot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots_per_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_grid_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lagr_eval_multidim.html#lagr_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lagr_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional Lagrange function centered at current_knot in non_grid_points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>current_knot</strong><span class="classifier">array_like</span></dt><dd><p>The knot where the Lagrange function is centered.</p>
+</dd>
+<dt><strong>knots_per_dim</strong><span class="classifier">list or array_like</span></dt><dd><p>List of arrays, where each array contains all the knots in each dimension.</p>
+</dd>
+<dt><strong>non_grid_points</strong><span class="classifier">array_like</span></dt><dd><p>Matrix where each row is a point to be evaluated.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>The evaluated multidimensional Lagrange function at non_grid_points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lagu_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lagu_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lagu_eval.html#lagu_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lagu_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th Laguerre polynomial orthonormal in [0, +inf) w.r.t. rho=lambda*exp(-lambda*x).</p>
+<p>This function computes the values of the k-th Laguerre polynomial, which is orthonormal with respect to the weight
+function rho = lambda * exp(-lambda * x) on the interval [0, +inf). The polynomials are defined
+starting from k=0, with L_0(x) = 1 and L_1(x) = -x*lambda + 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>Points at which to evaluate the polynomial (can be a matrix).</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>Degree of the Laguerre polynomial.</p>
+</dd>
+<dt><strong>lambda_</strong><span class="classifier">float</span></dt><dd><p>Parameter of the weight function (must be positive).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the k-th Laguerre polynomial at the points x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lagu_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lagu_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lagu_eval_multidim.html#lagu_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lagu_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional Laguerre polynomial of order k (multi-index)
+orthonormal on [0, +inf)^N with respect to rho=prod_i lambda_i*exp(-lambda_i*x),
+lambda_i&gt;0 on the list of points X (each column is a point in R^N).
+Lambda can be a scalar value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points, shape (N, nb_pts), where N is the dimension and nb_pts is the number of points.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Multi-index of the polynomial, shape (N,).</p>
+</dd>
+<dt><strong>lambda_</strong><span class="classifier">float or numpy.ndarray</span></dt><dd><p>Scale parameter(s) for the Laguerre polynomial. If scalar, it is expanded to a vector of length N.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Evaluated polynomial values, shape (nb_pts,).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lege_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lege_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lege_eval.html#lege_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lege_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th orthonormal Legendre polynomial on the interval [a, b].</p>
+<p>This function computes the values of the k-th Legendre polynomial, which is
+orthonormal with respect to the uniform weight function rho = 1/(b-a), at the
+points specified by x. The polynomials are defined starting from k=0:
+L_0(x) = 1, L_1(x) = (2*x - a - b)/(b - a).</p>
+<p>The computation is performed by transforming the input points from the interval
+[a, b] to the standard interval [-1, 1], evaluating the standard Legendre
+polynomial (orthogonal with respect to rho=1) at these transformed points,
+and then applying the necessary normalizations to account for the interval [a, b].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The points at which to evaluate the polynomial. Can be a scalar, list, or ndarray.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The degree of the Legendre polynomial.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>The lower bound of the interval.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">float</span></dt><dd><p>The upper bound of the interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>The values of the k-th orthonormal Legendre polynomial evaluated at x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.lege_eval_multidim">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">lege_eval_multidim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lege_eval_multidim.html#lege_eval_multidim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.lege_eval_multidim" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the multidimensional Legendre polynomial of order k (multi-index)
+orthonormal on [a,b]^N on the list of points X (each column is a point in R^N).
+a,b are scalar values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points, shape (N, nb_pts), where N is the dimension and nb_pts is the number of points.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Multi-index of the polynomial, shape (N,).</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">int or numpy.ndarray</span></dt><dd><p>Lower bound(s) of the domain. If scalar, it is broadcasted to all dimensions.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">int or numpy.ndarray</span></dt><dd><p>Upper bound(s) of the domain. If scalar, it is broadcasted to all dimensions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Evaluated polynomial values, shape (nb_pts,).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>a,b may differ in each direction, so that actually the domain is not [a,b]^N, but
+[a1,b1] x [a2,b2] x [a3,b3] x … [aN,bN]
+in this case, a,b are defined as vectors, each with N components.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.standard_lege_eval">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">standard_lege_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/lege_eval.html#standard_lege_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.standard_lege_eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the k-th standard Legendre polynomial.</p>
+<p>This function computes the values of the k-th standard Legendre polynomial,
+which is orthogonal (but not orthonormal) with respect to the uniform weight
+function rho=1 on the interval [-1, 1], at the points specified by x.
+The polynomials are defined starting from k=0: L_0(x) = 1, L_1(x) = x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The points at which to evaluate the polynomial. Can be a scalar, list, or ndarray.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The degree of the Legendre polynomial.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>L</strong><span class="classifier">ndarray</span></dt><dd><p>The values of the k-th standard Legendre polynomial evaluated at x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.polynomials_functions.univariate_interpolant">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.polynomials_functions.</span></span><span class="sig-name descname"><span class="pre">univariate_interpolant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_on_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_grid_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/polynomials_functions/univariate_interpolant.html#univariate_interpolant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.polynomials_functions.univariate_interpolant" title="Link to this definition"></a></dt>
+<dd><p>Interpolates values at non_grid_points using a Lagrange interpolant
+built from given grid_points and tabulated function_on_grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>grid_points</strong><span class="classifier">(M,) array_like</span></dt><dd><p>Interpolation nodes.</p>
+</dd>
+<dt><strong>function_on_grid</strong><span class="classifier">(V, M) array_like</span></dt><dd><p>Values of V different functions sampled at the M grid points.</p>
+</dd>
+<dt><strong>non_grid_points</strong><span class="classifier">(N,) array_like</span></dt><dd><p>Points where we want to evaluate the interpolation.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>f_values</strong><span class="classifier">(V, N) ndarray</span></dt><dd><p>Interpolated values at non_grid_points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>UNIVARIATE_INTERPOLANT interpolates a univariate function on grid points, i.e. evaluates the
+Lagrange polynomial approximation on a generic point of the parameter space.</p>
+<dl>
+<dt>F_VALUES = UNIVARIATE_INTERPOLANT(GRID_POINTS,FUNCTION_ON_GRID,NON_GRID_POINTS) evaluates the</dt><dd><p>lagrangian interpolant of a vector function F: R -&gt; R^V based on the points contained in the vector GRID_POINTS.</p>
+<p>GRID POINTS is a row vector with the nodes of interpolation.
+FUNCTION_ON_GRID is a matrix containing the evaluation of F on the points GRID_POINTS.</p>
+<blockquote>
+<div><p>Its dimensions are V x length(GRID_POINTS).</p>
+</div></blockquote>
+<p>NON_GRID_POINTS is a row vector of points where one wants to evaluate the polynomial approximation.
+F_VALUES is a matrix containing the evaluation of the function F in each of the NON_GRID_POINTS.</p>
+<blockquote>
+<div><p>Its dimensions are V X length(NON_GRID_POINTS)</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.tools.lev2knots_functions.html" class="btn btn-neutral float-left" title="sgpykit.tools.lev2knots_functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.tools.rescaling_functions.html" class="btn btn-neutral float-right" title="sgpykit.tools.rescaling_functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

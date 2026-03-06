@@ -1,0 +1,108 @@
+﻿sgpykit
+=======
+
+.. automodule:: sgpykit
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      GK_lev_table
+      adapt_sparse_grid
+      asreduced
+      cheb_eval
+      cheb_eval_multidim
+      check_index_admissibility
+      check_set_admissibility
+      clear
+      combination_technique
+      compare_sparse_grids
+      compute_modal_tensor
+      compute_sobol_indices_from_sparse_grid
+      convert_to_modal
+      create_sparse_grid
+      create_sparse_grid_add_multiidx
+      create_sparse_grid_multiidx_set
+      create_sparse_grid_quick_preset
+      define_functions_for_rule
+      delta_to_combitec
+      derive_sparse_grid
+      detect_insufficient_tolerance
+      evaluate_on_sparse_grid
+      export_sparse_grid_to_file
+      fast_TD_set
+      figure_create
+      find_lexicographic
+      find_lexicographic_tol
+      generalized_lagu_eval
+      generalized_lagu_eval_multidim
+      generate_pattern
+      get_interval_map
+      herm_eval
+      herm_eval_multidim
+      hessian_sparse_grid
+      interpolate_on_sparse_grid
+      is_sparse_grid
+      is_tensor_grid
+      isequal_sparse_grids
+      isequal_tensor_grids
+      islexico
+      islexico_tol
+      isreduced
+      jacobi_prob_eval
+      jacobi_prob_eval_multidim
+      knots_CC
+      knots_GK
+      knots_beta
+      knots_beta_leja
+      knots_exponential
+      knots_exponential_leja
+      knots_gamma
+      knots_gamma_leja
+      knots_leja
+      knots_midpoint
+      knots_normal
+      knots_normal_leja
+      knots_trap
+      knots_triangular_leja
+      knots_uniform
+      lagr_eval
+      lagr_eval_fast
+      lagr_eval_multidim
+      lagu_eval
+      lagu_eval_multidim
+      lege_eval
+      lege_eval_multidim
+      lev2knots_2step
+      lev2knots_GK
+      lev2knots_doubling
+      lev2knots_lin
+      lev2knots_tripling
+      lookup_merge_and_diff
+      multiidx_box_set
+      multiidx_gen
+      mysortrows
+      plot
+      plot3_sparse_grid
+      plot_idx_status
+      plot_multiidx_set
+      plot_sparse_grid
+      plot_sparse_grids_interpolant
+      quadrature_on_sparse_grid
+      reduce_sparse_grid
+      standard_lege_eval
+      tensor_grid
+      tensor_to_sparse
+      univariate_interpolant
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   main
+   src
+   tools
+   util

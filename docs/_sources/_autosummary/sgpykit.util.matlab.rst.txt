@@ -1,0 +1,44 @@
+sgpykit.util.matlab
+===================
+
+.. automodule:: sgpykit.util.matlab
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ce
+      cell
+      eig
+      fieldnames
+      find
+      fliplr
+      get_shape_of_cells
+      ifft
+      intersect
+      is_numeric_scalar
+      iscell
+      isfield
+      isnumeric
+      issorted
+      isstruct
+      logical
+      reshape
+      save
+      savemat
+      setdiff
+      sort
+      sortrows
+      struct
+      unique
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Cell
+      Sequence
+      Struct
+      StructArray
+   

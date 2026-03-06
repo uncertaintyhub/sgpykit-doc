@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.polynomials_functions.lagr_eval_fast &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.polynomials_functions.lagr_eval_fast</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.tools.polynomials_functions.lagr_eval_fast</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.checks</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_numeric_scalar</span>
+
+
+<div class="viewcode-block" id="lagr_eval_fast">
+<a class="viewcode-back" href="../../../../_autosummary/sgpykit.tools.polynomials_functions.html#sgpykit.tools.polynomials_functions.lagr_eval_fast">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">lagr_eval_fast</span><span class="p">(</span><span class="n">current_knot</span><span class="p">,</span> <span class="n">other_knots</span><span class="p">,</span> <span class="n">ok_len</span><span class="p">,</span> <span class="n">non_grid_points</span><span class="p">,</span> <span class="n">ng_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the Lagrange basis polynomial at non-grid points.</span>
+
+<span class="sd">    This function builds the Lagrange function L(x) such that L(current_knot)=1</span>
+<span class="sd">    and L(other_knots)=0, and returns L evaluated at non_grid_points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    current_knot : float</span>
+<span class="sd">        The knot where the Lagrange polynomial equals 1.</span>
+<span class="sd">    other_knots : array_like</span>
+<span class="sd">        The knots where the Lagrange polynomial equals 0.</span>
+<span class="sd">    ok_len : int</span>
+<span class="sd">        The length of other_knots.</span>
+<span class="sd">    non_grid_points : array_like</span>
+<span class="sd">        The points at which to evaluate the Lagrange polynomial.</span>
+<span class="sd">    ng_size : int or tuple</span>
+<span class="sd">        The size of non_grid_points. If scalar, it is treated as the size of a</span>
+<span class="sd">        square matrix. If tuple, it is treated as the shape of non_grid_points.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L : ndarray</span>
+<span class="sd">        The evaluated Lagrange polynomial at non_grid_points.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># L = LAGR_EVAL_FAST(current_knot,other_knots,ok_len,non_grid_points,ng_size)</span>
+
+    <span class="c1"># builds the lagrange function L(x) s.t.</span>
+    <span class="c1"># L(current_knot)=1;</span>
+    <span class="c1"># L(other_knots)=0;</span>
+
+    <span class="c1"># and returns L=L(non_grid_points)</span>
+
+    <span class="c1"># where ok_len = length(other_knots), ng_size = size(non_grid_points);</span>
+
+    <span class="c1"># this is essentially the same function as LAGR_EVAL, but some quantities are provided as input</span>
+    <span class="c1"># instead of being computed, for speed purposes.</span>
+    <span class="c1"># each monodim lagrange function is a product of K terms like (x-x_k)/(current_knot-x_k),</span>
+    <span class="c1"># so i compute it with a for loop</span>
+
+    <span class="c1"># this is the number of iterations</span>
+    <span class="c1"># ok_len=length(other_knots);</span>
+
+    <span class="c1"># L is the result. It is a column vector, same size as non_grid_points. It is initialized to 1, and then iteratively multiplied by</span>
+    <span class="c1"># each factor</span>
+    <span class="c1"># L=ones(size(non_grid_points));</span>
+    <span class="k">if</span> <span class="n">is_numeric_scalar</span><span class="p">(</span><span class="n">ng_size</span><span class="p">):</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">ng_size</span><span class="p">,</span> <span class="n">ng_size</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># make a simple vector (n,) instead of a column vector (n,1)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ng_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">ng_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ng_size</span> <span class="o">=</span> <span class="n">ng_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ng_size</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ok_len</span><span class="p">):</span>
+        <span class="c1"># these are the non current-knot, one at a time</span>
+        <span class="n">knots_k</span> <span class="o">=</span> <span class="n">other_knots</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="c1"># here it comes the computation of the lagrangian factor (x-x_k)/(current_knot-x_k)</span>
+        <span class="n">L</span> <span class="o">*=</span> <span class="p">(</span><span class="n">non_grid_points</span> <span class="o">-</span> <span class="n">knots_k</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">current_knot</span> <span class="o">-</span> <span class="n">knots_k</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">L</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

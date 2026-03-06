@@ -1,0 +1,1058 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main.adapt_sparse_grid &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.main.adapt_sparse_grid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.main.adapt_sparse_grid</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.main.create_sparse_grid_add_multiidx</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_sparse_grid_add_multiidx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.main.create_sparse_grid_multiidx_set</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_sparse_grid_multiidx_set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.main.evaluate_on_sparse_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">evaluate_on_sparse_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.main.interpolate_on_sparse_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpolate_on_sparse_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.main.reduce_sparse_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce_sparse_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.plot_idx_status</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_idx_status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.tensor_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.idxset_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_index_admissibility</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab_to_python_index</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="adapt_sparse_grid">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.main.html#sgpykit.main.adapt_sparse_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">adapt_sparse_grid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">N_full</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">prev_adapt</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute an adaptive sparse grid approximation of a function f.</span>
+
+<span class="sd">    This function computes a sparse grid adapted to the approximation of a function F: Gamma subset R^N_full -&gt; R^V</span>
+<span class="sd">    according to some profit indicator. The implementation closely resembles the algorithm proposed in</span>
+
+<span class="sd">    T. Gerstner, M. Griebel, Dimension-Adaptive Tensor-Product Quadrature, Computing 71, 65-87 (2003)</span>
+
+<span class="sd">    and the various definitions of profits are discussed in</span>
+
+<span class="sd">    F. Nobile, L. Tamellini, F. Tesei, and R. Tempone, An Adaptive Sparse Grid Algorithm for Elliptic PDEs</span>
+<span class="sd">    with Lognormal Diffusion Coefficient, Sparse Grids and Applications - Stuttgart 2014,</span>
+<span class="sd">    Lecture Notes in Computational Science and Engineering 109, p. 191-220,</span>
+<span class="sd">    Springer International Publishing Switzerland 2016</span>
+
+<span class="sd">    Roughly speaking, at each iteration the algorithm considers the multiidx with the highest profit</span>
+<span class="sd">    among those already explored, adds it to the sparse grid, computes the profits of all its neighbouring</span>
+<span class="sd">    indices (see controls.prof) and adds them to the list of explored indices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        A function-handle, taking as input a column vector (N_full components) and returning a column-vector value (V components).</span>
+<span class="sd">    N_full : int</span>
+<span class="sd">        A scalar, denotes the dimension of the space Gamma over which F and the sparse grid are defined.</span>
+<span class="sd">        Note that this is the full dimension, yet the algorithm might explore a smaller subset of variables to</span>
+<span class="sd">        start with, N_curr, as specified in CONTROLS.var_buffer_size (see below)</span>
+<span class="sd">    knots : callable or list of callables</span>
+<span class="sd">        KNOTS can be a function handle or a cell arrays of function handles to differentiate between directions, but they must be</span>
+<span class="sd">        either all nested or all non-nested formulae (the code cannot work partially with nested and partially with non-nested points)</span>
+<span class="sd">        KNOTS cannot be used with the &#39;nonprob&#39; option if later the &quot;buffer&quot; controls functionality is used, see later</span>
+<span class="sd">    lev2knots : callable</span>
+<span class="sd">        LEV2KNOTS must be a single function handle, i.e., it is not possible to use</span>
+<span class="sd">        e.g., lev2knots_2step in one direction and lev2knots_lin in the next one.</span>
+
+<span class="sd">        For instance, in N=2, the following setups are ok:</span>
+
+<span class="sd">        - ``knots = [lambda n: knots_uniform(n, 0, 1), lambda n: knots_uniform(n, 3, 5)]``,</span>
+<span class="sd">          ``lev2knots = lev2knots_lin`` (same family on different intervals, same lev2knots)</span>
+<span class="sd">        - ``knots = [lambda n: knots_CC(n, 0, 1), lambda n: knots_CC(n, 3, 5)]``,</span>
+<span class="sd">          ``lev2knots = lev2knots_doubling`` (same family on different intervals, same lev2knots)</span>
+
+<span class="sd">        while the following ones are not:</span>
+
+<span class="sd">        - ``knots = [lambda n: knots_uniform(n, 0, 1), lambda n: knots_CC(n, 3, 5)]``,</span>
+<span class="sd">          ``lev2knots = lev2knots_doubling`` (one nested family, one non-nested family)</span>
+<span class="sd">        - ``knots = [lambda n: knots_uniform(n, 0, 1), lambda n: knots_uniform(n, 3, 5)]``,</span>
+<span class="sd">          ``lev2knots = [lev2knots_lin, lev2knots_doubling]`` (different lev2knots in different directions)</span>
+<span class="sd">        - ``knots = [lambda n: knots_CC(n, 0, 1, &#39;nonprob&#39;), lambda n: knots_CC(n, 3, 5, &#39;nonprob&#39;)]``,</span>
+<span class="sd">          ``lev2knots = lev2knots_doubling`` (nonprob weights, cannot be used together with buffer)</span>
+
+<span class="sd">        See tutorial_adaptive.ipynb for an example that shows this.</span>
+<span class="sd">    prev_adapt : dict or None</span>
+<span class="sd">        By setting PREV_ADAPT as the output ADAPTED of a previous computation, the new computation</span>
+<span class="sd">        will resume from where the previous one left. Set PREV_ADAPT = None for a fresh start</span>
+<span class="sd">    controls : dict</span>
+<span class="sd">        A struct defining several parameters that control the algorithm flow. It is possible to</span>
+<span class="sd">        define only some (or none) of these parameters, the others will be set to default value. Only</span>
+<span class="sd">        the parameter &#39;nested&#39; is mandatory. The parameter &#39;pdf&#39; is mandatory only if controls.prof is</span>
+<span class="sd">        set to any of the &#39;weighted*&#39; choices (see below). For safety, &#39;pdf&#39; is not set to default and</span>
+<span class="sd">        an error will be raised if the field is not set</span>
+<span class="sd">        controls.nested : bool</span>
+<span class="sd">            (mandatory) true if nested points will be used, false otherwise</span>
+<span class="sd">        controls.max_pts : int</span>
+<span class="sd">            is the maximum number of points the adapted sparse grid can have (default 1000).</span>
+<span class="sd">            Observe that if the max nb of points is reached while checking the neighbours</span>
+<span class="sd">            of the current idx, the algorithm will not be interrupted.</span>
+<span class="sd">        controls.prof_tol : float</span>
+<span class="sd">            the algorithm will stop as soon as profit of the considered idx is smaller</span>
+<span class="sd">            then prof_tol (default 1e-14)</span>
+<span class="sd">        controls.recycling : str</span>
+<span class="sd">            can be set to &#39;priority_to_evaluation&#39; (default) or &#39;priority_to_recycling&#39;. This affects</span>
+<span class="sd">            only when non-nested points are used. Because in this case points enter and exit</span>
+<span class="sd">            from the sparse grid, we should keep a record of all points that have been</span>
+<span class="sd">            evaluated and recycle from it whenever possible. However, doing this exactly is **very</span>
+<span class="sd">            expensive** in terms of computational cost with the current data structure if N is</span>
+<span class="sd">            large. So, unless your function evaluation is **very** expensive, we recommend to</span>
+<span class="sd">            leave the default setting, which does a &quot;partial search&quot;, i.e. searches for</span>
+<span class="sd">            recycling only in the previous grid (instead than on the entire sparse grid</span>
+<span class="sd">            history) and therefore implies that the same point might be evaluated multiple times.</span>
+<span class="sd">        controls.prof : str</span>
+<span class="sd">            chooses how to compute the profit of an idx. In general, this entails comparing</span>
+<span class="sd">            the sparse grids approximation of f *before* adding idx to the sparse grids (call</span>
+<span class="sd">            this approximation S) and *after* having added it (call this approximation T).</span>
+<span class="sd">            Note that S, T are actually functions of y in Gamma and return a vector with V components</span>
+<span class="sd">            (same as f, the function to be approximated). In general, profit takes either of the two forms</span>
+<span class="sd">            P(idx) = Op_y ( Op_vect(S,T) ) , P(idx) = Op_vect ( Op_y(S,T) )</span>
+<span class="sd">            where Op_vect acts as a &quot;vector norm&quot; over the V components of S,T (e.g., the euclidean norm for</span>
+<span class="sd">            fixed y), and Op_y acts as a norm over Gamma (e.g. the maximum over a discrete set of values of y).</span>
+<span class="sd">            Currently, the choices below are available. In all of these choices, Op_vect can</span>
+<span class="sd">            be changed by setting the field controls.op_vect (see below)</span>
+
+<span class="sd">            &#39;Linf&#39; :</span>
+<span class="sd">                P(idx) = Op_y( Op_vect(S(y),T(y) ) where</span>
+<span class="sd">                Op_vect(S(y),T(y)) = euclidean norm of S(y) - T(y) for a fixed y;</span>
+<span class="sd">                Op_y = max over a discrete set of points of Gamma.</span>
+<span class="sd">                For nested points, the algorithm considers the points that would</span>
+<span class="sd">                be added to the grid by the considered idx,</span>
+<span class="sd">                evalutes the function and the previous sparse grid on such</span>
+<span class="sd">                points, and takes the max of such difference</span>
+<span class="sd">                as profit estimate. For non-nested points, the sparse grid approx</span>
+<span class="sd">                is not interpolant, hence we consider the difference between both the</span>
+<span class="sd">                *new* and the previous sparse grids on the new points.</span>
+
+<span class="sd">            &#39;Linf/new_points&#39; (default) :</span>
+<span class="sd">                the &#39;Linf&#39; profit estimate above is further divided</span>
+<span class="sd">                by the number of new points considered</span>
+<span class="sd">                (i.e. gain-cost ratio). For non-nested points, this is actually</span>
+<span class="sd">                the cost of the tensor grid associated to the current midx (see</span>
+<span class="sd">                Nobile Tamellini Tempone, ``Convergence of quasi optimal sparse</span>
+<span class="sd">                grid approximation ...&#39;&#39;</span>
+
+<span class="sd">            &#39;weighted Linf&#39; :</span>
+<span class="sd">                same as &#39;Linf&#39;, but the difference between</span>
+<span class="sd">                previous sparse grid and function evaluation (or between new and</span>
+<span class="sd">                old sparse grids, depending whether nested or non-nested points are used) is</span>
+<span class="sd">                multiplied by the probability density function (see below for details).</span>
+<span class="sd">                Useful when considering sparse grids on unbounded domains.</span>
+
+<span class="sd">            &#39;weighted Linf/new_points&#39; :</span>
+<span class="sd">                the &#39;weighted Linf&#39; profit estimate is divided by the number of new points</span>
+
+<span class="sd">            &#39;deltaint&#39; :</span>
+<span class="sd">                P(idx) = Op_vect ( Op_y(S,T) ) = euclidean_norm( expct(S) - expct(T))</span>
+<span class="sd">                i.e. the profit estimate is the euclidean norm of the difference of the</span>
+<span class="sd">                quadratures using the sparse grids with and without the given idx</span>
+
+<span class="sd">            &#39;deltaint/new_points&#39; :</span>
+<span class="sd">                the &#39;deltaint&#39; profit estimate is divided by the number of new points</span>
+
+<span class="sd">        controls.op_vect : callable</span>
+<span class="sd">            changes the operator op_vect above. It is defined as a handle function</span>
+<span class="sd">            lambda A, B: some_function_of_(A, B)</span>
+<span class="sd">            where A B are two matrices with V rows, containing the evaluation of the two operators S T discussed above</span>
+<span class="sd">            as columns, e.g. A=[S(y1) S(y2) S(y3) ...], B=[T(y1) T(y2) T(y3) ...]</span>
+<span class="sd">        controls.pts_tol : float</span>
+<span class="sd">            is the tolerance used by evaluate_on_sparse_grid to check for equal points (default 1e-14)</span>
+<span class="sd">        controls.pdf : callable</span>
+<span class="sd">            pdf over Gamma subset R^N_full, the set over which the sparse</span>
+<span class="sd">            of the random variables, to be used in weighted* profits. It must be provided</span>
+<span class="sd">            as a function handle that takes as input a matrix with N rows (for generic N), i.e. where each column is a point</span>
+<span class="sd">            where the pdf must be evaluated. For instance, if the weight is the standard gaussian</span>
+<span class="sd">            pdf on each direction, controls.pdf = lambda Y: np.prod(norm.pdf(Y, 0, 1), axis=0), with Y matrix with N</span>
+<span class="sd">            rows. For safety, &#39;pdf&#39; is not set to default and an error will be raised if the field is not set</span>
+<span class="sd">        controls.var_buffer_size : int</span>
+<span class="sd">            The algorithm starts exploring N_curr = &lt;var_buffer_size&gt; dimensions. As soon as</span>
+<span class="sd">            points are placed in one dimension, a new dimension is added to the set of</span>
+<span class="sd">            explored variables, i.e., N_curr = N_curr+1. In this way we ensure that there</span>
+<span class="sd">            are always &lt;var_buffer_size&gt; explored but &quot;non-activated&quot; variables, i.e.,</span>
+<span class="sd">            along which no point is placed (default N_full).</span>
+
+<span class="sd">            **IMPORTANT NOTE**: Use this option with care! Is evaluating the function at a</span>
+<span class="sd">            subset of variables equivalent to evaluating the function at the entire set of</span>
+<span class="sd">            variables, where the ones outside the buffer are fixed at the mid-point of the</span>
+<span class="sd">            interval? If this is not the case, the buffer cannot be used.</span>
+
+<span class="sd">            For instance:</span>
+
+<span class="sd">            - ``f1 = 1/exp(y1*c1 + y2*c2 + y3*c3)``, with y1,y2 in [-0.5,0.5], y3 in [-0.2,0.2]</span>
+<span class="sd">              This function is OK because f1 restricted to y1,y2 is y1*c1 + y2*c2 =</span>
+<span class="sd">              y1*c1 + y2*c2 + 0*c3 = y1*c1 + y2*c2 + y3*c3 with y3 held at midpoint</span>
+<span class="sd">            - ``f2 = 1/exp(y1*c1 + y2*c2 + y3*c3)``, with y1,y2,y3 in [0,1] (note the interval not centered in 0)</span>
+<span class="sd">              This function is NOT OK because f1 restricted to y1,y2 is y1*c1 + y2*c2 ≠</span>
+<span class="sd">              y1*c1 + y2*c2 + 0.5*c3 = y1*c1 + y2*c2 + y3*c3 with y3 held at midpoint</span>
+<span class="sd">            - ``f3 = y1 * y2 * y3``, with y1,y2,y3 in [0,1]</span>
+<span class="sd">              Is NOT OK because f1 restricted to y1,y2 is y1*y2 ≠ y1*y2*0.5 =</span>
+<span class="sd">              y1*y2*y3 with y3 held at midpoint</span>
+<span class="sd">            - ``f4 = cos(y1) + cos(y2) + cos(y3)``, with y1,y2,y3 in [-1,1]</span>
+<span class="sd">              Is NOT OK because f1 restricted to y1,y2 is cos(y1) + cos(y2) ≠</span>
+<span class="sd">              cos(y1) + cos(y2) + 1 = cos(y1) + cos(y2) + cos(y3) with y3 held at midpoint</span>
+<span class="sd">            - ``f5 = y1 * y2 * y3``, with y1,y2,y3 in [0,2]</span>
+<span class="sd">              Is OK because f1 restricted to y1,y2 is y1*y2 = y1*y2*1 =</span>
+<span class="sd">              y1*y2*y3 with y3 held at midpoint</span>
+
+<span class="sd">            See tutorial_adaptive.ipynb for an example that shows this.</span>
+<span class="sd">        controls.plot : bool</span>
+<span class="sd">            plot multiidx set and pause (default false)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    adapted : dict</span>
+<span class="sd">        A struct containing the results of the algorithms. The same structure can be passed</span>
+<span class="sd">        as input (PREV_ADAPT) to resume the computation. Its fields are</span>
+<span class="sd">        adapted.S : the adapted sparse grid (built over both all indices whose profit has been computed,</span>
+<span class="sd">            even those whose profit hasn&#39;t yet been chosen as the best one, i.e. those whose</span>
+<span class="sd">            neighbours haven&#39;t been explored yet).</span>
+<span class="sd">        adapted.Sr : its reduced version;</span>
+<span class="sd">        adapted.f_on_Sr : the evaluations of f over the list of points contained in Sr;</span>
+<span class="sd">        adapted.nb_pts : the number of points in Sr;</span>
+<span class="sd">        adapted.nested : true if points used are nested</span>
+<span class="sd">        adapted.nb_pts_visited : the number of points visited while building the sparse grid. For non-nested</span>
+<span class="sd">            points, this will be larger than nb_pts, because some points enter and then exit</span>
+<span class="sd">            the grid when the corresponding idx exits from the combination technique.</span>
+<span class="sd">        adapted.num_evals : the number of function evaluations done to compute the sparse grid. This is not</span>
+<span class="sd">            necessarily equal to the previous one, because for speed reasons (looking for</span>
+<span class="sd">            points in expensive for N large) sometimes one point might be recomputed twice</span>
+<span class="sd">        adapted.N : the current number of dimensions considered for exploration</span>
+<span class="sd">        adapted.private : a structure contained more detailed information on the status of the adaptive algorithm, that is needed</span>
+<span class="sd">            to resume the computation. In particular, the needed data structure consists of:</span>
+<span class="sd">            private.G : the multi-idx set used to build the sparse grid. This is called</span>
+<span class="sd">                I in Gerstner-Griebel paper.</span>
+<span class="sd">            private.I : the set of explored indices; G = I plus the neighbours of I.</span>
+<span class="sd">                This is called O in Gerstner-Griebel paper. I is sorted</span>
+<span class="sd">                lexicographically</span>
+<span class="sd">            private.G_log : same as private.G, but sorted in the order with which indices</span>
+<span class="sd">                are added to G insted of lexicographic</span>
+<span class="sd">            private.I_log : same as private.I, but sorted in the order with which indices</span>
+<span class="sd">                are added to I insted of lexicographic</span>
+<span class="sd">            private.coeff_G : the coefficients of the indices in private.G in the combination technique</span>
+<span class="sd">            private.N_log : for each iteration, the value of N_curr</span>
+<span class="sd">            private.idx=idx : the idx whose neighbour is the next to be explored</span>
+<span class="sd">            private.maxprof : the corresponding profit</span>
+<span class="sd">            private.profits : the set of idx whose profit has been computed. They have been added to the grid</span>
+<span class="sd">                but their neighbour is yet to be explored.</span>
+<span class="sd">            private.idx_bin : the corresponding set of profits. This is called A in</span>
+<span class="sd">                Gerstner-Griebel paper</span>
+<span class="sd">            private.var_with_pts : vector of variables in which we have actually put points.</span>
+<span class="sd">                length(var_with_pts) + controls.var_buffer_size = N_curr</span>
+<span class="sd">            private.nb_pts_log : for each iteration, the current nb_pts</span>
+<span class="sd">            private.Hr : for non-nested points, the list of points visited by the</span>
+<span class="sd">                algorithm. Empty for nested-points</span>
+<span class="sd">            private.f_on_Hr : for non-nested points, the evaluations of f on Hr. Empty for nested-points</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># set control fields</span>
+    <span class="n">controls</span> <span class="o">=</span> <span class="n">default_controls</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="n">N_full</span><span class="p">)</span>
+
+    <span class="c1"># init / resume adaptive algorithm.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Here&#39;s the data structure we need</span>
+    <span class="c1">#</span>
+    <span class="c1"># --&gt; idx       : is the idx with the highest profit, whose neighbour we will next explore</span>
+    <span class="c1"># --&gt; maxprof   : the corresponding profit</span>
+    <span class="c1"># --&gt; I         : is the set of explored indices (the grid is actually larger, it includes as well their</span>
+    <span class="c1">#                   neighbours), corresponds to O in Gerstner-Griebel</span>
+    <span class="c1"># --&gt; I_log     : I must be sorted lexicographically for software reasons. I_log is the same set of indices, but</span>
+    <span class="c1">#                   sorted in the order in which they are chosen by the algorithm</span>
+    <span class="c1"># --&gt; idx_bin   : is the set of idx whose profit has been computed. They have been added to the grid but their</span>
+    <span class="c1">#                 neighbour is yet to be explored. Corresponds to A in Gerstner-Griebel</span>
+    <span class="c1"># --&gt; profits   : is the corresponding set of profits</span>
+    <span class="c1"># --&gt; G         : is the set of the grid. Corresponds to I in Gerstner-Griebel</span>
+    <span class="c1"># --&gt; G_log     : same as I_log,  but for G</span>
+    <span class="c1"># --&gt; coeff_G   : coefficients of the combination technique applied to G</span>
+    <span class="c1"># --&gt; nb_pts    : the number of points in the grid</span>
+    <span class="c1"># --&gt; nb_pts_visited : the number of points visited during the sparse grid construction</span>
+    <span class="c1"># --&gt; num_evals : the number of function evaluations performed</span>
+    <span class="c1"># --&gt; nb_pts_log: for each iteration, the current nb_pts</span>
+    <span class="c1"># --&gt; S         : create_sparse_grid_multiidx_set(G,knots,lev2knots);</span>
+    <span class="c1"># --&gt; Sr        : reduce_sparse_grid(S);</span>
+    <span class="c1"># --&gt; f_on_Sr   : evaluate_on_sparse_grid(f,Sr);</span>
+    <span class="c1"># --&gt; var_with_pts: vector of variables in which we have actually put points.</span>
+    <span class="c1">#                   length(var_with_pts) + controls.var_buffer_size = N_curr</span>
+    <span class="c1"># --&gt; N_log     : for every iteration, the value of N_curr</span>
+
+    <span class="c1"># we need to distinguish the full dimension of the parameter space (N_tot) and the dimensional of the subspace</span>
+    <span class="c1"># currently explored (N_curr = length(expl_var)). For consistency with previous code, we actually use N instead of N_curr</span>
+
+    <span class="c1"># this is the current number of dimensions activated. Its value might change at the next line if we are</span>
+    <span class="c1"># actually resuming a previous computation. Also, we make sure that this is actually no larger than N_full</span>
+    <span class="c1"># already!</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">controls</span><span class="p">[</span><span class="s1">&#39;var_buffer_size&#39;</span><span class="p">]</span>
+
+    <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N_log</span><span class="p">,</span> <span class="n">var_with_pts</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">I_log</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">maxprof</span><span class="p">,</span>
+     <span class="n">idx_bin</span><span class="p">,</span> <span class="n">profits</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">G_log</span><span class="p">,</span> <span class="n">coeff_G</span><span class="p">,</span> <span class="n">Hr</span><span class="p">,</span> <span class="n">f_on_Hr</span><span class="p">,</span>
+     <span class="n">nb_pts</span><span class="p">,</span> <span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">num_evals</span><span class="p">,</span> <span class="n">intf</span><span class="p">)</span> <span class="o">=</span> <span class="n">start_adapt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span>
+                                                        <span class="n">prev_adapt</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
+
+    <span class="c1"># here&#39;s the adapt algo</span>
+    <span class="k">while</span> <span class="n">nb_pts</span> <span class="o">&lt;</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;max_pts&quot;</span><span class="p">]:</span>
+
+        <span class="k">if</span> <span class="n">maxprof</span> <span class="o">&lt;</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;prof_tol&quot;</span><span class="p">]:</span>
+            <span class="k">break</span>
+
+        <span class="c1"># -------------------------------------------------------------</span>
+        <span class="c1">#   Compute neighbours of the idx with highest profit</span>
+        <span class="c1"># -------------------------------------------------------------</span>
+        <span class="c1"># In MATLAB: Ng = ones(N,1)*idx + eye(N);</span>
+        <span class="c1"># In Python we build a (N, N) array where each row is ``idx`` plus the</span>
+        <span class="c1"># unit vector e_j.</span>
+        <span class="n">Ng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">Ng_0</span> <span class="o">=</span> <span class="n">matlab_to_python_index</span><span class="p">(</span><span class="n">Ng</span><span class="p">)</span>
+
+        <span class="c1"># -------------------------------------------------------------</span>
+        <span class="c1">#   Remove those that are not admissible w.r.t. the current set I</span>
+        <span class="c1"># -------------------------------------------------------------</span>
+        <span class="n">admissible_rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">Ng_0</span><span class="p">:</span>
+            <span class="n">is_adm</span><span class="p">,</span><span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">check_index_admissibility</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_adm</span><span class="p">:</span>
+                <span class="n">admissible_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">Ng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">admissible_rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+        <span class="c1"># -------------------------------------------</span>
+        <span class="c1"># for those safe, add them to the grid &amp; compute profit</span>
+        <span class="c1"># -------------------------------------------</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">Ng</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+            <span class="c1"># the current idx</span>
+            <span class="n">jj</span> <span class="o">=</span> <span class="n">Ng</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="n">G_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">G_log</span><span class="p">,</span> <span class="n">jj</span><span class="p">])</span>
+            <span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">coeff_G</span> <span class="o">=</span> <span class="n">create_sparse_grid_add_multiidx</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">coeff_G</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">)</span>
+
+            <span class="n">Tr</span> <span class="o">=</span> <span class="n">reduce_sparse_grid</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">controls</span><span class="p">[</span><span class="s1">&#39;pts_tol&#39;</span><span class="p">])</span>
+
+            <span class="p">(</span><span class="n">nb_pts</span><span class="p">,</span> <span class="n">num_evals</span><span class="p">,</span> <span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">Prof_temp</span><span class="p">[</span><span class="n">m</span><span class="p">],</span>
+             <span class="n">f_on_Tr</span><span class="p">,</span> <span class="n">Hr</span><span class="p">,</span> <span class="n">f_on_Hr</span><span class="p">,</span> <span class="n">intnew</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_profit_idx</span><span class="p">(</span>
+                <span class="n">Ng</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="p">:],</span> <span class="n">f</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Tr</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">Hr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">f_on_Hr</span><span class="p">,</span>
+                <span class="n">intf</span><span class="p">,</span> <span class="n">nb_pts</span><span class="p">,</span> <span class="n">num_evals</span><span class="p">,</span> <span class="n">nb_pts_log</span><span class="p">,</span>
+                <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">controls</span><span class="p">)</span>
+
+            <span class="n">S</span> <span class="o">=</span> <span class="n">T</span>
+            <span class="n">Sr</span> <span class="o">=</span> <span class="n">Tr</span>
+            <span class="n">f_on_Sr</span> <span class="o">=</span> <span class="n">f_on_Tr</span>
+            <span class="n">intf</span> <span class="o">=</span> <span class="n">intnew</span>
+
+        <span class="c1"># -------------------------------------------</span>
+        <span class="c1"># update the list of profits</span>
+        <span class="c1"># -------------------------------------------</span>
+
+        <span class="n">profits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">profits</span><span class="p">,</span> <span class="n">Prof_temp</span><span class="p">)</span>
+        <span class="c1"># observe that any of the indices in Ng can be already in idx_bin, i.e. there are no duplicates. Indeed, if ii is in Ng, this</span>
+        <span class="c1"># means that ii is admissible wrt I, therefore all previous indices jj&lt;=ii are already included in I, therefore they have already</span>
+        <span class="c1"># left idx_bin therefore no jj will be considered and ii will no longer be generated in Ng.</span>
+        <span class="c1"># Anyway, let&#39;s leave a check for the moment</span>
+
+        <span class="c1"># idx_bin = np.vstack([idx_bin, Ng]) # will fail if one is empty []</span>
+        <span class="c1"># NOTE: because numpy cannot have a 2D empty set from np.atleast_2d([]) leading to a shape conflict we use this:</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">idx_bin</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">idx_bin</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">Ng</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">Ng</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">parts</span><span class="p">:</span>
+            <span class="n">idx_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">idx_bin</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">idx_bin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;an index is appearing twice in idx_bin&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unexpected empty sets.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># -------------------------------------------</span>
+        <span class="c1"># take the next idx with highest profit. I&#39;d like to remove it but first I need to add (possibly) the new dimension.</span>
+        <span class="c1"># Note that idx it&#39;s already in G</span>
+        <span class="c1"># -------------------------------------------</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">profits</span><span class="p">)</span>
+        <span class="n">maxprof</span> <span class="o">=</span> <span class="n">profits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">idx_bin</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># -------------------------------------------</span>
+        <span class="c1"># now we take care of possibly changing the variables buffer, i.e., adding a new variable to be explored</span>
+        <span class="c1"># -------------------------------------------</span>
+        <span class="c1"># find the list of variables in which the current choice of idx wants to add points</span>
+        <span class="n">to_be_explored</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">new_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">to_be_explored</span><span class="p">,</span> <span class="n">var_with_pts</span><span class="p">,</span> <span class="n">assume_unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># i.e., the variables activated by the new profit in which</span>
+                                                        <span class="c1"># no points have still been placed. Note that obviously new_var &lt;= N_full</span>
+
+        <span class="k">if</span> <span class="n">new_var</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># do nothing here, we keep working in the same subspace</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;keep number of dimensions as is&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">new_var</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># in this case, we add the new proposed variable to the ones where we have added points and</span>
+            <span class="c1"># we also add one variable to the explored one, to maintain the balance</span>
+            <span class="c1"># length(var_with_pts) + controls.var_buffer_size = N_curr</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;adding points a new variable&quot;</span><span class="p">)</span>
+            <span class="n">var_with_pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">var_with_pts</span><span class="p">,</span> <span class="n">new_var</span><span class="p">)</span>
+            <span class="c1"># the new variable to be explored is necessarily the N_curr+1, so adding it is just a matter</span>
+            <span class="c1"># of adding a column to the proper containers, unless the hard limit of N_full,</span>
+            <span class="c1"># i.e. the total number of variables of f has been reached; then, there are no more variables to explore.</span>
+            <span class="c1"># Observe though that even if all variables are explored, not all variables necessarily have points,</span>
+            <span class="c1"># so the previous line is not to be put inside the following if</span>
+            <span class="k">if</span> <span class="n">N</span> <span class="o">&lt;</span> <span class="n">N_full</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;adding a new variable to the explored dimensions&quot;</span><span class="p">)</span>
+
+                <span class="c1"># let&#39;s add one variable and increase the containers. We first add one dimension to the index containers</span>
+                <span class="n">N</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="c1"># fill those index lists with initial one&#39;s as in MATLAB</span>
+                <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">I</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+                <span class="n">I_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">I_log</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I_log</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">G</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">G</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+                <span class="n">G_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">G_log</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">G_log</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+                <span class="n">idx_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">idx_bin</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">idx_bin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+
+                <span class="c1"># then we add one coordinate to the sparse grid points that we have already generated. The new</span>
+                <span class="c1"># coordinate is the midpoint of the parameter space along the new direction. Here it&#39;s crucial that</span>
+                <span class="c1"># f(x)==f([x mp]), otherwise I have to reevaluate everything, which I do not want to do. I&#39;ll just raise a</span>
+                <span class="c1"># warning for the time being</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;adding a new variable, hence a new coordinate to points, held ad midpoint. Does this change f evaluations? If so, the code does not work because it does not recompute function evaluations&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">knots</span><span class="p">):</span>
+                    <span class="n">mp</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">knots</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">knots</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">mp</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">knots</span><span class="p">[</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">](</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;SparseGKit:WrongInput: knots must be either a function handle or a cell array of function handles&#39;</span><span class="p">)</span>
+
+                <span class="c1"># Extend every tensor grid stored in ``S`` (the sparse grid before reduction)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)):</span>
+                    <span class="c1"># add the new coordinate to the knot matrix</span>
+                    <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">mp</span><span class="p">)])</span>
+                    <span class="c1"># store the midpoint in the per-dimension cell array</span>
+                    <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">knots_per_dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">knots_per_dim</span><span class="p">,</span> <span class="p">[</span><span class="n">mp</span><span class="p">])</span>
+                    <span class="c1"># update the 1-D size vector</span>
+                    <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="c1"># the multi-index for this tensor grid gets a new entry = 0</span>
+                    <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+                <span class="c1"># Extend the reduced grid ``Sr`` (only the knot matrix - weights are unchanged)</span>
+                <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">mp</span><span class="p">)])</span>
+
+                <span class="c1"># For non-nested points we also have to extend the full list ``Hr``</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]:</span>
+                    <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">mp</span><span class="p">)])</span>
+
+                <span class="c1"># because we have added the new variable, we need to add right away the profit of the first index in</span>
+                <span class="c1"># its direction, as if we had started with Ng=ones(N+1,1)*idx + eye(N+1) in the first place. In this way,</span>
+                <span class="c1"># we trigger exploration in that direction too</span>
+
+                <span class="n">Ng_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+                <span class="n">Ng_new</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="n">G_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">G_log</span><span class="p">,</span> <span class="n">Ng_new</span><span class="p">])</span>
+                <span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">coeff_G</span> <span class="o">=</span> <span class="n">create_sparse_grid_add_multiidx</span><span class="p">(</span>
+                    <span class="n">Ng_new</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">coeff_G</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span>
+                <span class="p">)</span>
+                <span class="n">Tr</span> <span class="o">=</span> <span class="n">reduce_sparse_grid</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pts_tol&quot;</span><span class="p">])</span>
+
+                <span class="p">(</span>
+                    <span class="n">nb_pts</span><span class="p">,</span>
+                    <span class="n">num_evals</span><span class="p">,</span>
+                    <span class="n">nb_pts_log</span><span class="p">,</span>
+                    <span class="n">Prof_new</span><span class="p">,</span>
+                    <span class="n">f_on_Tr</span><span class="p">,</span>
+                    <span class="n">Hr</span><span class="p">,</span>
+                    <span class="n">f_on_Hr</span><span class="p">,</span>
+                    <span class="n">intnew</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">compute_profit_idx</span><span class="p">(</span>
+                    <span class="n">Ng_new</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span>
+                    <span class="n">f</span><span class="p">,</span>
+                    <span class="n">S</span><span class="p">,</span>
+                    <span class="n">T</span><span class="p">,</span>
+                    <span class="n">Tr</span><span class="p">,</span>
+                    <span class="n">Sr</span><span class="p">,</span>
+                    <span class="n">Hr</span><span class="p">,</span>
+                    <span class="n">f_on_Sr</span><span class="p">,</span>
+                    <span class="n">f_on_Hr</span><span class="p">,</span>
+                    <span class="n">intf</span><span class="p">,</span>
+                    <span class="n">nb_pts</span><span class="p">,</span>
+                    <span class="n">num_evals</span><span class="p">,</span>
+                    <span class="n">nb_pts_log</span><span class="p">,</span>
+                    <span class="n">knots</span><span class="p">,</span>
+                    <span class="n">lev2knots</span><span class="p">,</span>
+                    <span class="n">controls</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># update the current grid with the newly added index</span>
+                <span class="n">S</span> <span class="o">=</span> <span class="n">T</span>
+                <span class="n">Sr</span> <span class="o">=</span> <span class="n">Tr</span>
+                <span class="n">f_on_Sr</span> <span class="o">=</span> <span class="n">f_on_Tr</span>
+                <span class="n">intf</span> <span class="o">=</span> <span class="n">intnew</span>
+
+                <span class="c1"># add the new profit to the list</span>
+                <span class="n">profits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">profits</span><span class="p">,</span> <span class="n">Prof_new</span><span class="p">)</span>
+                <span class="n">idx_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">idx_bin</span><span class="p">,</span> <span class="n">Ng_new</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">idx_bin</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">idx_bin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;an index is appearing twice in idx_bin&#39;</span><span class="p">)</span>
+
+                <span class="c1"># now, this new profit might already be the best one, so I need to reconsider my previous decision.</span>
+                <span class="c1"># I recompute the best profit and now I can also remove it from idx_bin (a few lines below)</span>
+                <span class="c1"># recompute the best profit (the newly added index might be the best)</span>
+
+                <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">profits</span><span class="p">)</span>
+                <span class="n">maxprof</span> <span class="o">=</span> <span class="n">profits</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">idx_bin</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;maximum number of variables to be explored reached, continuing as is&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;still don&#39;t know how to deal with the case where 2 or more new variables need to be explored&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># -------------------------------------------</span>
+        <span class="c1"># end of the section where we change the variables buffer</span>
+        <span class="c1"># -------------------------------------------</span>
+        <span class="n">I_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">I_log</span><span class="p">,</span> <span class="n">idx</span><span class="p">])</span>
+        <span class="n">I_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">I</span><span class="p">,</span> <span class="n">idx</span><span class="p">])</span>
+        <span class="c1"># sort rows lexicographically by all columns</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">I_combined</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">I_combined</span><span class="p">))]</span> <span class="c1"># note that I must be lexicog sorted for check_index_admissibility(Ng(m,:),I) to work</span>
+
+        <span class="c1"># remove the just-chosen index from the candidate list</span>
+        <span class="n">idx_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">idx_bin</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">profits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">profits</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+        <span class="n">N_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">N_log</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="c1"># optional live plot (only if the user asked for it)</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">plot_idx_status</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">idx_bin</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+
+    <span class="c1"># done with the loop on idx, we can reduce Hr to squeeze out multiple occurrencies of same point (if any) and</span>
+    <span class="c1"># fix nb_pts_visited</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;recycling&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;priority_to_evaluation&quot;</span><span class="p">:</span>
+        <span class="c1"># I need to make Hr look like a sequence of tensor grids. I actually only need to add to it a fake weights field</span>
+        <span class="n">Hr</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">Hr</span> <span class="o">=</span> <span class="n">reduce_sparse_grid</span><span class="p">(</span><span class="n">Hr</span><span class="p">,</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pts_tol&quot;</span><span class="p">])</span>
+        <span class="n">f_on_Hr</span> <span class="o">=</span> <span class="n">f_on_Hr</span><span class="p">[:,</span> <span class="n">Hr</span><span class="o">.</span><span class="n">m</span><span class="p">]</span>  <span class="c1"># here I remove duplicates in f_on_Hr too</span>
+
+    <span class="n">adapted</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+        <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span>
+        <span class="s2">&quot;Sr&quot;</span><span class="p">:</span> <span class="n">Sr</span><span class="p">,</span>
+        <span class="s2">&quot;f_on_Sr&quot;</span><span class="p">:</span> <span class="n">f_on_Sr</span><span class="p">,</span>
+        <span class="s2">&quot;nb_pts&quot;</span><span class="p">:</span> <span class="n">nb_pts</span><span class="p">,</span>
+        <span class="s2">&quot;nested&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]),</span>
+        <span class="s2">&quot;nb_pts_visited&quot;</span><span class="p">:</span> <span class="n">nb_pts</span> <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;num_evals&quot;</span><span class="p">:</span> <span class="n">num_evals</span><span class="p">,</span>
+        <span class="s2">&quot;intf&quot;</span><span class="p">:</span> <span class="n">intf</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">num_evals</span> <span class="o">&gt;</span> <span class="n">adapted</span><span class="p">[</span><span class="s2">&quot;nb_pts_visited&quot;</span><span class="p">]:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Some points have been evaluated more than once. Total: </span><span class="si">{</span><span class="n">num_evals</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">adapted</span><span class="p">[</span><span class="s1">&#39;nb_pts_visited&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;extra evaluations over </span><span class="si">{</span><span class="n">adapted</span><span class="p">[</span><span class="s1">&#39;nb_pts_visited&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> function evaluations&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># -----------------------------------------------------------------</span>
+    <span class="c1">#   Private data needed to resume a computation</span>
+    <span class="c1"># -----------------------------------------------------------------</span>
+    <span class="n">private</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">G</span><span class="p">,</span>
+        <span class="s2">&quot;G_log&quot;</span><span class="p">:</span> <span class="n">G_log</span><span class="p">,</span>
+        <span class="s2">&quot;coeff_G&quot;</span><span class="p">:</span> <span class="n">coeff_G</span><span class="p">,</span>
+        <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="n">I</span><span class="p">,</span>
+        <span class="s2">&quot;I_log&quot;</span><span class="p">:</span> <span class="n">I_log</span><span class="p">,</span>
+        <span class="s2">&quot;maxprof&quot;</span><span class="p">:</span> <span class="n">maxprof</span><span class="p">,</span>
+        <span class="s2">&quot;idx&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span>
+        <span class="s2">&quot;profits&quot;</span><span class="p">:</span> <span class="n">profits</span><span class="p">,</span>
+        <span class="s2">&quot;idx_bin&quot;</span><span class="p">:</span> <span class="n">idx_bin</span><span class="p">,</span>
+        <span class="s2">&quot;Hr&quot;</span><span class="p">:</span> <span class="n">Hr</span><span class="p">,</span>
+        <span class="s2">&quot;f_on_Hr&quot;</span><span class="p">:</span> <span class="n">f_on_Hr</span><span class="p">,</span>
+        <span class="s2">&quot;var_with_pts&quot;</span><span class="p">:</span> <span class="n">var_with_pts</span><span class="p">,</span>
+        <span class="s2">&quot;N_log&quot;</span><span class="p">:</span> <span class="n">N_log</span><span class="p">,</span>
+        <span class="s2">&quot;nb_pts_log&quot;</span><span class="p">:</span> <span class="n">nb_pts_log</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">adapted</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">private</span>
+
+    <span class="k">return</span> <span class="n">adapted</span></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">default_controls</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="n">N_full</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fill the ``controls`` dictionary with default values for all optional fields.</span>
+<span class="sd">    The mandatory fields are ``&#39;nested&#39;`` (always required) and, when a weighted</span>
+<span class="sd">    profit is requested, ``&#39;pdf&#39;``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    controls : dict</span>
+<span class="sd">        Dictionary of control parameters.</span>
+<span class="sd">    N_full : int</span>
+<span class="sd">        Full dimension of the parameter space.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Updated controls dictionary with default values for missing fields.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;pts_tol&quot;</span><span class="p">:</span> <span class="mf">1e-14</span><span class="p">,</span>
+        <span class="s2">&quot;max_pts&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;prof_tol&quot;</span><span class="p">:</span> <span class="mf">1e-14</span><span class="p">,</span>
+        <span class="s2">&quot;prof&quot;</span><span class="p">:</span> <span class="s2">&quot;Linf/new_points&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;op_vect&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">A</span> <span class="o">-</span> <span class="n">B</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
+        <span class="s2">&quot;recycling&quot;</span><span class="p">:</span> <span class="s2">&quot;priority_to_evaluation&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># copy defaults only for missing keys</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">controls</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+    <span class="c1"># mandatory fields</span>
+    <span class="k">if</span> <span class="s2">&quot;nested&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">controls</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;controls must specify the value of &#39;nested&#39; field&quot;</span><span class="p">)</span>
+
+    <span class="c1"># weighted profits need a pdf</span>
+    <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;prof&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;weighted Linf/new_points&quot;</span><span class="p">,</span> <span class="s2">&quot;weighted Linf&quot;</span><span class="p">}:</span>
+        <span class="k">if</span> <span class="s2">&quot;pdf&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">controls</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="s2">&quot;you need to set the field &#39;pdf&#39; to use &#39;weighted Linf&#39; and &#39;weighted Linf/new_points&#39; profits&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># buffer size - cannot be larger than the full dimension</span>
+    <span class="k">if</span> <span class="s2">&quot;var_buffer_size&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">controls</span><span class="p">:</span>
+        <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;var_buffer_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">N_full</span>
+    <span class="k">elif</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;var_buffer_size&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">N_full</span><span class="p">:</span>
+        <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;var_buffer_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">N_full</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s2">&quot;controls.var_buffer_size cannot be greater than N_full. &quot;</span>
+            <span class="s2">&quot;The code will proceed with controls.var_buffer_size = N_full.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check recycling option</span>
+    <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;recycling&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;priority_to_evaluation&quot;</span><span class="p">,</span> <span class="s2">&quot;priority_to_recycling&quot;</span><span class="p">}:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown value of field controls.recycling&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">controls</span>
+
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="c1">#   Helper: initialise (or resume) the adaptive algorithm</span>
+<span class="c1"># -------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">start_adapt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">prev_adapt</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize or resume the adaptive algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        Function to approximate.</span>
+<span class="sd">    N : int</span>
+<span class="sd">        Current number of dimensions.</span>
+<span class="sd">    knots : callable or list of callables</span>
+<span class="sd">        Knot generation functions.</span>
+<span class="sd">    lev2knots : callable</span>
+<span class="sd">        Level-to-knots mapping function.</span>
+<span class="sd">    prev_adapt : dict or None</span>
+<span class="sd">        Previous adaptation state (None for fresh start).</span>
+<span class="sd">    controls : dict</span>
+<span class="sd">        Control parameters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Initialized or resumed state of the adaptive algorithm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># --&gt; I         : is the set of explored indices (the grid is actually larger, it includes as well their neighbours)</span>
+    <span class="c1"># --&gt; I_log     : I must be sorted lexicographically for software reasons. I_log is the same set of indices, but</span>
+    <span class="c1">#                   sorted in the order in which they are chosen by the algorithm</span>
+    <span class="c1"># --&gt; idx       : is the idx with the highest profit, whose neighbour we will next explore</span>
+    <span class="c1"># --&gt; maxprof   : the corresponding profit</span>
+    <span class="c1"># --&gt; idx_bin   : is the set of idx whose profit has been computed. They have been added to the grid but their neighbour is yet to be explored</span>
+    <span class="c1"># --&gt; profits   : is the corresponding set of profits</span>
+    <span class="c1"># --&gt; G         : is the set of the grid.</span>
+    <span class="c1"># --&gt; G_log     : same as I_log,  but for G</span>
+    <span class="c1"># --&gt; coeff_G   : coefficients of the combination technique applied to G</span>
+    <span class="c1"># --&gt; nb_pts    : the number of points in the grid</span>
+    <span class="c1"># --&gt; num_evals : the number of function evaluations</span>
+    <span class="c1"># --&gt; nb_pts_log: for each iteration, the current nb_pts</span>
+    <span class="c1"># --&gt; S         : create_sparse_grid_multiidx_set(G,knots,lev2knots);</span>
+    <span class="c1"># --&gt; Sr        : reduce_sparse_grid(S);</span>
+    <span class="c1"># --&gt; f_on_Sr   : evaluate_on_sparse_grid(f,Sr);</span>
+    <span class="c1"># --&gt; intf      : approx of integral of f using Sr</span>
+    <span class="c1"># --&gt; Hr        : all the points visited by the algo, stored as a reduced grid to be able to use ; only useful for non-nested grids, where it differs from Sr.</span>
+    <span class="c1"># --&gt; var_with_pts: vector of variables in which we have actually put points.</span>
+    <span class="c1">#                   length(var_with_pts) + controls.var_buffer_size = N_curr</span>
+    <span class="c1"># --&gt; N_log     : for every iteration, the value of N_curr</span>
+
+    <span class="k">if</span> <span class="n">prev_adapt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># it&#39;s a fresh start</span>
+        <span class="c1"># --------------------------------------------</span>
+
+        <span class="n">var_with_pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>   <span class="c1"># we have put no points in no variables for now</span>
+        <span class="n">N_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">N</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+        <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>            <span class="c1"># first explored index = [0,0,...,0]</span>
+        <span class="n">I_log</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">maxprof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="n">idx_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">profits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="n">G</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">G_log</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">coeff_G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])</span>
+
+        <span class="n">S</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">create_sparse_grid_multiidx_set</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">)</span>
+        <span class="n">Sr</span> <span class="o">=</span> <span class="n">reduce_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pts_tol&quot;</span><span class="p">])</span>
+        <span class="n">f_on_Sr</span><span class="p">,</span><span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">evaluate_on_sparse_grid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Sr</span><span class="p">)</span>  <span class="c1"># here we don&#39;t need controls.pts_tol, there is no check on new/old points</span>
+
+        <span class="n">Hr</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Sr</span><span class="p">)</span>
+        <span class="n">f_on_Hr</span> <span class="o">=</span> <span class="n">f_on_Sr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># it is a matrix of size VxM where M is the number of points and f:R^N-&gt;R^V</span>
+
+        <span class="n">intf</span> <span class="o">=</span> <span class="n">f_on_Sr</span> <span class="o">@</span> <span class="n">Sr</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">nb_pts</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">nb_pts_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nb_pts</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">num_evals</span> <span class="o">=</span> <span class="n">nb_pts</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># we are resuming from a previous run</span>
+        <span class="c1">#--------------------------------------------</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;adapt--recycling&quot;</span><span class="p">)</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">]</span>
+        <span class="n">N_log</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;N_log&quot;</span><span class="p">]</span>
+        <span class="n">var_with_pts</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;var_with_pts&quot;</span><span class="p">]</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;I&quot;</span><span class="p">]</span>
+        <span class="n">I_log</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;I_log&quot;</span><span class="p">]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span>
+        <span class="n">maxprof</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;maxprof&quot;</span><span class="p">]</span>
+        <span class="n">idx_bin</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;idx_bin&quot;</span><span class="p">]</span>
+        <span class="n">profits</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;profits&quot;</span><span class="p">]</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;G&quot;</span><span class="p">]</span>
+        <span class="n">G_log</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;G_log&quot;</span><span class="p">]</span>
+        <span class="n">coeff_G</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;coeff_G&quot;</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;S&quot;</span><span class="p">]</span>
+        <span class="n">Sr</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;Sr&quot;</span><span class="p">]</span>
+        <span class="n">f_on_Sr</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;f_on_Sr&quot;</span><span class="p">]</span>
+        <span class="n">Hr</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;Hr&quot;</span><span class="p">]</span>
+        <span class="n">f_on_Hr</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;f_on_Hr&quot;</span><span class="p">]</span>
+        <span class="n">intf</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;intf&quot;</span><span class="p">]</span>
+        <span class="n">nb_pts</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;nb_pts&quot;</span><span class="p">]</span>
+        <span class="n">nb_pts_log</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;private&quot;</span><span class="p">][</span><span class="s2">&quot;nb_pts_log&quot;</span><span class="p">]</span>
+        <span class="n">num_evals</span> <span class="o">=</span> <span class="n">prev_adapt</span><span class="p">[</span><span class="s2">&quot;num_evals&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">N</span><span class="p">,</span>
+        <span class="n">N_log</span><span class="p">,</span>
+        <span class="n">var_with_pts</span><span class="p">,</span>
+        <span class="n">S</span><span class="p">,</span>
+        <span class="n">Sr</span><span class="p">,</span>
+        <span class="n">f_on_Sr</span><span class="p">,</span>
+        <span class="n">I</span><span class="p">,</span>
+        <span class="n">I_log</span><span class="p">,</span>
+        <span class="n">idx</span><span class="p">,</span>
+        <span class="n">maxprof</span><span class="p">,</span>
+        <span class="n">idx_bin</span><span class="p">,</span>
+        <span class="n">profits</span><span class="p">,</span>
+        <span class="n">G</span><span class="p">,</span>
+        <span class="n">G_log</span><span class="p">,</span>
+        <span class="n">coeff_G</span><span class="p">,</span>
+        <span class="n">Hr</span><span class="p">,</span>
+        <span class="n">f_on_Hr</span><span class="p">,</span>
+        <span class="n">nb_pts</span><span class="p">,</span>
+        <span class="n">nb_pts_log</span><span class="p">,</span>
+        <span class="n">num_evals</span><span class="p">,</span>
+        <span class="n">intf</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_profit_idx</span><span class="p">(</span><span class="n">ng_idx</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Tr</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">Hr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">f_on_Hr</span><span class="p">,</span> <span class="n">intf</span><span class="p">,</span> <span class="n">nb_pts</span><span class="p">,</span> <span class="n">num_evals</span><span class="p">,</span> <span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the profit of a given index.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ng_idx : ndarray</span>
+<span class="sd">        The index to compute the profit for.</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        Function to approximate.</span>
+<span class="sd">    S : list</span>
+<span class="sd">        Current sparse grid.</span>
+<span class="sd">    T : list</span>
+<span class="sd">        New sparse grid with the index added.</span>
+<span class="sd">    Tr : struct</span>
+<span class="sd">        Reduced new sparse grid.</span>
+<span class="sd">    Sr : struct</span>
+<span class="sd">        Reduced current sparse grid.</span>
+<span class="sd">    Hr : struct</span>
+<span class="sd">        All points visited by the algorithm.</span>
+<span class="sd">    f_on_Sr : ndarray</span>
+<span class="sd">        Function evaluations on Sr.</span>
+<span class="sd">    f_on_Hr : ndarray</span>
+<span class="sd">        Function evaluations on Hr.</span>
+<span class="sd">    intf : ndarray</span>
+<span class="sd">        Approximation of the integral of f using Sr.</span>
+<span class="sd">    nb_pts : int</span>
+<span class="sd">        Current number of points in the grid.</span>
+<span class="sd">    num_evals : int</span>
+<span class="sd">        Current number of function evaluations.</span>
+<span class="sd">    nb_pts_log : ndarray</span>
+<span class="sd">        Log of the number of points at each iteration.</span>
+<span class="sd">    knots : callable or list of callables</span>
+<span class="sd">        Knot generation functions.</span>
+<span class="sd">    lev2knots : callable</span>
+<span class="sd">        Level-to-knots mapping function.</span>
+<span class="sd">    controls : dict</span>
+<span class="sd">        Control parameters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Updated number of points, number of function evaluations, log of points, profit, function evaluations on Tr, Hr, f_on_Hr, and integral approximation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">ng_idx</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">1</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">ng_idx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Tr_on_new_pts</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]:</span>
+        <span class="c1"># here we evaluate on new points only. Note that finding which points have been evaluated already</span>
+        <span class="c1"># relies on multiindex info almost exclusively (because the points are nested) so this is quite efficient</span>
+        <span class="n">f_on_Tr</span><span class="p">,</span> <span class="n">new_points</span><span class="p">,</span> <span class="n">idx_newp</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">evaluate_on_sparse_grid</span><span class="p">(</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Tr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pts_tol&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">intnew</span> <span class="o">=</span> <span class="n">f_on_Tr</span> <span class="o">@</span> <span class="n">Tr</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">newp</span> <span class="o">=</span> <span class="n">idx_newp</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">nb_pts</span> <span class="o">+=</span> <span class="n">newp</span>
+        <span class="n">nb_pts_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">nb_pts</span><span class="p">)</span>
+        <span class="n">num_evals</span> <span class="o">=</span> <span class="n">nb_pts</span>
+        <span class="n">Hr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">f_on_Hr</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># in this case, we need to keep track of all the points explored, even those that have been discarded in</span>
+        <span class="c1"># previous iterations</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;recycling&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;priority_to_evaluation&quot;</span><span class="p">:</span>
+            <span class="c1"># here we allow for multiple evaluations of the same point because we recycle from the previous grid only.</span>
+            <span class="c1"># if the function evaluation is &quot;cheap&quot; this is much faster, because the search for common points relies</span>
+            <span class="c1"># on multiindices and not on comparison of coordinates</span>
+            <span class="n">f_on_Tr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">idx_newp</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">evaluate_on_sparse_grid</span><span class="p">(</span>
+                <span class="n">f</span><span class="p">,</span>
+                <span class="n">T</span><span class="p">,</span>
+                <span class="n">Tr</span><span class="p">,</span>
+                <span class="n">f_on_Sr</span><span class="p">,</span>
+                <span class="n">S</span><span class="p">,</span>
+                <span class="n">Sr</span><span class="p">,</span>
+                <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pts_tol&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">intnew</span> <span class="o">=</span> <span class="n">f_on_Tr</span> <span class="o">@</span> <span class="n">Tr</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">T</span>
+
+            <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span> <span class="n">Tr</span><span class="o">.</span><span class="n">knots</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">]])</span>
+            <span class="n">f_on_Hr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">f_on_Hr</span><span class="p">,</span> <span class="n">f_on_Tr</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">]])</span>
+
+            <span class="c1">#newp = np.prod(lev2knots(ng_idx))</span>
+            <span class="n">newp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">lev2knots</span><span class="p">(</span><span class="n">ng_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
+            <span class="n">nb_pts</span> <span class="o">=</span> <span class="n">Tr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">num_evals</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_newp</span><span class="p">)</span>
+            <span class="n">nb_pts_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">nb_pts</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># (slow)</span>
+            <span class="c1"># here we want to make sure no multiple evaluations of the same point occur. Thus we look in</span>
+            <span class="c1"># all points ever visited, but this is expensive because we rely on point coordinates only!</span>
+            <span class="n">f_on_Tr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">idx_newp</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">evaluate_on_sparse_grid</span><span class="p">(</span>
+                <span class="n">f</span><span class="p">,</span>
+                <span class="n">T</span><span class="p">,</span>
+                <span class="n">Tr</span><span class="p">,</span>
+                <span class="n">f_on_Hr</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span>  <span class="c1"># this is not an error</span>
+                <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pts_tol&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">intnew</span> <span class="o">=</span> <span class="n">f_on_Tr</span> <span class="o">@</span> <span class="n">Tr</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">T</span>
+
+            <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span> <span class="n">Tr</span><span class="o">.</span><span class="n">knots</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">]])</span>
+            <span class="n">f_on_Hr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">f_on_Hr</span><span class="p">,</span> <span class="n">f_on_Tr</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">]])</span>
+
+            <span class="c1">#newp = np.prod(lev2knots(ng_idx))</span>
+            <span class="n">newp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">lev2knots</span><span class="p">(</span><span class="n">ng_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
+            <span class="n">nb_pts</span> <span class="o">=</span> <span class="n">f_on_Tr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">num_evals</span> <span class="o">=</span> <span class="n">Hr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">nb_pts_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">nb_pts</span><span class="p">)</span>
+
+        <span class="c1"># moreover, if profit is of type Linf, we need to evaluate the new grid on the ``nominally new points&#39;&#39;,</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;prof&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span>
+            <span class="s2">&quot;Linf/new_points&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Linf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;weighted Linf/new_points&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;weighted Linf&quot;</span><span class="p">,</span>
+        <span class="p">}:</span>
+            <span class="c1">#Tx = tensor_grid(N, lev2knots(ng_idx), knots)</span>
+            <span class="n">Tx</span> <span class="o">=</span> <span class="n">tensor_grid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="p">[</span><span class="n">lev2knots</span><span class="p">(</span><span class="n">ng_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)],</span> <span class="n">knots</span><span class="p">)</span>
+            <span class="n">new_points</span> <span class="o">=</span> <span class="n">Tx</span><span class="o">.</span><span class="n">knots</span>
+            <span class="n">Tr_on_new_pts</span> <span class="o">=</span> <span class="n">interpolate_on_sparse_grid</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Tr</span><span class="p">,</span> <span class="n">f_on_Tr</span><span class="p">,</span> <span class="n">new_points</span><span class="p">)</span>
+        <span class="c1">#elif controls[&#39;prof&#39;] in [&#39;deltaint/new_points&#39;, &#39;deltaint&#39;]:</span>
+            <span class="c1"># no need of new points</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;do we need new points in this case? fix code here&#39;</span><span class="p">)</span>
+
+    <span class="n">prof_type</span> <span class="o">=</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;prof&quot;</span><span class="p">]</span>
+    <span class="n">op_vect</span> <span class="o">=</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;op_vect&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">prof_type</span> <span class="o">==</span> <span class="s2">&quot;Linf/new_points&quot;</span><span class="p">:</span>
+        <span class="n">Sr_on_new_pts</span> <span class="o">=</span> <span class="n">interpolate_on_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">new_points</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">op_vect</span><span class="p">(</span><span class="n">f_on_Tr</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">],</span> <span class="n">Sr_on_new_pts</span><span class="p">))</span> <span class="o">/</span> <span class="n">newp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">op_vect</span><span class="p">(</span><span class="n">Tr_on_new_pts</span><span class="p">,</span> <span class="n">Sr_on_new_pts</span><span class="p">))</span> <span class="o">/</span> <span class="n">newp</span>
+
+    <span class="k">elif</span> <span class="n">prof_type</span> <span class="o">==</span> <span class="s2">&quot;Linf&quot;</span><span class="p">:</span>
+        <span class="n">Sr_on_new_pts</span> <span class="o">=</span> <span class="n">interpolate_on_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">new_points</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">op_vect</span><span class="p">(</span><span class="n">f_on_Tr</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">],</span> <span class="n">Sr_on_new_pts</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">op_vect</span><span class="p">(</span><span class="n">Tr_on_new_pts</span><span class="p">,</span> <span class="n">Sr_on_new_pts</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">prof_type</span> <span class="o">==</span> <span class="s2">&quot;deltaint/new_points&quot;</span><span class="p">:</span>
+        <span class="n">delta_int</span> <span class="o">=</span> <span class="n">op_vect</span><span class="p">(</span><span class="n">intnew</span><span class="p">,</span> <span class="n">intf</span><span class="p">)</span>
+        <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">delta_int</span> <span class="o">/</span> <span class="n">newp</span>
+
+    <span class="k">elif</span> <span class="n">prof_type</span> <span class="o">==</span> <span class="s2">&quot;deltaint&quot;</span><span class="p">:</span>
+        <span class="n">delta_int</span> <span class="o">=</span> <span class="n">op_vect</span><span class="p">(</span><span class="n">intnew</span><span class="p">,</span> <span class="n">intf</span><span class="p">)</span>
+        <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">delta_int</span>
+
+    <span class="k">elif</span> <span class="n">prof_type</span> <span class="o">==</span> <span class="s2">&quot;weighted Linf/new_points&quot;</span><span class="p">:</span>
+        <span class="n">Sr_on_new_pts</span> <span class="o">=</span> <span class="n">interpolate_on_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">new_points</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                    <span class="n">op_vect</span><span class="p">(</span><span class="n">f_on_Tr</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">],</span> <span class="n">Sr_on_new_pts</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">](</span><span class="n">new_points</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">/</span> <span class="n">newp</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                    <span class="n">op_vect</span><span class="p">(</span><span class="n">Tr_on_new_pts</span><span class="p">,</span> <span class="n">Sr_on_new_pts</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">](</span><span class="n">new_points</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">/</span> <span class="n">newp</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">prof_type</span> <span class="o">==</span> <span class="s2">&quot;weighted Linf&quot;</span><span class="p">:</span>
+        <span class="n">Sr_on_new_pts</span> <span class="o">=</span> <span class="n">interpolate_on_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">f_on_Sr</span><span class="p">,</span> <span class="n">new_points</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">]:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                <span class="n">op_vect</span><span class="p">(</span><span class="n">f_on_Tr</span><span class="p">[:,</span> <span class="n">idx_newp</span><span class="p">],</span> <span class="n">Sr_on_new_pts</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">](</span><span class="n">new_points</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Prof_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                <span class="n">op_vect</span><span class="p">(</span><span class="n">Tr_on_new_pts</span><span class="p">,</span> <span class="n">Sr_on_new_pts</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">controls</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">](</span><span class="n">new_points</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown profit indicator. Check spelling&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nb_pts</span><span class="p">,</span> <span class="n">num_evals</span><span class="p">,</span> <span class="n">nb_pts_log</span><span class="p">,</span> <span class="n">Prof_temp</span><span class="p">,</span> <span class="n">f_on_Tr</span><span class="p">,</span> <span class="n">Hr</span><span class="p">,</span> <span class="n">f_on_Hr</span><span class="p">,</span> <span class="n">intnew</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+sgpykit.tools.polynomials\_functions
+====================================
+
+.. automodule:: sgpykit.tools.polynomials_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cheb_eval
+      cheb_eval_multidim
+      generalized_lagu_eval
+      generalized_lagu_eval_multidim
+      herm_eval
+      herm_eval_multidim
+      jacobi_prob_eval
+      jacobi_prob_eval_multidim
+      lagr_eval
+      lagr_eval_fast
+      lagr_eval_multidim
+      lagu_eval
+      lagu_eval_multidim
+      lege_eval
+      lege_eval_multidim
+      standard_lege_eval
+      univariate_interpolant
+   

@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main.convert_to_modal &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.main.convert_to_modal</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.main.convert_to_modal</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.compute_modal_tensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_modal_tensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.struct_array</span><span class="w"> </span><span class="kn">import</span> <span class="n">StructArray</span>
+
+
+<div class="viewcode-block" id="convert_to_modal">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.main.html#sgpykit.main.convert_to_modal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_to_modal</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">nodal_values</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a sparse grid interpolant to a modal (spectral) expansion.</span>
+
+<span class="sd">    This function recasts a sparse grid interpolant as a sum of orthogonal polynomials,</span>
+<span class="sd">    i.e., computes the spectral expansion of the interpolant.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    S : array_like</span>
+<span class="sd">        Sparse grid structure.</span>
+<span class="sd">    Sr : array_like</span>
+<span class="sd">        Reduced sparse grid structure.</span>
+<span class="sd">    nodal_values : array_like</span>
+<span class="sd">        Values of the target function evaluated on the reduced sparse grid.</span>
+<span class="sd">        If the function is vector-valued (F: R^N -&gt; R^V), then nodal_values</span>
+<span class="sd">        is a matrix of size V x M, where M is the number of points in Sr.knots.</span>
+<span class="sd">        If the function is scalar-valued, nodal_values is a row vector.</span>
+<span class="sd">    domain : array_like</span>
+<span class="sd">        Domain specification for the sparse grid. The format depends on the</span>
+<span class="sd">        polynomial family:</span>
+<span class="sd">        - For &#39;legendre&#39;, &#39;chebyshev&#39;: 2xN matrix [a1, a2, ...; b1, b2, ...]</span>
+<span class="sd">          defining the hyper-rectangle bounds.</span>
+<span class="sd">        - For &#39;hermite&#39;: 2xN matrix [mu1, mu2, ...; sigma1, sigma2, ...]</span>
+<span class="sd">          defining normal distribution parameters.</span>
+<span class="sd">        - For &#39;laguerre&#39;: 1xN matrix [lambda1, lambda2, ...] defining</span>
+<span class="sd">          exponential distribution parameters.</span>
+<span class="sd">        - For &#39;generalized laguerre&#39;: 2xN matrix [alpha1, alpha2, ...; beta1, beta2, ...]</span>
+<span class="sd">          defining Gamma distribution parameters.</span>
+<span class="sd">        - For &#39;jacobi&#39;: 4xN matrix [alpha1, alpha2, ...; beta1, beta2, ...; a1, a2, ...; b1, b2, ...]</span>
+<span class="sd">          defining Beta distribution parameters on intervals [a_n, b_n].</span>
+<span class="sd">        - For mixed families: cell array of length N, where each cell contains the parameters</span>
+<span class="sd">          for the corresponding polynomial family.</span>
+<span class="sd">    flags : str or list of str</span>
+<span class="sd">        Polynomial family or families to use for the expansion. Supported values are:</span>
+<span class="sd">        &#39;legendre&#39;, &#39;chebyshev&#39;, &#39;hermite&#39;, &#39;laguerre&#39;, &#39;generalized laguerre&#39;, &#39;jacobi&#39;.</span>
+<span class="sd">        For mixed families, provide a list of strings.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    modal_coeffs : ndarray</span>
+<span class="sd">        Matrix of modal coefficients. Each row corresponds to a multi-index and has V components.</span>
+<span class="sd">    K : ndarray</span>
+<span class="sd">        Matrix of multi-indices, one per row.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function processes each tensor grid in the sparse grid, computes the modal</span>
+<span class="sd">    coefficients for each grid, and aggregates the coefficients by summing those with</span>
+<span class="sd">    identical multi-indices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># CONVERT_TO_MODAL recasts a sparse grid interpolant as a sum of orthogonal polynomials</span>
+    <span class="c1"># i.e. computes the spectral expansion of the interpolant.</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,&#39;legendre&#39;) returns the Legendre expansion</span>
+    <span class="c1">#       of the sparse grid interpolant. S is a sparse grid, SR is its reduced counterpart, NODAL_VALUES</span>
+    <span class="c1">#       are the values of the target function (say F) evaluated on the reduced sparse grid, and has the same</span>
+    <span class="c1">#       size of e.g. F_EVAL, output of EVALUATE_ON_SPARSE_GRID.</span>
+
+    <span class="c1">#       More precisely, if F: R^N -&gt; R^V and SR.KNOTS contains M points in R^N, then</span>
+    <span class="c1">#       SR.KNOTS is a matrix NxM and NODAL_VALUES is a matrix VxM, i.e.,</span>
+    <span class="c1">#       evaluations of F on different points of SR must be stored in NODAL_VALUES as columns.</span>
+    <span class="c1">#       If F is a scalar-valued function then NODAL_VALUES is a row-vector</span>
+
+    <span class="c1">#       DOMAIN is a 2xN matrix = [a1, a2, a3, ...; b1, b2, b3, ...] defining the lower and upper bound</span>
+    <span class="c1">#       of the hyper-rectangle on which the sparse grid is defined</span>
+    <span class="c1">#       The function returns the Legendre expansion as a matrix of coefficients MODAL_COEFFS, where</span>
+    <span class="c1">#       the rows of MODAL_COEFF have V components (V columns), i.e. they are the &quot;function coefficient&quot; of the expansion</span>
+    <span class="c1">#       of F: R^N -&gt; R^V. K is a matrix containing the associated multi-indices, one per row.</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,&#39;chebyshev&#39;) returns the Chebyshev expansion</span>
+    <span class="c1">#        of the sparse grid interpolant. See above for inputs and outputs.</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,&#39;hermite&#39;) returns the Hermite expansion</span>
+    <span class="c1">#       of the sparse grid interpolant. Here, DOMAIN is a 2XN matrix = [mu1, mu2, mu3, ...; sigma1, sigma2, sigma3,...]</span>
+    <span class="c1">#       i.e. the n-th variable of the sparse grid space has normal distribution with mean mu_n and std sigma_n</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,&#39;laguerre&#39;) returns the Laguerre expansion</span>
+    <span class="c1">#       of the sparse grid interpolant. Here, DOMAIN is a 1XN matrix = [lambda1, lambda2, lambda3, ...]</span>
+    <span class="c1">#       i.e. the n-th variable of the sparse grid space has exponential distribution with parameter lambda_n</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,&#39;generalized laguerre&#39;) returns the generalized Laguerre expansion</span>
+    <span class="c1">#       of the sparse grid interpolant. Here, DOMAIN is a 2XN matrix = [alpha1, alpha2, alpha3, ...; beta1, beta2, beta3, ...]</span>
+    <span class="c1">#       i.e. the n-th variable of the sparse grid space has Gamma distribution with parameters alpha_n and beta_n</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,&#39;jacobi&#39;) returns the Jacobi expansion</span>
+    <span class="c1">#       of the sparse grid interpolant. Here, DOMAIN is a 4XN matrix = [alpha1, alpha2, alpha3, ...; beta1, beta2, beta3, ...; a1, a2, a3, ...; b1, b2, b3, ...]</span>
+    <span class="c1">#       i.e. the n-th variable of the sparse grid space has Beta distribution with parameters alpha_n and beta_n on the interval [a_n,b_n]</span>
+    <span class="c1"># [MODAL_COEFFS,K] = CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,{&lt;family1&gt;,&lt;family2&gt;,&lt;family3&gt;,...}) returns the expansion</span>
+    <span class="c1">#       of the sparse grid interpolant over polynomial of &quot;mixed&quot; type, according to the families specified in</span>
+    <span class="c1">#       the last argument. For example:</span>
+    <span class="c1">#       CONVERT_TO_MODAL(S,SR,NODAL_VALUES,DOMAIN,{&#39;legendre&#39;,&#39;hermite&#39;,&#39;laguerre&#39;,&#39;jacobi&#39;,&#39;legendre&#39;})</span>
+    <span class="c1">#       converts the sparse grid interpolant in a sum of multi-variate polynomials that are products of</span>
+    <span class="c1">#       univariate Legendre polynomials (directions 1 and 5), Hermite (direction 2), Lagurre (direction 3) and Jacobi (direction 4).</span>
+    <span class="c1">#       Here DOMAIN is a cell array of lenght N where each cell contains the vector of the parameters (or a scalar value for the case &#39;laguerre&#39;)</span>
+    <span class="c1">#       of the n-th family of polynomials.</span>
+    <span class="c1">#       E.g. in the case above</span>
+    <span class="c1">#       DOMAIN = {[a1;b1], [mu1;sigma1], lambda, [alpha2;beta2;a2;b2], [a3;b3]}</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">flag</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;legendre&#39;</span><span class="p">,</span> <span class="s1">&#39;chebyshev&#39;</span><span class="p">,</span> <span class="s1">&#39;hermite&#39;</span><span class="p">,</span> <span class="s1">&#39;laguerre&#39;</span><span class="p">,</span> <span class="s1">&#39;generalized laguerre&#39;</span><span class="p">,</span> <span class="s1">&#39;jacobi&#39;</span><span class="p">}</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span>
+               <span class="n">flags</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;One or more strings in FLAGS unrecognized.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">matlab</span><span class="o">.</span><span class="n">iscell</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">matlab</span><span class="o">.</span><span class="n">iscell</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input argument DOMAIN must be a cell array. Each cell contains the domain for the corresponding polynomial.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># N is be the number of random variables</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># V is the output dimensionality, F:R^N -&gt; R^V</span>
+    <span class="n">nodal_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">nodal_values</span><span class="p">)</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">nodal_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># one tensor grid at a time, compute the modal equivalent, then sum up</span>
+    <span class="c1"># how many grid to process?</span>
+    <span class="n">nb_tensor_grids</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="c1"># each tensor grid will result in vector of coefficients, u, that</span>
+    <span class="c1"># are the coefficients of the modal (Legendre,Hermite) expansion of the</span>
+    <span class="c1"># lagrangian interpolant. To combine these coefficients properly, I need</span>
+    <span class="c1"># to store not only the coefficients u themselves, but also the associated</span>
+    <span class="c1"># multi-indices. I store this information into a structure array, U,</span>
+    <span class="c1"># whose lenght is nb_tensor_grids, with fields U(i).modal_coeffs, U(i).multi_indices, U(i).size (i.e.</span>
+    <span class="c1"># how many polynomials are associated to each grid)</span>
+
+    <span class="c1"># I will need this counter</span>
+    <span class="n">values_counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># I also do a trick to preallocate U</span>
+    <span class="c1"># TODO: check</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">StructArray</span><span class="p">(</span><span class="n">nb_tensor_grids</span><span class="p">)</span>
+    <span class="c1"># U[nb_tensor_grids-1].multi_indices = []</span>
+    <span class="c1"># U[nb_tensor_grids-1].size = []</span>
+    <span class="c1"># U[nb_tensor_grids-1].modal_coeffs = []</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_tensor_grids</span><span class="p">):</span>
+        <span class="c1"># some of the grids in S structure are empty, so I skip them</span>
+        <span class="k">if</span> <span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># recover the values of f on the current grid.</span>
+        <span class="c1"># To do this, I need to use Sr.n, that is the mapping from [S.knots] to Sr.knots</span>
+        <span class="c1"># To locate the knots of the g-th grid in the mapping Sr.n, i use values_counter</span>
+        <span class="n">grid_knots</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">values_counter</span><span class="p">,</span> <span class="n">values_counter</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;size&#39;</span><span class="p">])</span>
+        <span class="c1"># extract the values of the g-th grid. If nodal_values is vector-valued, because F:R^N -&gt; R^V</span>
+        <span class="c1"># then the evaluation of each component of F, F_1, F_2, ... F_V on each point of the tensor</span>
+        <span class="c1"># grid must be in a column vector, therefore I need to transpose nodal_values</span>
+        <span class="n">S_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">nodal_values</span><span class="p">[:,</span> <span class="n">Sr</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">grid_knots</span><span class="p">]])</span>
+        <span class="c1"># then update values_counter</span>
+        <span class="n">values_counter</span> <span class="o">=</span> <span class="n">values_counter</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+        <span class="c1"># and compute modal</span>
+        <span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_modal_tensor</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">],</span> <span class="n">S_values</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+    <span class="c1"># now I need to put together all the U.multi_indices, summing the coefficients that</span>
+    <span class="c1"># share the same multi_index. Same procedure as reduce sparse grid</span>
+
+    <span class="c1"># First I build a list of all multi_indices and coefficients</span>
+    <span class="c1"># I preallocate them to speed up code</span>
+
+    <span class="n">tot_midx</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_tensor_grids</span><span class="p">))</span>
+    <span class="c1"># this is the container of multi_indices</span>
+    <span class="n">All</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tot_midx</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="c1"># this is the container of coefficients</span>
+    <span class="n">all_coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tot_midx</span><span class="p">,</span> <span class="n">V</span><span class="p">))</span>
+    <span class="c1"># this is the index that scrolls them</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># fill All and all_coeffs</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_tensor_grids</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">All</span><span class="p">[</span><span class="n">l</span><span class="p">:</span><span class="n">l</span> <span class="o">+</span> <span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;size&#39;</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;multi_indices&#39;</span><span class="p">]</span>
+        <span class="n">all_coeffs</span><span class="p">[</span><span class="n">l</span><span class="p">:</span><span class="n">l</span> <span class="o">+</span> <span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;size&#39;</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;modal_coeffs&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">S</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="s1">&#39;coeff&#39;</span><span class="p">]</span>
+        <span class="c1"># a row vector (row of all_coeffs) and on the right we have</span>
+        <span class="c1"># a column vector</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="n">U</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="c1"># get rid of identical ones, by sorting and taking differences between cosecutive rows</span>
+    <span class="c1"># I need to store the sorter vector, to sum up all coefficients with</span>
+    <span class="c1"># the same multi_index</span>
+
+    <span class="n">All_sorted</span><span class="p">,</span> <span class="n">sorter</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sortrows</span><span class="p">(</span><span class="n">All</span><span class="p">)</span>
+    <span class="c1"># taking differences between consecutive rows, I have a way</span>
+    <span class="c1"># to build the unique version of All. Remember diff has 1 row</span>
+    <span class="c1"># less, so I have to add a ficticious row at the end of All</span>
+
+    <span class="n">dAll_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">All_sorted</span><span class="p">,</span> <span class="n">All_sorted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># if a row of dAll_sorted is made of 0s then I have</span>
+    <span class="c1"># to discard the corresponding row of All</span>
+
+    <span class="n">selector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dAll_sorted</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># store uniqued version of All</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">All_sorted</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span>
+    <span class="c1"># now I have to sum all the coefficients.</span>
+
+    <span class="c1"># sort coefficients in the same way as multi_indices</span>
+    <span class="n">all_coeffs_sorted</span> <span class="o">=</span> <span class="n">all_coeffs</span><span class="p">[</span><span class="n">sorter</span><span class="p">]</span>
+    <span class="c1"># initialize modal_coeffs, that is the final output</span>
+    <span class="n">nb_modal_coeffs</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">modal_coeffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_modal_coeffs</span><span class="p">,</span> <span class="n">V</span><span class="p">))</span>
+    <span class="c1"># compute them one at a time</span>
+
+    <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># scrolls all_coeffs_sorted</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_modal_coeffs</span><span class="p">):</span>
+        <span class="n">ss</span> <span class="o">=</span> <span class="n">all_coeffs_sorted</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">selector</span><span class="p">[</span><span class="n">l</span><span class="p">]:</span>
+            <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ss</span> <span class="o">+=</span> <span class="n">all_coeffs_sorted</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+        <span class="n">modal_coeffs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ss</span>
+        <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">modal_coeffs</span><span class="p">,</span> <span class="n">K</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

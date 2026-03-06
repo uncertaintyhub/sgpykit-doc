@@ -1,0 +1,706 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.matlab &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.util.misc" href="sgpykit.util.misc.html" />
+    <link rel="prev" title="sgpykit.util.log" href="sgpykit.util.log.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.cell.html">sgpykit.util.cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.checks.html">sgpykit.util.checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.create_sparse_grid_construct.html">sgpykit.util.create_sparse_grid_construct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.definitions.html">sgpykit.util.definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.log.html">sgpykit.util.log</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.util.matlab</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.ce"><code class="docutils literal notranslate"><span class="pre">ce()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.cell"><code class="docutils literal notranslate"><span class="pre">cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.eig"><code class="docutils literal notranslate"><span class="pre">eig()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.fieldnames"><code class="docutils literal notranslate"><span class="pre">fieldnames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.find"><code class="docutils literal notranslate"><span class="pre">find()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.fliplr"><code class="docutils literal notranslate"><span class="pre">fliplr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.ifft"><code class="docutils literal notranslate"><span class="pre">ifft()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.intersect"><code class="docutils literal notranslate"><span class="pre">intersect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.iscell"><code class="docutils literal notranslate"><span class="pre">iscell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.isfield"><code class="docutils literal notranslate"><span class="pre">isfield()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.isnumeric"><code class="docutils literal notranslate"><span class="pre">isnumeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.issorted"><code class="docutils literal notranslate"><span class="pre">issorted()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.isstruct"><code class="docutils literal notranslate"><span class="pre">isstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.logical"><code class="docutils literal notranslate"><span class="pre">logical()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.reshape"><code class="docutils literal notranslate"><span class="pre">reshape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.setdiff"><code class="docutils literal notranslate"><span class="pre">setdiff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.sort"><code class="docutils literal notranslate"><span class="pre">sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.sortrows"><code class="docutils literal notranslate"><span class="pre">sortrows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.struct"><code class="docutils literal notranslate"><span class="pre">struct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.matlab.unique"><code class="docutils literal notranslate"><span class="pre">unique()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.misc.html">sgpykit.util.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.plot.html">sgpykit.util.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct.html">sgpykit.util.struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct_array.html">sgpykit.util.struct_array</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.util.html">sgpykit.util</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.matlab</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.util.matlab.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.util.matlab">
+<span id="sgpykit-util-matlab"></span><h1>sgpykit.util.matlab<a class="headerlink" href="#module-sgpykit.util.matlab" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.ce" title="sgpykit.util.matlab.ce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ce</span></code></a>(*args)</p></td>
+<td><p>Replacement for the matlab {} operator to create cells.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.cell" title="sgpykit.util.matlab.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span></code></a>(shape)</p></td>
+<td><p>Returns an empty cell (numpy) array with the given shape (empty nD-matrix).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.eig" title="sgpykit.util.matlab.eig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eig</span></code></a>(var)</p></td>
+<td><p>Compute the eigenvalues and eigenvectors of a matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.fieldnames" title="sgpykit.util.matlab.fieldnames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fieldnames</span></code></a>(s)</p></td>
+<td><p>Get the field names of a Struct or StructArray.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.find" title="sgpykit.util.matlab.find"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find</span></code></a>(X[, n, direction])</p></td>
+<td><p>Find non-zero elements in an array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.fliplr" title="sgpykit.util.matlab.fliplr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fliplr</span></code></a>(arr)</p></td>
+<td><p>Flip the elements of the array from left to right.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_shape_of_cells</span></code>(objects)</p></td>
+<td><p>Get the shape of the first Cell object in the list of objects.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.ifft" title="sgpykit.util.matlab.ifft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ifft</span></code></a>(arr)</p></td>
+<td><p>Compute the inverse FFT of a 1D or 2D array, matching MATLAB's ifft() behavior.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.intersect" title="sgpykit.util.matlab.intersect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersect</span></code></a>(x, y)</p></td>
+<td><p>Find the intersection of two arrays.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_numeric_scalar</span></code>(item)</p></td>
+<td><p>Check if an item is a numeric scalar.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.iscell" title="sgpykit.util.matlab.iscell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iscell</span></code></a>(var)</p></td>
+<td><p>Check if the given variable is a Cell.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.isfield" title="sgpykit.util.matlab.isfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isfield</span></code></a>(var, sel)</p></td>
+<td><p>Check if the given field exists in the struct.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.isnumeric" title="sgpykit.util.matlab.isnumeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isnumeric</span></code></a>(obj)</p></td>
+<td><p>Check if the object is numeric.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.issorted" title="sgpykit.util.matlab.issorted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">issorted</span></code></a>(matrix[, typ])</p></td>
+<td><p>Check if the matrix is sorted.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.isstruct" title="sgpykit.util.matlab.isstruct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isstruct</span></code></a>(var)</p></td>
+<td><p>Check if the given variable is an instance of Struct or StructArray.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.logical" title="sgpykit.util.matlab.logical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logical</span></code></a>(var)</p></td>
+<td><p>Convert array to boolean (0=false, else=true).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.reshape" title="sgpykit.util.matlab.reshape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reshape</span></code></a>(var, r[, c])</p></td>
+<td><p>Reshape an array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.save" title="sgpykit.util.matlab.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(filename, *args)</p></td>
+<td><p>Save NumPy arrays to a MATLAB file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">savemat</span></code>(file_name, mdict[, appendmat, ...])</p></td>
+<td><p>Save a dictionary of names and arrays into a MATLAB-style .mat file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.setdiff" title="sgpykit.util.matlab.setdiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdiff</span></code></a>(A, B[, kind])</p></td>
+<td><p>Set difference of two arrays.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.sort" title="sgpykit.util.matlab.sort"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sort</span></code></a>(arr[, axis, direction])</p></td>
+<td><p>Sort an array in ascending or descending order.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.sortrows" title="sgpykit.util.matlab.sortrows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sortrows</span></code></a>(A)</p></td>
+<td><p>Sort rows of a matrix in ascending order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.matlab.struct" title="sgpykit.util.matlab.struct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">struct</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Create a Struct or StructArray from given arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.matlab.unique" title="sgpykit.util.matlab.unique"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique</span></code></a>(var[, by])</p></td>
+<td><p>Incomplete matlabs unique() function.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code>(shape[, dtype])</p></td>
+<td><p>A 1D or 2D container class that extends Python's built-in list.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sequence</span></code>()</p></td>
+<td><p>All the operations on a read-only sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Struct</span></code>(**kwargs)</p></td>
+<td><p>A simple struct-like class that allows attribute access and dictionary-like item access.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">StructArray</span></code>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.ce">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">ce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#ce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.ce" title="Link to this definition"></a></dt>
+<dd><p>Replacement for the matlab {} operator to create cells.
+The cell elements must be of same data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Elements to be placed in the cell array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Cell</dt><dd><p>The created cell array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.cell">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.cell" title="Link to this definition"></a></dt>
+<dd><p>Returns an empty cell (numpy) array with the given shape (empty nD-matrix).</p>
+<p>2D cell objects can be flat indexed, e.g. c[0,2] or c[2].
+Higher dimensions than 2D are not supported.
+If shape is a single integer N, create a NxN cell</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>shape</strong><span class="classifier">int or tuple</span></dt><dd><p>The shape of the cell array. If an integer, creates a square cell array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Cell</dt><dd><p>The empty cell array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.eig">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">eig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#eig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.eig" title="Link to this definition"></a></dt>
+<dd><p>Compute the eigenvalues and eigenvectors of a matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">array_like</span></dt><dd><p>Input matrix.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Eigenvectors and eigenvalues.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.fieldnames">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">fieldnames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#fieldnames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.fieldnames" title="Link to this definition"></a></dt>
+<dd><p>Get the field names of a Struct or StructArray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>s</strong><span class="classifier">Struct or StructArray</span></dt><dd><p>The struct or struct array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>The list of field names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.find">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'first'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.find" title="Link to this definition"></a></dt>
+<dd><p>Find non-zero elements in an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array_like</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>n</strong><span class="classifier">int, optional</span></dt><dd><p>Maximum number of elements to return. Default is None.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">str, optional</span></dt><dd><p>Direction to search (‘first’ or ‘last’). Default is ‘first’.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Indices and values of non-zero elements.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.fliplr">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">fliplr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#fliplr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.fliplr" title="Link to this definition"></a></dt>
+<dd><p>Flip the elements of the array from left to right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>arr</strong><span class="classifier">array_like</span></dt><dd><p>Input array to be flipped.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray</dt><dd><p>Flipped array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.ifft">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">ifft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#ifft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.ifft" title="Link to this definition"></a></dt>
+<dd><p>Compute the inverse FFT of a 1D or 2D array, matching MATLAB’s ifft() behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>arr</strong><span class="classifier">array_like</span></dt><dd><p>A 1D or 2D numpy array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray</dt><dd><p>The inverse FFT of the input array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the input array is not 1D or 2D.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.intersect">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">intersect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#intersect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.intersect" title="Link to this definition"></a></dt>
+<dd><p>Find the intersection of two arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>First input array.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like</span></dt><dd><p>Second input array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Common elements and their indices in the original arrays.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.iscell">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">iscell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#iscell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.iscell" title="Link to this definition"></a></dt>
+<dd><p>Check if the given variable is a Cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">any</span></dt><dd><p>The variable to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the variable is a Cell, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.isfield">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">isfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#isfield"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.isfield" title="Link to this definition"></a></dt>
+<dd><p>Check if the given field exists in the struct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">str</span></dt><dd><p>The field name to check.</p>
+</dd>
+<dt><strong>sel</strong><span class="classifier">Struct or StructArray</span></dt><dd><p>The struct or struct array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the field exists, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.isnumeric">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">isnumeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#isnumeric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.isnumeric" title="Link to this definition"></a></dt>
+<dd><p>Check if the object is numeric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">any</span></dt><dd><p>The object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the object is numeric, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.issorted">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">issorted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rows'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#issorted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.issorted" title="Link to this definition"></a></dt>
+<dd><p>Check if the matrix is sorted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>matrix</strong><span class="classifier">array_like</span></dt><dd><p>Input matrix.</p>
+</dd>
+<dt><strong>typ</strong><span class="classifier">str, optional</span></dt><dd><p>Type of sorting to check. Default is ‘rows’.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the matrix is sorted, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.isstruct">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">isstruct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#isstruct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.isstruct" title="Link to this definition"></a></dt>
+<dd><p>Check if the given variable is an instance of Struct or StructArray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">any</span></dt><dd><p>The variable to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the variable is an instance of Struct or StructArray, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.logical">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">logical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#logical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.logical" title="Link to this definition"></a></dt>
+<dd><p>Convert array to boolean (0=false, else=true).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">array_like</span></dt><dd><p>Input array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray</dt><dd><p>Boolean array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.reshape">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">reshape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#reshape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.reshape" title="Link to this definition"></a></dt>
+<dd><p>Reshape an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">array_like</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>r</strong><span class="classifier">int or array_like</span></dt><dd><p>New shape or number of rows.</p>
+</dd>
+<dt><strong>c</strong><span class="classifier">int, optional</span></dt><dd><p>Number of columns. Default is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray</dt><dd><p>Reshaped array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.save">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.save" title="Link to this definition"></a></dt>
+<dd><p>Save NumPy arrays to a MATLAB file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The name of the file to save.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Variable length argument list of strings and NumPy arrays.
+The first argument is the filename, followed by pairs of variable names and arrays.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.setdiff">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">setdiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rows'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#setdiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.setdiff" title="Link to this definition"></a></dt>
+<dd><p>Set difference of two arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">array_like</span></dt><dd><p>First input array.</p>
+</dd>
+<dt><strong>B</strong><span class="classifier">array_like</span></dt><dd><p>Second input array.</p>
+</dd>
+<dt><strong>kind</strong><span class="classifier">str, optional</span></dt><dd><p>Type of set difference (‘rows’ or others). Default is ‘rows’.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray</dt><dd><p>The set difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.sort">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ascend'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.sort" title="Link to this definition"></a></dt>
+<dd><p>Sort an array in ascending or descending order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>arr</strong><span class="classifier">array_like</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>axis</strong><span class="classifier">int, optional</span></dt><dd><p>Axis along which to sort. Default is None.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">str, optional</span></dt><dd><p>Direction to sort (‘ascend’ or ‘descend’). Default is ‘ascend’.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Sorted array and sorted indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.sortrows">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">sortrows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#sortrows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.sortrows" title="Link to this definition"></a></dt>
+<dd><p>Sort rows of a matrix in ascending order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">array_like</span></dt><dd><p>Input array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Sorted array and sorted indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.struct">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">struct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#struct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.struct" title="Link to this definition"></a></dt>
+<dd><p>Create a Struct or StructArray from given arguments.</p>
+<p>This function mimics MATLAB’s struct behavior. If keyword arguments are provided,
+it creates a Struct with the given fields. If positional arguments are provided,
+it creates a Struct with fields from the even-indexed arguments and values from
+the odd-indexed arguments. If cells are detected, it creates a StructArray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Positional arguments for field-value pairs.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Keyword arguments for field-value pairs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Struct or StructArray</dt><dd><p>The created struct or struct array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.matlab.unique">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.matlab.</span></span><span class="sig-name descname"><span class="pre">unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/matlab.html#unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.matlab.unique" title="Link to this definition"></a></dt>
+<dd><p>Incomplete matlabs unique() function.</p>
+<p><a class="reference external" href="https://de.mathworks.com/help/matlab/ref/double.unique.html">https://de.mathworks.com/help/matlab/ref/double.unique.html</a>
+- ‘first’ and ‘sorted’ are defaults
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy-unique">https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy-unique</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>var</strong><span class="classifier">array_like</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>by</strong><span class="classifier">str, optional</span></dt><dd><p>The axis to return indices for repetitions. Default is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>The unique elements and their indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.util.log.html" class="btn btn-neutral float-left" title="sgpykit.util.log" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.util.misc.html" class="btn btn-neutral float-right" title="sgpykit.util.misc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

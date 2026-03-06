@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.create_sparse_grid_construct &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.create_sparse_grid_construct</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.util.create_sparse_grid_construct</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.find_lexicographic</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_lexicographic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.tensor_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_lev2knots</span><span class="p">,</span> <span class="n">matlab_to_python_index</span>
+
+<span class="n">logger_</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_sparse_grid_construct">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.create_sparse_grid_construct.html#sgpykit.util.create_sparse_grid_construct.create_sparse_grid_construct">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_sparse_grid_construct</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">S2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct a sparse grid from a given set of multi-indices.</span>
+
+<span class="sd">    This function builds a sparse grid by combining tensor grids according to the</span>
+<span class="sd">    combination technique. It optionally reuses tensor grids from a previously</span>
+<span class="sd">    constructed sparse grid to improve efficiency.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    C : ndarray</span>
+<span class="sd">        Array of multi-indices (in 0 or 1-based index scheme) defining the sparse grid.</span>
+<span class="sd">    N : int</span>
+<span class="sd">        Number of dimensions.</span>
+<span class="sd">    knots : callable or list of callable</span>
+<span class="sd">        Function(s) to generate knots for each dimension.</span>
+<span class="sd">    lev2knots : callable</span>
+<span class="sd">        Function to convert level indices to number of knots.</span>
+<span class="sd">    S2 : struct, optional</span>
+<span class="sd">        Previously constructed sparse grid for tensor grid recycling.</span>
+<span class="sd">    base : int, optional</span>
+<span class="sd">        if matrix C is using 1-based indexing</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    S : struct</span>
+<span class="sd">        Constructed sparse grid with fields:</span>
+<span class="sd">        - knots : Cell array of knot coordinates for each tensor grid.</span>
+<span class="sd">        - weights : Cell array of weights for each tensor grid.</span>
+<span class="sd">        - size : Cell array of sizes for each tensor grid.</span>
+<span class="sd">        - knots_per_dim : Cell array of knots per dimension for each tensor grid.</span>
+<span class="sd">        - m : Cell array of level indices for each tensor grid.</span>
+<span class="sd">        - coeff : Array of combination technique coefficients.</span>
+<span class="sd">        - idx : Array of multi-indices corresponding to each tensor grid.</span>
+<span class="sd">    C : ndarray</span>
+<span class="sd">        Array of multi-indices used in the construction (0-based indexing).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">base</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">matlab_to_python_index</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <span class="c1"># we also build the set of S2 if provided</span>
+    <span class="k">if</span> <span class="n">S2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">S2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># get index set of S2. Note that if S2 has empty fields, C2==[]  ## TODO: check C2==[] when empty fields</span>
+        <span class="n">C2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">S2</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">C2</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># now compute the tensor grids out of the delta operators listed in C.</span>
+    <span class="c1"># Exploit partial ordering of the sequence of multiindices</span>
+    <span class="c1"># -----------------------------------------------</span>
+    <span class="c1"># each multiindex of C is a delta grid. Given say [i1 i2 i3] i will get</span>
+    <span class="c1"># (i1 - i1-1) x (i2 - i2-1) x (i3 - i3-1)</span>
+    <span class="c1"># that is the grids associated to</span>
+    <span class="c1"># [i1 i2 i3],[i1-1 i2 13],[i1 i2-1 i3],[i1-1 i2-1 i3] and so on</span>
+    <span class="c1"># note that all of these multiindeces are also included in the initial set C</span>
+    <span class="c1"># (if [i1 i2 i3] ratisfies the rule, all other will, because their indeces are equal or lower)</span>
+    <span class="c1"># So the set of all possible grids (non delta grids) is the same set C, but some of them will cancel out</span>
+    <span class="c1"># C is partially ordered (lexicographis): [x x x x i], are listed increasing with i,</span>
+    <span class="c1"># [x x x j i] are listed increasing first with j and then with i ...</span>
+    <span class="c1"># Now take a row of C, c. Because of the ordering, if you take c as a grid index</span>
+    <span class="c1"># the same grid can appear again only from delta grids coming from rows following.</span>
+    <span class="c1"># Now we scroll these rows following (say c2) and compute how many times c will be generated, and with</span>
+    <span class="c1"># what sign. It has to be that d=c2-c has only 0 or 1</span>
+    <span class="c1"># if this is the case, the sign of this new appearence of c could be both + or - .</span>
+    <span class="c1"># To determine the sign, start with + and switch it every time a 1 appears in d</span>
+    <span class="c1"># d=[0 1 0 0 1] =&gt; sign= +</span>
+    <span class="c1"># the formula is (-1)^sum(d) ( d with even appearences of 1 gives a + , odd gives a -)</span>
+    <span class="c1"># and just sum all the coefficients to see if c will survive or cancel out</span>
+    <span class="n">nn</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+    <span class="c1"># I can at least restrict the search to multiindices whose first component is c(i) + 2, so I define</span>
+    <span class="n">__</span><span class="p">,</span> <span class="n">bookmarks</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">C</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;first&#39;</span><span class="p">)</span>
+    <span class="n">bk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bookmarks</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="p">[</span><span class="n">nn</span><span class="p">,</span> <span class="n">nn</span><span class="p">])</span>  <span class="c1"># bookmarks - 1 not required</span>
+    <span class="c1"># i.e. those who begin with 1 end at bookmark(3)-1, those who begin with 2-1 end at bookmark(4) and so on,</span>
+    <span class="c1"># until there&#39;s no multiindex with c(i)+2</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nn</span><span class="p">):</span>  <span class="c1"># in np.arange(1, nn + 1).reshape(-1):</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="c1"># recover the range in which we have to look. Observe that the first column of C contains necessarily 1,2,3 ...</span>
+        <span class="c1"># so we can use them to access bk</span>
+        <span class="n">range_</span> <span class="o">=</span> <span class="n">bk</span><span class="p">[</span><span class="n">cc</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">range_</span><span class="p">):</span>  <span class="c1">#.reshape(-1)</span>
+            <span class="c1"># scroll c2, the following rows</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">cc</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># so if max(d)&lt;=1 is false the other condition is not even checked</span>
+                <span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="c1"># now we can store only those grids who survived, i.e. coeff~=0</span>
+    <span class="c1"># ------------------------------------------------------</span>
+    <span class="n">nb_grids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">coeff</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">empty_cells</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">cell</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">nb_grids</span><span class="p">))</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">struct</span><span class="p">(</span><span class="s1">&#39;knots&#39;</span><span class="p">,</span> <span class="n">empty_cells</span><span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">,</span> <span class="n">empty_cells</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">empty_cells</span><span class="p">,</span> <span class="s1">&#39;knots_per_dim&#39;</span><span class="p">,</span> <span class="n">empty_cells</span><span class="p">,</span>
+               <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">empty_cells</span><span class="p">)</span>
+    <span class="n">fieldnms</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="n">coeff_condensed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_grids</span><span class="p">)</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># for each nonzero coeff, generate the tensor grid and store it. If possible, recycle from S2.</span>
+    <span class="k">if</span> <span class="n">C2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">C2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logger_</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;build sparse grid with tensor grid recycling&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nn</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">found</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_lexicographic</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">C2</span><span class="p">,</span> <span class="s1">&#39;nocheck&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="c1"># disp(&#39;found&#39;)</span>
+                    <span class="c1"># Note that at this point elements of S are tensor grids while S2 is a sparse grid therefore it has additional fields</span>
+                    <span class="c1"># (coeff, idx). We thus need to copy field by field otherwise we&#39;ll have &quot;assignment between dissimilar</span>
+                    <span class="c1"># structures&quot; error. We use dynamic filed names to this end</span>
+                    <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fieldnms</span><span class="p">:</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">],</span> <span class="n">fn</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">S2</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span> <span class="n">fn</span><span class="p">))</span>
+                    <span class="c1"># however we need to fix the weights. Indeed, they are stored in S2 as weights*coeff, so we need to reverse</span>
+                    <span class="c1"># that multiplication</span>
+                    <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">/</span> <span class="n">S2</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">m</span> <span class="o">=</span> <span class="n">apply_lev2knots</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+                    <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span> <span class="o">=</span> <span class="n">tensor_grid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">knots</span><span class="p">)</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">*</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">coeff_condensed</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nn</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">apply_lev2knots</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span> <span class="o">=</span> <span class="n">tensor_grid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">knots</span><span class="p">)</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">*</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">coeff_condensed</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1"># now store the coeff value. It has to be stored after the first loop, becuase tensor_grid returns a grid</span>
+    <span class="c1"># WITHOUT coeff field, and Matlab would throw an error (Subscripted assignment between dissimilar structures)</span>
+    <span class="k">for</span> <span class="n">ss</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_grids</span><span class="p">):</span>  <span class="c1"># in np.arange(1, nb_grids + 1).reshape(-1):</span>
+        <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff_condensed</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span>
+    <span class="c1"># similarly for the multiidx generating each tensor grid</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nn</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">C</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+sgpykit.util.plot
+=================
+
+.. automodule:: sgpykit.util.plot
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_and_convert_to_fig3d
+      clear
+      figure_create
+      gcf
+      grid
+      merge_all_args_to_kwargs
+      parse_matlab_plot_args
+      plot
+      plot_3d
+      plot_scatter_3d
+      set_legend
+      view
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Axes3D
+   

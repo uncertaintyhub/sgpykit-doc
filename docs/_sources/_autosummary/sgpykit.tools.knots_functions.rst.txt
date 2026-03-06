@@ -1,0 +1,34 @@
+sgpykit.tools.knots\_functions
+==============================
+
+.. automodule:: sgpykit.tools.knots_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      knots_CC
+      knots_GK
+      knots_beta
+      knots_beta_leja
+      knots_exponential
+      knots_exponential_leja
+      knots_gamma
+      knots_gamma_leja
+      knots_leja
+      knots_midpoint
+      knots_normal
+      knots_normal_leja
+      knots_trap
+      knots_triangular_leja
+      knots_uniform
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   constants
+   constants_normal_leja

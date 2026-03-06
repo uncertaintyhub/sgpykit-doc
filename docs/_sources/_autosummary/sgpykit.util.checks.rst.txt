@@ -1,0 +1,19 @@
+sgpykit.util.checks
+===================
+
+.. automodule:: sgpykit.util.checks
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      contains_same_elements
+      is_array_like
+      is_list_math_equal
+      is_nparray_of_numbers
+      is_number_or_list_of_numbers_nonnegative
+      is_number_or_nparray_of_numbers
+      is_number_or_nparray_of_numbers_nonnegative
+      is_numeric_scalar
+   

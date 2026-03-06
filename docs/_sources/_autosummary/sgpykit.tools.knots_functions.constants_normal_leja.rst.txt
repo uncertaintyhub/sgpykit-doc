@@ -1,0 +1,6 @@
+sgpykit.tools.knots\_functions.constants\_normal\_leja
+======================================================
+
+.. automodule:: sgpykit.tools.knots_functions.constants_normal_leja
+
+   

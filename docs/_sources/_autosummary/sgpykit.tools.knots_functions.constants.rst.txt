@@ -1,0 +1,6 @@
+sgpykit.tools.knots\_functions.constants
+========================================
+
+.. automodule:: sgpykit.tools.knots_functions.constants
+
+   

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main.evaluate_on_sparse_grid &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.main.evaluate_on_sparse_grid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.main.evaluate_on_sparse_grid</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.compare_sparse_grids</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_sparse_grids</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.lookup_merge_and_diff</span><span class="w"> </span><span class="kn">import</span> <span class="n">lookup_merge_and_diff</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.type_and_property_check_functions.is_sparse_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_sparse_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.type_and_property_check_functions.isreduced</span><span class="w"> </span><span class="kn">import</span> <span class="n">isreduced</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.struct</span><span class="w"> </span><span class="kn">import</span> <span class="n">Struct</span>
+
+
+<div class="viewcode-block" id="evaluate_on_sparse_grid">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.main.html#sgpykit.main.evaluate_on_sparse_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_on_sparse_grid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">evals_old</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S_old</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Sr_old</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate a function on a sparse grid, possibly recycling previous calls.</span>
+
+<span class="sd">    Several input combinations are possible, every input from the 3rd on can be set to [].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        Function to evaluate. Takes a column vector point and returns a scalar or column vector.</span>
+<span class="sd">    S : sparse grid or None</span>
+<span class="sd">        Sparse grid structure. If None, Sr must be provided.</span>
+<span class="sd">    Sr : reduced sparse grid or None</span>
+<span class="sd">        Reduced sparse grid structure. Must be provided if S is None.</span>
+<span class="sd">    evals_old : ndarray, optional</span>
+<span class="sd">        Matrix storing previous evaluations of f on Sr_old.</span>
+<span class="sd">    S_old : sparse grid or None, optional</span>
+<span class="sd">        Previous sparse grid structure.</span>
+<span class="sd">    Sr_old : reduced sparse grid or matrix, optional</span>
+<span class="sd">        Previous reduced sparse grid or matrix of points.</span>
+<span class="sd">    tol : float, optional</span>
+<span class="sd">        Tolerance for testing point equality (default 1e-14).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    f_eval : ndarray</span>
+<span class="sd">        Matrix storing evaluations of f on Sr.</span>
+<span class="sd">    new_points : ndarray</span>
+<span class="sd">        Points where f has been evaluated (new points w.r.t. previous grid).</span>
+<span class="sd">    tocomp_list : ndarray</span>
+<span class="sd">        Position of new_points in Sr.knots.</span>
+<span class="sd">    discard_points : ndarray</span>
+<span class="sd">        Points of Sr_old that have been discarded.</span>
+<span class="sd">    discard_list : ndarray</span>
+<span class="sd">        Index vector s.t. Sr_old.knots[:, discard_list] == discard_points.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Possible calls:</span>
+<span class="sd">    - res, *_ = evaluate_on_sparse_grid(f, S=None, Sr)</span>
+<span class="sd">    - res, *_ = evaluate_on_sparse_grid(f, S, Sr, evals_old, S_old, Sr_old)</span>
+<span class="sd">    - res, *_ = evaluate_on_sparse_grid(f, S, Sr)</span>
+<span class="sd">    - res, *_ = evaluate_on_sparse_grid(f, S, Sr, evals_old, None, Sr_old)</span>
+<span class="sd">    - res, *_ = evaluate_on_sparse_grid(f, S, Sr, evals_old, S_old, Sr_old, tol)</span>
+
+<span class="sd">    API is like in evaluate_on_sparse_grid(). S or Sr have to be provided explicitly,</span>
+<span class="sd">    opposed to SGMK.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="c1"># evaluate_on_sparse_grid(f,S=[],Sr=Sr)</span>
+    <span class="k">if</span> <span class="n">Sr</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">S</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">isreduced</span><span class="p">(</span><span class="n">Sr</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;When evaluate_on_sparse_grid is called with two inputs, the second one must be a reduced sparse grid.&#39;</span><span class="p">)</span>
+        <span class="n">f_eval</span> <span class="o">=</span> <span class="n">simple_evaluate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Sr</span><span class="p">)</span>
+        <span class="n">new_points</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span>
+        <span class="n">tocomp_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sr</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
+        <span class="n">discard_points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">discard_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">f_eval</span><span class="p">,</span> <span class="n">new_points</span><span class="p">,</span> <span class="n">tocomp_list</span><span class="p">,</span> <span class="n">discard_points</span><span class="p">,</span> <span class="n">discard_list</span>
+
+    <span class="c1"># evaluate_on_sparse_grid(f,S=S,Sr=Sr) # may works but keep it consistent with matlab SGMK interface</span>
+    <span class="k">if</span> <span class="n">evals_old</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">Sr_old</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;evals_old and Sr_old are required when S and Sr are given.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># evaluate_on_sparse_grid(f,S=S,Sr=Sr, evals_old, S_old, Sr_old)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Sr_old</span><span class="p">,</span> <span class="n">Struct</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">isreduced</span><span class="p">(</span><span class="n">Sr_old</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Sr_old must be a reduced sparse grid.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">S_old</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">S_old</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_sparse_grid</span><span class="p">(</span><span class="n">S_old</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;S_old must be a sparse grid.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># evaluate_on_sparse_grid(f, S, Sr, [], [], [])</span>
+
+    <span class="k">assert</span> <span class="n">Sr</span> <span class="ow">and</span> <span class="n">S</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">evals_old</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sr_old</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">S_old</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">S_old</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">f_eval</span> <span class="o">=</span> <span class="n">simple_evaluate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Sr</span><span class="p">)</span>
+        <span class="n">new_points</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span>
+        <span class="n">tocomp_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Sr</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
+        <span class="n">discard_points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">discard_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">f_eval</span><span class="p">,</span> <span class="n">new_points</span><span class="p">,</span> <span class="n">tocomp_list</span><span class="p">,</span> <span class="n">discard_points</span><span class="p">,</span> <span class="n">discard_list</span>
+
+    <span class="k">if</span> <span class="n">S_old</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">S_old</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># here SR_OLD is matrix with points stored as columns, and we go for the slow code</span>
+        <span class="n">pts_list</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span>
+        <span class="n">pts_list_old</span> <span class="o">=</span> <span class="n">Sr_old</span>
+        <span class="n">tocomp_list</span><span class="p">,</span> <span class="n">recycle_list</span><span class="p">,</span> <span class="n">recycle_list_old</span><span class="p">,</span> <span class="n">discard_list</span> <span class="o">=</span> <span class="n">lookup_merge_and_diff</span><span class="p">(</span><span class="n">pts_list</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">pts_list_old</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># here S_OLD is a sparse grid and SR_OLD is its reduced version and we go for the faster alternative</span>
+        <span class="n">pts_list</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span>
+        <span class="n">pts_list_old</span> <span class="o">=</span> <span class="n">Sr_old</span><span class="o">.</span><span class="n">knots</span>
+        <span class="n">tocomp_list</span><span class="p">,</span> <span class="n">recycle_list</span><span class="p">,</span> <span class="n">recycle_list_old</span><span class="p">,</span> <span class="n">discard_list</span> <span class="o">=</span> <span class="n">compare_sparse_grids</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">S_old</span><span class="p">,</span> <span class="n">Sr_old</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+
+    <span class="n">new_points</span> <span class="o">=</span> <span class="n">pts_list</span><span class="p">[:,</span> <span class="n">tocomp_list</span><span class="p">]</span>
+    <span class="n">discard_points</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">discard_list</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="k">else</span> <span class="n">pts_list_old</span><span class="p">[:,</span> <span class="n">discard_list</span><span class="p">]</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">pts_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">evals_old</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">f_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+
+    <span class="n">evals_new</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">pts_list</span><span class="p">[:,</span> <span class="n">tocomp_list</span><span class="p">])</span>
+    <span class="n">f_eval</span><span class="p">[:,</span> <span class="n">tocomp_list</span><span class="p">]</span> <span class="o">=</span> <span class="n">evals_new</span>
+    <span class="n">f_eval</span><span class="p">[:,</span> <span class="n">recycle_list</span><span class="p">]</span> <span class="o">=</span> <span class="n">evals_old</span><span class="p">[:,</span> <span class="n">recycle_list_old</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">f_eval</span><span class="p">,</span> <span class="n">new_points</span><span class="p">,</span> <span class="n">tocomp_list</span><span class="p">,</span> <span class="n">discard_points</span><span class="p">,</span> <span class="n">discard_list</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_evaluate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Sr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate a function on a reduced sparse grid without recycling previous evaluations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        Function to evaluate.</span>
+<span class="sd">    Sr : reduced sparse grid</span>
+<span class="sd">        Reduced sparse grid structure.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    output : ndarray</span>
+<span class="sd">        Evaluations of f on Sr.knots.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># function output = simple_evaluate(f,Sr)</span>
+    <span class="c1">#</span>
+    <span class="c1"># does not exploit the previous sparse grids evaluations</span>
+
+    <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

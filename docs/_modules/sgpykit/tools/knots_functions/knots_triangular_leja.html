@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.knots_functions.knots_triangular_leja &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.knots_functions.knots_triangular_leja</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.tools.knots_functions.knots_triangular_leja</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.knots_functions.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TriangularLejaPrecomputedKnotsAndWeights50</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+
+
+<div class="viewcode-block" id="knots_triangular_leja">
+<a class="viewcode-back" href="../../../../_autosummary/sgpykit.tools.knots_functions.html#sgpykit.tools.knots_functions.knots_triangular_leja">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">knots_triangular_leja</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the collocation points (x) and the weights (w) for the weighted Leja</span>
+<span class="sd">    sequence for integration with respect to the weight function rho(x) = 2/(b-a)^2 (b-x),</span>
+<span class="sd">    i.e., a linear decreasing pdf over the interval [a, b].</span>
+
+<span class="sd">    Knots and weights have been precomputed (up to 50) following the work of</span>
+<span class="sd">    A. Narayan, J. Jakeman, &quot;Adaptive Leja sparse grid constructions for stochastic collocation</span>
+<span class="sd">    and high-dimensional approximation&quot;, SIAM Journal on Scientific Computing, Vol. 36, No. 6,</span>
+<span class="sd">    pp. A2952--A2983, 2014.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int</span>
+<span class="sd">        Number of collocation points.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Lower bound of the interval.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Upper bound of the interval.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x : numpy.ndarray</span>
+<span class="sd">        Collocation points.</span>
+<span class="sd">    w : numpy.ndarray</span>
+<span class="sd">        Weights corresponding to the collocation points.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    Exception</span>
+<span class="sd">        If more than 50 points are requested.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># An error is raised if more than 50 points are requested.</span>
+    <span class="k">assert</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;OutOfTable: this number of points is not available: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">TriangularLejaPrecomputedKnotsAndWeights50</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">W</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+        <span class="c1"># modifies points according to the interval (the weights are unaffected)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span>
+        <span class="c1"># sort knots increasingly and weights accordingly. Weights need to be row vectors</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">sorter</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">sorter</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

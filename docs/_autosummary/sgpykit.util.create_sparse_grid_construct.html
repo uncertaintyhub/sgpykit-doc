@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.create_sparse_grid_construct &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.util.definitions" href="sgpykit.util.definitions.html" />
+    <link rel="prev" title="sgpykit.util.checks" href="sgpykit.util.checks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.cell.html">sgpykit.util.cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.checks.html">sgpykit.util.checks</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.util.create_sparse_grid_construct</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.create_sparse_grid_construct.create_sparse_grid_construct"><code class="docutils literal notranslate"><span class="pre">create_sparse_grid_construct()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.definitions.html">sgpykit.util.definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.log.html">sgpykit.util.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.matlab.html">sgpykit.util.matlab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.misc.html">sgpykit.util.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.plot.html">sgpykit.util.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct.html">sgpykit.util.struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct_array.html">sgpykit.util.struct_array</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.util.html">sgpykit.util</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.create_sparse_grid_construct</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.util.create_sparse_grid_construct.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.util.create_sparse_grid_construct">
+<span id="sgpykit-util-create-sparse-grid-construct"></span><h1>sgpykit.util.create_sparse_grid_construct<a class="headerlink" href="#module-sgpykit.util.create_sparse_grid_construct" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_lev2knots</span></code>(i, lev2knots[, N])</p></td>
+<td><p>Apply level-to-knots mapping to an index array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.create_sparse_grid_construct.create_sparse_grid_construct" title="sgpykit.util.create_sparse_grid_construct.create_sparse_grid_construct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_construct</span></code></a>(C, N, knots, ...)</p></td>
+<td><p>Construct a sparse grid from a given set of multi-indices.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_lexicographic</span></code>(lookfor, I[, nocheck])</p></td>
+<td><p>Find specific rows of a matrix that is sorted lexicographically.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">matlab_to_python_index</span></code>(var)</p></td>
+<td><p>Convert MATLAB-style index to Python-style index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_grid</span></code>(N, m, knots)</p></td>
+<td><p>Generate a tensor grid and compute the corresponding weights.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.create_sparse_grid_construct.create_sparse_grid_construct">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.create_sparse_grid_construct.</span></span><span class="sig-name descname"><span class="pre">create_sparse_grid_construct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lev2knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/create_sparse_grid_construct.html#create_sparse_grid_construct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.create_sparse_grid_construct.create_sparse_grid_construct" title="Link to this definition"></a></dt>
+<dd><p>Construct a sparse grid from a given set of multi-indices.</p>
+<p>This function builds a sparse grid by combining tensor grids according to the
+combination technique. It optionally reuses tensor grids from a previously
+constructed sparse grid to improve efficiency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>C</strong><span class="classifier">ndarray</span></dt><dd><p>Array of multi-indices (in 0 or 1-based index scheme) defining the sparse grid.</p>
+</dd>
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions.</p>
+</dd>
+<dt><strong>knots</strong><span class="classifier">callable or list of callable</span></dt><dd><p>Function(s) to generate knots for each dimension.</p>
+</dd>
+<dt><strong>lev2knots</strong><span class="classifier">callable</span></dt><dd><p>Function to convert level indices to number of knots.</p>
+</dd>
+<dt><strong>S2</strong><span class="classifier">struct, optional</span></dt><dd><p>Previously constructed sparse grid for tensor grid recycling.</p>
+</dd>
+<dt><strong>base</strong><span class="classifier">int, optional</span></dt><dd><p>if matrix C is using 1-based indexing</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>Constructed sparse grid with fields:
+- knots : Cell array of knot coordinates for each tensor grid.
+- weights : Cell array of weights for each tensor grid.
+- size : Cell array of sizes for each tensor grid.
+- knots_per_dim : Cell array of knots per dimension for each tensor grid.
+- m : Cell array of level indices for each tensor grid.
+- coeff : Array of combination technique coefficients.
+- idx : Array of multi-indices corresponding to each tensor grid.</p>
+</dd>
+<dt><strong>C</strong><span class="classifier">ndarray</span></dt><dd><p>Array of multi-indices used in the construction (0-based indexing).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.util.checks.html" class="btn btn-neutral float-left" title="sgpykit.util.checks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.util.definitions.html" class="btn btn-neutral float-right" title="sgpykit.util.definitions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

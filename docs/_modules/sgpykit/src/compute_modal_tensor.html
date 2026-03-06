@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.src.compute_modal_tensor &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.src.compute_modal_tensor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.src.compute_modal_tensor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.idxset_functions.multiidx_box_set</span><span class="w"> </span><span class="kn">import</span> <span class="n">multiidx_box_set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.cheb_eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">cheb_eval</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.cheb_eval_multidim</span><span class="w"> </span><span class="kn">import</span> <span class="n">cheb_eval_multidim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.generalized_lagu_eval_multidim</span><span class="w"> </span><span class="kn">import</span> <span class="n">generalized_lagu_eval_multidim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.herm_eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">herm_eval</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.herm_eval_multidim</span><span class="w"> </span><span class="kn">import</span> <span class="n">herm_eval_multidim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.jacobi_prob_eval_multidim</span><span class="w"> </span><span class="kn">import</span> <span class="n">jacobi_prob_eval_multidim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.lagu_eval_multidim</span><span class="w"> </span><span class="kn">import</span> <span class="n">lagu_eval_multidim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.lege_eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">lege_eval</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.lege_eval_multidim</span><span class="w"> </span><span class="kn">import</span> <span class="n">lege_eval_multidim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.matlab</span><span class="w"> </span><span class="kn">import</span> <span class="n">struct</span>
+
+
+<div class="viewcode-block" id="compute_modal_tensor">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.src.html#sgpykit.src.compute_modal_tensor">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_modal_tensor</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">S_values</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a tensor grid interpolant to a modal expansion in orthogonal polynomials.</span>
+
+<span class="sd">    This function takes a tensor grid and its associated point evaluations, and converts</span>
+<span class="sd">    the resulting Lagrange multivariate interpolant to a sum of orthogonal polynomials.</span>
+<span class="sd">    The type of polynomials used can be specified via the `flags` parameter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    S : struct</span>
+<span class="sd">        A struct containing the tensor grid information, including knots and size.</span>
+<span class="sd">    S_values : ndarray</span>
+<span class="sd">        The values of the interpolant at the tensor grid points.</span>
+<span class="sd">    domain : ndarray or list of ndarrays</span>
+<span class="sd">        The domain of the sparse grid. The format depends on the polynomial family:</span>
+<span class="sd">        - For Legendre, Chebyshev: 2xN matrix [a1, a2, ...; b1, b2, ...]</span>
+<span class="sd">        - For Hermite: 2xN matrix [mu1, mu2, ...; sigma1, sigma2, ...]</span>
+<span class="sd">        - For Laguerre: 1xN matrix [lambda1, lambda2, ...]</span>
+<span class="sd">        - For generalized Laguerre: 2xN matrix [alpha1, alpha2, ...; beta1, beta2, ...]</span>
+<span class="sd">        - For Jacobi: 4xN matrix [alpha1, alpha2, ...; beta1, beta2, ...; a1, a2, ...; b1, b2, ...]</span>
+<span class="sd">        - For mixed families: a cell array where each cell contains the domain for the corresponding polynomial.</span>
+<span class="sd">    flags : str or list of str</span>
+<span class="sd">        The type of orthogonal polynomials to use. Can be a single string or a list of strings</span>
+<span class="sd">        for mixed families. Supported values are:</span>
+<span class="sd">        - &#39;legendre&#39;</span>
+<span class="sd">        - &#39;chebyshev&#39;</span>
+<span class="sd">        - &#39;hermite&#39;</span>
+<span class="sd">        - &#39;laguerre&#39;</span>
+<span class="sd">        - &#39;generalized laguerre&#39;</span>
+<span class="sd">        - &#39;jacobi&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    U : struct</span>
+<span class="sd">        A struct with the following fields:</span>
+<span class="sd">        - size: the number of polynomials in the expansion.</span>
+<span class="sd">        - multi_indices: the multi-indices corresponding to each polynomial.</span>
+<span class="sd">        - modal_coeffs: the coefficients of the modal expansion.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If one or more strings in `flags` are unrecognized, or if the input argument `domain`</span>
+<span class="sd">        is not a cell array when `flags` is a cell array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># COMPUTE_MODAL_TENSOR given a tensor grid and the values on it, re-express the interpolant</span>
+    <span class="c1"># as a modal expansion.</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_VALUES,DOMAIN,&#39;legendre&#39;) considers the tensor grid S on the</span>
+    <span class="c1">#       hyper-rectangle DOMAIN with associated point evaluations S_VALUES and converts the</span>
+    <span class="c1">#       resulting lagrangian multivariate interpolant to a sum of Legendre polynomials.</span>
+    <span class="c1">#       DOMAIN is a 2xN matrix = [a1, a2, a3, ...; b1, b2, b3, ...]</span>
+    <span class="c1">#       defining the hyper-rectangluar domain of the sparse grid: (a1,b1) x (a2,b2) x ...</span>
+    <span class="c1">#       U is a struct with fields U.size (the number of Legendre polynomials needed),</span>
+    <span class="c1">#       U.multi_indices (one multi-index per Legendre polynomial), U.coeffs</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_values,domain,&#39;chebyshev&#39;) works as the previous call, using</span>
+    <span class="c1">#       Chebyshev polynomials</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_values,domain,&#39;hermite&#39;) works as the previous call, using</span>
+    <span class="c1">#       Hermite polynomials. Here DOMAIN is a 2XN matrix = [mu1, mu2, mu3, ...; sigma1, sigma2, sigma3,...]</span>
+    <span class="c1">#       such that the first variable has normal distribution with mean mu1 and std sigma1</span>
+    <span class="c1">#       and so on.</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_values,domain,&#39;laguerre&#39;) works as the previous call, using</span>
+    <span class="c1">#       Laguerre polynomials. Here DOMAIN is a 1XN matrix = [lambda1, lambda2, lambda3, ...]</span>
+    <span class="c1">#       such that the first variable has exponential distribution with parameter lambda1 and so on.</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_values,domain,&#39;generalized laguerre&#39;) works as the previous call, using</span>
+    <span class="c1">#       generalized Laguerre polynomials. Here DOMAIN is a 2XN matrix = [alpha1, alpha2, alpha3, ...; beta1, beta2, beta3, ...]</span>
+    <span class="c1">#       such that the first variable has Gamma distribution with parameters alpha1 and beta1 and so on.</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_values,domain,&#39;jacobi&#39;) works as the previous call, using</span>
+    <span class="c1">#       Jacobi polynomials. Here DOMAIN is a 4XN matrix = [alpha1, alpha2, alpha3, ...; beta1, beta2, beta3, ...; a1, a2, a3, ...; b1, b2, b3, ...]</span>
+    <span class="c1">#       such that the first variable has Beta distribution with parameters alpha1 and beta1 on the interval [a1,b1] and so on.</span>
+    <span class="c1"># U=COMPUTE_MODAL_TENSOR(S,S_values,domain,{&lt;family1&gt;,&lt;family2&gt;,&lt;family3&gt;,...}) works as the previous call, using</span>
+    <span class="c1">#       polynomials of type &lt;family-n&gt; in direction n. Here DOMAIN is a cell array of lenght N</span>
+    <span class="c1">#       where each cell contains the matrix giving the parameters of the n-th family of polynomials.</span>
+    <span class="c1">#       For example:</span>
+    <span class="c1">#       COMPUTE_MODAL_TENSOR(S,S_VALUES,DOMAIN,{&#39;legendre&#39;,&#39;hermite&#39;,&#39;laguerre&#39;,&#39;jacobi&#39;,&#39;legendre&#39;})</span>
+    <span class="c1">#       with</span>
+    <span class="c1">#       DOMAIN = {[a1;b1], [mu1;sigma1], lambda, [alpha2;beta2;a2;b2], [a3;b3]}</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">flag</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;legendre&#39;</span><span class="p">,</span> <span class="s1">&#39;chebyshev&#39;</span><span class="p">,</span> <span class="s1">&#39;hermite&#39;</span><span class="p">,</span> <span class="s1">&#39;laguerre&#39;</span><span class="p">,</span> <span class="s1">&#39;generalized laguerre&#39;</span><span class="p">,</span> <span class="s1">&#39;jacobi&#39;</span><span class="p">}</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span>
+               <span class="n">flags</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;One or more strings in FLAGS unrecognized.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">matlab</span><span class="o">.</span><span class="n">iscell</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">matlab</span><span class="o">.</span><span class="n">iscell</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input argument DOMAIN must be a cell array. Each cell contains the domain for the corresponding polynomial.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># I will need the knots in each dimension separately.</span>
+    <span class="c1"># As the number of knots is different in each direction, I use a cell array</span>
+
+    <span class="n">nb_dim</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># knots_per_dim=cell((1,nb_grids));</span>
+    <span class="c1"># for dim=1:nb_dim</span>
+    <span class="c1">#     knots_per_dim{dim}=unique(S.knots[dim,:]);</span>
+    <span class="c1"># end</span>
+
+    <span class="n">knots_per_dim</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">knots_per_dim</span>
+    <span class="c1"># The modal expansion in i-th direction uses up to degree k, with k as follows</span>
+
+    <span class="n">degrees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_dim</span><span class="p">):</span>
+        <span class="n">degrees</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">knots_per_dim</span><span class="p">[</span><span class="n">dim</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># the modal polynomials to be used are s.t. the corresponding multi-indices have</span>
+    <span class="c1"># all components less than or equal to the maximum degree</span>
+
+    <span class="n">I</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">multiidx_box_set</span><span class="p">(</span><span class="n">degrees</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># return multiindex_set as</span>
+    <span class="n">nb_multiindices</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># safety check. I have solve a system, so I need the vandermonde matrix to be squared!</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">nb_multiindices</span>
+
+    <span class="k">if</span> <span class="n">rows</span> <span class="o">!=</span> <span class="n">cols</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Vandermonde matrix is not square!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># now create the vandermonde matrix with evaluation of each multi-index in every point</span>
+    <span class="c1"># of the grid</span>
+
+    <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="n">flags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># the second condition for when the function is called on one single family of polynomials</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="n">c</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># vc = lege_eval_multidim(interval_map(S[&#39;knots&#39;]), k, domain[0], domain[1])</span>
+            <span class="k">if</span> <span class="n">flags</span> <span class="o">==</span> <span class="s1">&#39;legendre&#39;</span><span class="p">:</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="n">lege_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">flags</span> <span class="o">==</span> <span class="s1">&#39;hermite&#39;</span><span class="p">:</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="n">herm_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">flags</span> <span class="o">==</span> <span class="s1">&#39;chebyshev&#39;</span><span class="p">:</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="n">cheb_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">flags</span> <span class="o">==</span> <span class="s1">&#39;laguerre&#39;</span><span class="p">:</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="n">lagu_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">flags</span> <span class="o">==</span> <span class="s1">&#39;generalized laguerre&#39;</span><span class="p">:</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="n">generalized_lagu_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">flags</span> <span class="o">==</span> <span class="s1">&#39;jacobi&#39;</span><span class="p">:</span>
+                <span class="n">vc</span> <span class="o">=</span> <span class="n">jacobi_prob_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown family of polynomials&#39;</span><span class="p">)</span>
+            <span class="n">V</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="n">c</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">vc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_dim</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;legendre&#39;</span><span class="p">:</span>
+                    <span class="c1"># vc = vc * lege_eval(S[&#39;knots&#39;][n], k[n], domain[0][n], domain[1][n])</span>
+                    <span class="n">vc</span> <span class="o">=</span> <span class="n">vc</span> <span class="o">*</span> <span class="n">lege_eval</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;hermite&#39;</span><span class="p">:</span>
+                    <span class="c1"># vc = vc * herm_eval(S[&#39;knots&#39;][n], k[n], domain[0][n], domain[1][n])</span>
+                    <span class="n">vc</span> <span class="o">=</span> <span class="n">vc</span> <span class="o">*</span> <span class="n">herm_eval</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;chebyshev&#39;</span><span class="p">:</span>
+                    <span class="c1"># vc = vc * cheb_eval(S[&#39;knots&#39;][n], k[n], domain[0][n], domain[1][n])</span>
+                    <span class="n">vc</span> <span class="o">=</span> <span class="n">vc</span> <span class="o">*</span> <span class="n">cheb_eval</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;laguerre&#39;</span><span class="p">:</span>
+                    <span class="n">vc</span> <span class="o">=</span> <span class="n">vc</span> <span class="o">*</span> <span class="n">lagu_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;generalized laguerre&#39;</span><span class="p">:</span>
+                    <span class="n">vc</span> <span class="o">=</span> <span class="n">vc</span> <span class="o">*</span> <span class="n">generalized_lagu_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">flags</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;jacobi&#39;</span><span class="p">:</span>
+                    <span class="n">vc</span> <span class="o">=</span> <span class="n">vc</span> <span class="o">*</span> <span class="n">jacobi_prob_eval_multidim</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s1">&#39;knots&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                                                        <span class="n">domain</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown family of polynomials&#39;</span><span class="p">)</span>
+            <span class="n">V</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># now solve the system</span>
+
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">S_values</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">struct</span><span class="p">(</span><span class="n">multi_indices</span><span class="o">=</span><span class="n">I</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nb_multiindices</span><span class="p">,</span> <span class="n">modal_coeffs</span><span class="o">=</span><span class="n">sol</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">U</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

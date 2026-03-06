@@ -1,0 +1,28 @@
+sgpykit.main
+============
+
+.. automodule:: sgpykit.main
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      adapt_sparse_grid
+      compute_sobol_indices_from_sparse_grid
+      convert_to_modal
+      create_sparse_grid
+      create_sparse_grid_add_multiidx
+      create_sparse_grid_multiidx_set
+      create_sparse_grid_quick_preset
+      derive_sparse_grid
+      evaluate_on_sparse_grid
+      export_sparse_grid_to_file
+      hessian_sparse_grid
+      interpolate_on_sparse_grid
+      plot3_sparse_grid
+      plot_sparse_grid
+      plot_sparse_grids_interpolant
+      quadrature_on_sparse_grid
+      reduce_sparse_grid
+   

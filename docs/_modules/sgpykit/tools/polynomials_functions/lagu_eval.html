@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.polynomials_functions.lagu_eval &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.polynomials_functions.lagu_eval</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.tools.polynomials_functions.lagu_eval</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<div class="viewcode-block" id="lagu_eval">
+<a class="viewcode-back" href="../../../../_autosummary/sgpykit.tools.polynomials_functions.html#sgpykit.tools.polynomials_functions.lagu_eval">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">lagu_eval</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">lambda_</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the k-th Laguerre polynomial orthonormal in [0, +inf) w.r.t. rho=lambda*exp(-lambda*x).</span>
+
+<span class="sd">    This function computes the values of the k-th Laguerre polynomial, which is orthonormal with respect to the weight</span>
+<span class="sd">    function rho = lambda * exp(-lambda * x) on the interval [0, +inf). The polynomials are defined</span>
+<span class="sd">    starting from k=0, with L_0(x) = 1 and L_1(x) = -x*lambda + 1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        Points at which to evaluate the polynomial (can be a matrix).</span>
+<span class="sd">    k : int</span>
+<span class="sd">        Degree of the Laguerre polynomial.</span>
+<span class="sd">    lambda_ : float</span>
+<span class="sd">        Parameter of the weight function (must be positive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L : ndarray</span>
+<span class="sd">        Values of the k-th Laguerre polynomial at the points x.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># L = lagu_eval(x,k,lambda)</span>
+    <span class="c1"># returns the values of the k-th Laguerre polynomial orthoNORMAL in [0,+inf) w.r.t to rho=lambda*exp(-lambda*x), lambda&gt;0,</span>
+    <span class="c1"># in the points x (x can be a matrix as well)</span>
+    <span class="c1"># N.B. the polynomials start from k=0: L_0(x) = 1, L_1(x) = - x*lambda + 1</span>
+    <span class="c1"># this function expresses L as a function of the standard Laguerre &quot;probabilistic&quot; polynomial (i.e. orthoGONAL w.r.t. rho=e^(-x),</span>
+    <span class="c1"># which are recursively calculated through the function standard_lagu_eval, coded below in this .m file</span>
+
+    <span class="c1"># first compute the transformation of x (referred to Exp(lambda)) to z, the standard Exp(1)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">lambda_</span>
+    <span class="c1"># calculate the standard Laguerre polynomials in z</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">standard_lagu_eval</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">L</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">standard_lagu_eval</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the k-th standard Laguerre &quot;probabilistic&quot; polynomial.</span>
+
+<span class="sd">    This function computes the values of the k-th standard Laguerre polynomial, which is orthogonal with respect to the</span>
+<span class="sd">    weight function rho = exp(-x) on the interval [0, +inf). The polynomials are defined starting from k=0,</span>
+<span class="sd">    with L_0(x) = 1 and L_1(x) = -x + 1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        Points at which to evaluate the polynomial (can be a vector).</span>
+<span class="sd">    k : int</span>
+<span class="sd">        Degree of the Laguerre polynomial (must be non-negative).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L : ndarray</span>
+<span class="sd">        Values of the k-th standard Laguerre polynomial at the points x.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># L = standard_lagu_eval(x,k)</span>
+    <span class="c1"># returns the values of the k-th standard Laguerre &quot;probabilistic&quot; polynomial (i.e. orthoGONAL w.r.t. rho=exp(-x), in the points x</span>
+    <span class="c1"># ( x can be a vector as well)</span>
+    <span class="c1"># N.B. the polynomials start from k=0: L_0(x) = 1, L_1(x) = -x+1</span>
+    <span class="k">assert</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="c1"># base steps</span>
+
+    <span class="c1"># read this as L(k-2)</span>
+    <span class="n">L_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c1"># and this as L(k-1)</span>
+    <span class="n">L_1</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L_2</span>
+        <span class="k">return</span> <span class="n">L</span>
+    <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L_1</span>
+        <span class="k">return</span> <span class="n">L</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># recursive step ## TODO: optimize for vector ops?</span>
+        <span class="k">for</span> <span class="n">ric</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">((</span><span class="o">-</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ric</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ric</span><span class="p">,</span> <span class="n">L_1</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">ric</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ric</span> <span class="o">*</span> <span class="n">L_2</span>
+            <span class="n">L_2</span> <span class="o">=</span> <span class="n">L_1</span>
+            <span class="n">L_1</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="k">return</span> <span class="n">L</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

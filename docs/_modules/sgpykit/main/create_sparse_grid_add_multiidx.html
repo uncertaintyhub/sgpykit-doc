@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main.create_sparse_grid_add_multiidx &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.main.create_sparse_grid_add_multiidx</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.main.create_sparse_grid_add_multiidx</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.delta_to_combitec</span><span class="w"> </span><span class="kn">import</span> <span class="n">delta_to_combitec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.find_lexicographic</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_lexicographic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.tensor_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensor_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_array</span><span class="p">,</span> <span class="n">apply_lev2knots</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_sparse_grid_add_multiidx">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.main.html#sgpykit.main.create_sparse_grid_add_multiidx">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_sparse_grid_add_multiidx</span><span class="p">(</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">S_in</span><span class="p">,</span> <span class="n">I_in</span><span class="p">,</span> <span class="n">coeff_in</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Produce a grid obtained by adding a single multi-idx to a previously existing grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    new_idx : array_like</span>
+<span class="sd">        An index that must be admissible with respect to the index set I_in.</span>
+<span class="sd">        This condition won&#39;t be checked by the function.</span>
+<span class="sd">    S_in : array_like</span>
+<span class="sd">        A sparse grid to which new_idx should be added.</span>
+<span class="sd">    I_in : array_like</span>
+<span class="sd">        The index set that was used to create S_in, either implicitly (by defining</span>
+<span class="sd">        the rule in CREATE_SPARSE_GRID) or explicitly (by using</span>
+<span class="sd">        CREATE_SPARSE_GRID_MULTIIDX). Note that this cannot be produced as the</span>
+<span class="sd">        union of the indices S_in.idx, because S_in contains only tensors whose</span>
+<span class="sd">        coefficient in the combination technique is non-zero, while here we need</span>
+<span class="sd">        them all.</span>
+<span class="sd">    coeff_in : array_like</span>
+<span class="sd">        The vector of coefficients of the combination technique obtained on I_in.</span>
+<span class="sd">        Note that this vector of coefficients *MUST* include also zeros if a row</span>
+<span class="sd">        of I_in has coeff zero in the combination technique. Therefore, coeff_in</span>
+<span class="sd">        cannot be taken as [S_in.coeff]. Instead, use coeff_in =</span>
+<span class="sd">        COMBINATION_TECHNIQUE(I_in).</span>
+<span class="sd">    knots : array_like or callable</span>
+<span class="sd">        The usual argument to specify knots.</span>
+<span class="sd">    lev2knots : array_like or callable</span>
+<span class="sd">        The usual argument to specify lev2knots.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    S : array_like</span>
+<span class="sd">        The new sparse grid.</span>
+<span class="sd">    I : array_like</span>
+<span class="sd">        The new multiidx set, i.e., I = sortrows([I_in; new_idx]).</span>
+<span class="sd">    coeff : array_like</span>
+<span class="sd">        The updated vector of coefficients of the combination technique.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># sort rows of the index set after adding the new index</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">I_in</span><span class="p">,</span> <span class="n">new_idx</span><span class="p">])</span>
+    <span class="n">I</span><span class="p">,</span><span class="n">sorter</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sortrows</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+    <span class="c1"># add 0 to the new coeff_G in its right place (+1 will come later on)</span>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coeff_in</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="n">sorter</span><span class="p">]</span>
+
+    <span class="c1"># first a check on C_old being sorted. Observe that the function sortrows used is very efficient</span>
+    <span class="c1"># so the cost of this preliminary analysis is negligible (e.g. it takes 0.02 sec to verify</span>
+    <span class="c1"># that a TD set with w=5 and N=30, i.e. ~340600 indices is sorted,  and only 0.00027 sec that</span>
+    <span class="c1"># the matrix A=randi(20,300000,30) is unsorted.</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">matlab</span><span class="o">.</span><span class="n">issorted</span><span class="p">(</span><span class="n">I_in</span><span class="p">,</span><span class="s1">&#39;rows&#39;</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;the multiindex set C_old is not sorted&#39;</span><span class="p">)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">I_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># if knots and  lev2knots are simple function, we replicate them in a cell</span>
+    <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">knots</span><span class="p">):</span>
+        <span class="n">knots</span> <span class="o">=</span> <span class="n">to_array</span><span class="p">(</span><span class="n">knots</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">lev2knots</span><span class="p">):</span>
+        <span class="n">lev2knots</span> <span class="o">=</span> <span class="n">to_array</span><span class="p">(</span><span class="n">lev2knots</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+    <span class="c1">#-----------------------------------------------</span>
+    <span class="c1"># generate contributions of jj to combitec. They are already lexicosorted, jj is the last row</span>
+    <span class="n">Tensors_jj</span> <span class="o">=</span> <span class="n">delta_to_combitec</span><span class="p">(</span><span class="n">new_idx</span><span class="p">)</span>
+    <span class="c1"># look them up in G and for each of them add +-1. Because both Tensor and GG are sorted,</span>
+    <span class="c1"># restrict the search at each iteration</span>
+
+    <span class="n">nb_tens</span> <span class="o">=</span> <span class="n">Tensors_jj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">from_where</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_tens</span><span class="p">):</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="n">Tensors_jj</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">found</span><span class="p">,</span> <span class="n">rel_pos</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_lexicographic</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">I</span><span class="p">[</span><span class="n">from_where</span><span class="p">:,</span> <span class="p">:],</span> <span class="s1">&#39;nocheck&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">from_where</span> <span class="o">+</span> <span class="n">rel_pos</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;I was supposed to find this tensor!&#39;</span><span class="p">)</span>
+        <span class="n">coeff_tt</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_idx</span> <span class="o">-</span> <span class="n">tt</span><span class="p">)</span>
+        <span class="n">coeff</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">coeff_tt</span>
+        <span class="n">from_where</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># now we can store only those grids who survived, i.e. coeff~=0</span>
+    <span class="c1">#------------------------------------------------------</span>
+
+    <span class="n">nb_grids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">coeff</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">empty_cells</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">cell</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">nb_grids</span><span class="p">))</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">struct</span><span class="p">(</span><span class="s1">&#39;knots&#39;</span><span class="p">,</span><span class="n">empty_cells</span><span class="p">,</span><span class="s1">&#39;weights&#39;</span><span class="p">,</span><span class="n">empty_cells</span><span class="p">,</span><span class="s1">&#39;size&#39;</span><span class="p">,</span><span class="n">empty_cells</span><span class="p">,</span><span class="s1">&#39;knots_per_dim&#39;</span><span class="p">,</span><span class="n">empty_cells</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="n">empty_cells</span><span class="p">)</span>
+    <span class="n">fieldnms</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+    <span class="n">coeff_condensed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_grids</span><span class="p">)</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># for each nonzero coeff, generate the tensor grid and store it. If possible, recycle from S_old. Note that C_old</span>
+    <span class="c1"># stores all idx of S_old, even those with 0 coeff. So I need to extract the information on the tensors that I have</span>
+    <span class="c1"># in S_old as follows</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;build sparse grid with tensor grid recycling&#39;</span><span class="p">)</span>
+
+    <span class="n">nb_S_old_grids</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">S_in</span><span class="p">)</span>
+    <span class="n">C_old_nnz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">S_in</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">nb_S_old_grids</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># TODO review</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coeff</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span>
+            <span class="n">found</span><span class="p">,</span><span class="n">pos</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">find_lexicographic</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">C_old_nnz</span><span class="p">,</span><span class="s1">&#39;nocheck&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="c1"># Note that at this point elements of S are tensor grids while S_old is a sparse grid therefore it has additional fields</span>
+                <span class="c1"># (coeff, idx). We thus need to copy field by field otherwise we&#39;ll have &quot;assignment between dissimilar</span>
+                <span class="c1"># structures&quot; error. We use dynamic filed names to this end</span>
+                <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fieldnms</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">],</span><span class="n">fn</span><span class="p">,</span><span class="nb">getattr</span><span class="p">(</span><span class="n">S_in</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span><span class="n">fn</span><span class="p">))</span>
+                <span class="c1"># however we need to fix the weights. Indeed, they are stored in S_old as weights*coeff, so we need to reverse</span>
+                <span class="c1"># that multiplication</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">/</span> <span class="n">S_in</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">apply_lev2knots</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">lev2knots</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span> <span class="o">=</span> <span class="n">tensor_grid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">knots</span><span class="p">)</span>
+            <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span> <span class="o">*</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">coeff_condensed</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># now store the coeff value. It has to be stored after the first loop, because tensor_grid returns a grid</span>
+    <span class="c1"># WITHOUT coeff field, and Matlab would throw an error (Subscripted assignment between dissimilar structures)</span>
+
+    <span class="k">for</span> <span class="n">ss</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_grids</span><span class="p">):</span>
+        <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff_condensed</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span>
+
+    <span class="c1"># similarly for the multiidx generating each tensor grid</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coeff</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">coeff</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span>
+            <span class="n">S</span><span class="p">[</span><span class="n">ss</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">coeff</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

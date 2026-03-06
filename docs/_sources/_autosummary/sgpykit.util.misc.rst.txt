@@ -1,0 +1,33 @@
+sgpykit.util.misc
+=================
+
+.. automodule:: sgpykit.util.misc
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      append
+      apply_lev2knots
+      contextmanager
+      generate_multi_indices
+      get_shape_of_cells
+      is_int_nan
+      is_numeric_scalar
+      matlab_to_python_index
+      merge_all_args_to_kwargs
+      print_plain_int
+      python_to_matlab_index
+      reshape_nested_lists_to_nrows
+      safe_vstack
+      time_block
+      to_array
+      unique_rows_stable
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Cell
+   

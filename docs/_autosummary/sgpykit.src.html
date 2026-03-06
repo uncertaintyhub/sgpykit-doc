@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.src &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.tools" href="sgpykit.tools.html" />
+    <link rel="prev" title="sgpykit.main" href="sgpykit.main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sgpykit.src</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.GK_lev_table"><code class="docutils literal notranslate"><span class="pre">GK_lev_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.combination_technique"><code class="docutils literal notranslate"><span class="pre">combination_technique()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.compare_sparse_grids"><code class="docutils literal notranslate"><span class="pre">compare_sparse_grids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.compute_modal_tensor"><code class="docutils literal notranslate"><span class="pre">compute_modal_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.delta_to_combitec"><code class="docutils literal notranslate"><span class="pre">delta_to_combitec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.detect_insufficient_tolerance"><code class="docutils literal notranslate"><span class="pre">detect_insufficient_tolerance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.find_lexicographic"><code class="docutils literal notranslate"><span class="pre">find_lexicographic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.find_lexicographic_tol"><code class="docutils literal notranslate"><span class="pre">find_lexicographic_tol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.generate_pattern"><code class="docutils literal notranslate"><span class="pre">generate_pattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.lookup_merge_and_diff"><code class="docutils literal notranslate"><span class="pre">lookup_merge_and_diff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.mysortrows"><code class="docutils literal notranslate"><span class="pre">mysortrows()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.plot_idx_status"><code class="docutils literal notranslate"><span class="pre">plot_idx_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.src.tensor_grid"><code class="docutils literal notranslate"><span class="pre">tensor_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+      <li class="breadcrumb-item active">sgpykit.src</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.src">
+<span id="sgpykit-src"></span><h1>sgpykit.src<a class="headerlink" href="#module-sgpykit.src" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.GK_lev_table" title="sgpykit.src.GK_lev_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GK_lev_table</span></code></a>(row_idx, col_idx)</p></td>
+<td><p>Return entries from the Gauss-Kronrod level table.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.src.combination_technique" title="sgpykit.src.combination_technique"><code class="xref py py-obj docutils literal notranslate"><span class="pre">combination_technique</span></code></a>(I)</p></td>
+<td><p>Compute the coefficients of the combination technique expression of a sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.compare_sparse_grids" title="sgpykit.src.compare_sparse_grids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_sparse_grids</span></code></a>(S, Sr, S_old, Sr_old[, tol])</p></td>
+<td><p>Compare the points of two sparse grids.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.src.compute_modal_tensor" title="sgpykit.src.compute_modal_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_modal_tensor</span></code></a>(S, S_values, domain, flags)</p></td>
+<td><p>Convert a tensor grid interpolant to a modal expansion in orthogonal polynomials.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.delta_to_combitec" title="sgpykit.src.delta_to_combitec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_to_combitec</span></code></a>(ii)</p></td>
+<td><p>Compute the combination technique contributions of a multi-index.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.src.detect_insufficient_tolerance" title="sgpykit.src.detect_insufficient_tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_insufficient_tolerance</span></code></a>(pts, tol)</p></td>
+<td><p>Check if the given tolerance is sufficient to detect identical points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.find_lexicographic" title="sgpykit.src.find_lexicographic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_lexicographic</span></code></a>(lookfor, I[, nocheck])</p></td>
+<td><p>Find specific rows of a matrix that is sorted lexicographically.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.src.find_lexicographic_tol" title="sgpykit.src.find_lexicographic_tol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_lexicographic_tol</span></code></a>(lookfor, I[, tol])</p></td>
+<td><p>Find specific rows of a matrix that is sorted lexicographically up to TOL.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.generate_pattern" title="sgpykit.src.generate_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_pattern</span></code></a>(m)</p></td>
+<td><p>Generate a pattern matrix for the Cartesian product of sequences.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.src.lookup_merge_and_diff" title="sgpykit.src.lookup_merge_and_diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lookup_merge_and_diff</span></code></a>(pts_list, pts_list_old)</p></td>
+<td><p>Identify points to compute, recycle, and discard between two sparse grids.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.mysortrows" title="sgpykit.src.mysortrows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mysortrows</span></code></a>(A[, tol])</p></td>
+<td><p>Sort the rows of a matrix in lexicographic order with a tolerance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.src.plot_idx_status" title="sgpykit.src.plot_idx_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_idx_status</span></code></a>(G, I, idx_bin, idx)</p></td>
+<td><p>Plot the status of a two-dimensional adaptive sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.src.tensor_grid" title="sgpykit.src.tensor_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_grid</span></code></a>(N, m, knots)</p></td>
+<td><p>Generate a tensor grid and compute the corresponding weights.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.GK_lev_table">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">GK_lev_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/GK_lev_table.html#GK_lev_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.GK_lev_table" title="Link to this definition"></a></dt>
+<dd><p>Return entries from the Gauss-Kronrod level table.</p>
+<p>This function returns the (row, col) submatrix of the pre-defined
+Gauss-Kronrod level table. The table maps between Gauss-Kronrod level
+indices, the number of knots, and the corresponding quadrature order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>row_idx</strong><span class="classifier">int or array_like</span></dt><dd><p>Row index or indices of the table.</p>
+</dd>
+<dt><strong>col_idx</strong><span class="classifier">int or array_like</span></dt><dd><p>Column index or indices of the table.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">ndarray</span></dt><dd><p>The submatrix of the Gauss-Kronrod level table at the specified
+row and column indices.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>In the tabulated GK knots, many levels have the same knots (with weights
+identical up to 10th-11th digit). For each group of levels with the same
+number of knots, one representative is selected, and a map is defined as
+follows:</p>
+<p>MAP=
+i:   l:     nb_knots:   order:
+0     0     0             0
+1     1     1             1
+2     3     3             3
+3     8     9             15
+4    15    19             29
+5    25    35             51</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.combination_technique">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">combination_technique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/combination_technique.html#combination_technique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.combination_technique" title="Link to this definition"></a></dt>
+<dd><p>Compute the coefficients of the combination technique expression of a sparse grid.</p>
+<p>The combination technique computes the coefficients for expressing a sparse grid as a
+linear combination of tensor grids. This function takes a multi-index set I (each row
+representing a multi-index associated with a Delta operator in the sparse grid
+construction) and computes the corresponding combination technique coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">ndarray</span></dt><dd><p>0-based multi-index set matrix (one row per index), must be admissible and
+lexicographically sorted. These properties are not checked by the function.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>coeff</strong><span class="classifier">ndarray</span></dt><dd><p>Vector containing the combination technique coefficients.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The input matrix I must be admissible and lexicographically sorted. The function does
+not verify these properties, so incorrect input may lead to unexpected results.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.compare_sparse_grids">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">compare_sparse_grids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/compare_sparse_grids.html#compare_sparse_grids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.compare_sparse_grids" title="Link to this definition"></a></dt>
+<dd><p>Compare the points of two sparse grids.</p>
+<p>This function compares the points in S and S_old, and determines those in common,
+and those belonging exclusively to each of the two. Points are considered equal if
+coordinate-wise they are closer than TOL. SR is the reduced version of S and SR_OLD
+is the reduced version of S_OLD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">array_like</span></dt><dd><p>Sparse grid structure.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">array_like</span></dt><dd><p>Reduced version of S.</p>
+</dd>
+<dt><strong>S_old</strong><span class="classifier">array_like</span></dt><dd><p>Old sparse grid structure.</p>
+</dd>
+<dt><strong>Sr_old</strong><span class="classifier">array_like</span></dt><dd><p>Reduced version of S_old.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance for point comparison (default is 1e-14).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>pts_in_S_only</strong><span class="classifier">ndarray</span></dt><dd><p>Column indices of points in SR.KNOTS that are not in the intersection of S and S_OLD.</p>
+</dd>
+<dt><strong>pts_in_both_grids_S</strong><span class="classifier">ndarray</span></dt><dd><p>Column indices of points in SR.KNOTS that are also in SR_OLD.KNOTS.</p>
+</dd>
+<dt><strong>pts_in_both_grids_S_old</strong><span class="classifier">ndarray</span></dt><dd><p>Column indices of points in SR_OLD.KNOTS that are also in SR.KNOTS.</p>
+</dd>
+<dt><strong>pts_in_S_old_only</strong><span class="classifier">ndarray</span></dt><dd><p>Column indices of points in SR_OLD.KNOTS that are in SR_OLD but not in SR.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The same results would happen if SR_OLD.KNOTS are perturbed by numerical noise below tol:
+SR_OLD.KNOTS =[a+n f b    h;</p>
+<blockquote>
+<div><p>x   s y-n  r];</p>
+</div></blockquote>
+<p>COMPARE_GRIDS is very efficient because it works with comparing integer indices coming from
+the multiindices in S.IDX and S_OLD.IDX as much as possible. See also LOOKUP_MERGE_AND_DIFF
+for the same kind of analysis based however on comparing the actual coordinates of the points.</p>
+<p class="rubric">Examples</p>
+<p>Suppose
+SR.KNOTS =    [a b c d e;</p>
+<blockquote>
+<div><p>x y z w t]</p>
+</div></blockquote>
+<dl class="simple">
+<dt>SR_OLD.KNOTS =[a f b h;</dt><dd><p>x s y r];</p>
+</dd>
+</dl>
+<p>Then:
+pts_in_S_only             = [3 4 5];
+pts_in_both_grids_S       = [1 2];
+pts_in_both_grids_S_old   = [1 3];
+pts_in_S_old_only         = [2 4];</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.compute_modal_tensor">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">compute_modal_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/compute_modal_tensor.html#compute_modal_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.compute_modal_tensor" title="Link to this definition"></a></dt>
+<dd><p>Convert a tensor grid interpolant to a modal expansion in orthogonal polynomials.</p>
+<p>This function takes a tensor grid and its associated point evaluations, and converts
+the resulting Lagrange multivariate interpolant to a sum of orthogonal polynomials.
+The type of polynomials used can be specified via the <cite>flags</cite> parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>A struct containing the tensor grid information, including knots and size.</p>
+</dd>
+<dt><strong>S_values</strong><span class="classifier">ndarray</span></dt><dd><p>The values of the interpolant at the tensor grid points.</p>
+</dd>
+<dt><strong>domain</strong><span class="classifier">ndarray or list of ndarrays</span></dt><dd><p>The domain of the sparse grid. The format depends on the polynomial family:
+- For Legendre, Chebyshev: 2xN matrix [a1, a2, …; b1, b2, …]
+- For Hermite: 2xN matrix [mu1, mu2, …; sigma1, sigma2, …]
+- For Laguerre: 1xN matrix [lambda1, lambda2, …]
+- For generalized Laguerre: 2xN matrix [alpha1, alpha2, …; beta1, beta2, …]
+- For Jacobi: 4xN matrix [alpha1, alpha2, …; beta1, beta2, …; a1, a2, …; b1, b2, …]
+- For mixed families: a cell array where each cell contains the domain for the corresponding polynomial.</p>
+</dd>
+<dt><strong>flags</strong><span class="classifier">str or list of str</span></dt><dd><p>The type of orthogonal polynomials to use. Can be a single string or a list of strings
+for mixed families. Supported values are:
+- ‘legendre’
+- ‘chebyshev’
+- ‘hermite’
+- ‘laguerre’
+- ‘generalized laguerre’
+- ‘jacobi’</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>U</strong><span class="classifier">struct</span></dt><dd><p>A struct with the following fields:
+- size: the number of polynomials in the expansion.
+- multi_indices: the multi-indices corresponding to each polynomial.
+- modal_coeffs: the coefficients of the modal expansion.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If one or more strings in <cite>flags</cite> are unrecognized, or if the input argument <cite>domain</cite>
+is not a cell array when <cite>flags</cite> is a cell array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.delta_to_combitec">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">delta_to_combitec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ii</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/delta_to_combitec.html#delta_to_combitec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.delta_to_combitec" title="Link to this definition"></a></dt>
+<dd><p>Compute the combination technique contributions of a multi-index.</p>
+<p>DELTA_TO_COMBITEC computes the combination technique contributions of a multi-index
+I = delta_to_combitec(ii)
+takes as input a multi-index (row-vector) ii that describes a delta operator in the sparse grids construction
+and returns the set I of the corresponding quadrature/interpolation operators (lexicosorted). It does <em>not</em>
+return instead the coefficient of the index in the combination technique, whose value is trivial to compute, see below.
+In formulas,
+Delta^ii = prod_{n=1}^N ( U_n^{ii_n} - U_n^{ii_n-1})
+where U_n^{i_n} is the quadrature/interpolation operator along direction n at level i_n.
+The Delta^ii can be expressed as linear combination of tensorized U_n operators:
+Delta^ii = sum_{kk in K} c_kk prod_n U_n^{kk_n}
+where c_kk = (-1)^sum(ii - kk);
+and I = sortrows(K),  while c_kk is not returned
+For instance
+Delta^[1 2] = (U_1^1 -U_1^0) * (U_2^2 -U_2^1) = U_1^1 * U_2^2 - U_1^1 * U_2^1 - U_1^0 * U_2^2 + U_1^0 * U_2^1
+and delta_to_combitec([1, 2]):
+<a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></p>
+<blockquote>
+<div><p>0     1
+0     2
+1     1
+1     2</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">Of</span> <span class="pre">course</span> <span class="pre">whenever</span> <span class="pre">ii_n</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">for</span> <span class="pre">some</span> <span class="pre">n,</span>&#160; <span class="pre">we</span> <span class="pre">should</span> <span class="pre">not</span> <span class="pre">take</span> <span class="pre">the</span> <span class="pre">difference</span> <span class="pre">(</span> <span class="pre">U_n^{ii_n}</span> <span class="pre">-</span> <span class="pre">U_n^{ii_n-1});</span> <span class="pre">delta_to_combitec</span> <span class="pre">does</span> <span class="pre">this</span> <span class="pre">too:</span>
+<span class="pre">delta_to_combitec([1,</span> <span class="pre">1,</span> <span class="pre">2]):</span>
+<span class="pre">`</span></code></p>
+<blockquote>
+<div><p>0     0     1
+0     0     2
+0     1     1
+0     1     2
+1     0     1
+1     0     2
+1     1     1
+1     1     2</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">but</span> <span class="pre">delta_to_combitec([1,</span> <span class="pre">0,</span> <span class="pre">2]):</span>
+<span class="pre">`</span></code></p>
+<blockquote>
+<div><p>0     0     1
+0     0     2
+1     0     1
+1     0     2</p>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ii</strong><span class="classifier">array_like</span></dt><dd><p>Multi-index (row-vector) describing a delta operator in the sparse grids construction (0-based indexing).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">ndarray</span></dt><dd><p>Set of corresponding quadrature/interpolation operators (lexicosorted).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.detect_insufficient_tolerance">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">detect_insufficient_tolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/detect_insufficient_tolerance.html#detect_insufficient_tolerance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.detect_insufficient_tolerance" title="Link to this definition"></a></dt>
+<dd><p>Check if the given tolerance is sufficient to detect identical points.</p>
+<p>For a matrix of points (one per row, as in mysortrows or lookup_merge_and_diff),
+computes an approximation of the support of the set of point in each direction
+(as max - min coord in each dir) and compares it with tol. If they are “same-sized”
+then tol is too large and a warning is thrown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pts</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Matrix of points, with each row representing a point.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float</span></dt><dd><p>Tolerance value to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the tolerance is insufficient, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.find_lexicographic">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">find_lexicographic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookfor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nocheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/find_lexicographic.html#find_lexicographic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.find_lexicographic" title="Link to this definition"></a></dt>
+<dd><p>Find specific rows of a matrix that is sorted lexicographically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lookfor</strong><span class="classifier">array_like</span></dt><dd><p>The row vector to look for among the rows of I.</p>
+</dd>
+<dt><strong>I</strong><span class="classifier">array_like</span></dt><dd><p>The matrix to search in, assumed to be sorted lexicographically.</p>
+</dd>
+<dt><strong>nocheck</strong><span class="classifier">str, optional</span></dt><dd><p>If ‘nocheck’, the function does not check whether I is lexicographically sorted.
+This can be useful for speed purposes. Default is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>found</strong><span class="classifier">bool</span></dt><dd><p>True if the row vector is found, False otherwise.</p>
+</dd>
+<dt><strong>pos</strong><span class="classifier">int or None</span></dt><dd><p>The row number of the found row vector, i.e., lookfor == I[pos, :]. If not found, pos is None.</p>
+</dd>
+<dt><strong>iter</strong><span class="classifier">int</span></dt><dd><p>The number of iterations performed during the binary search.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function performs a preliminary check whether I is actually lexicographically sorted.
+If nocheck is ‘nocheck’, this check is skipped.
+The function uses a binary search algorithm, which guarantees a cost of ~log(nb_idx).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.find_lexicographic_tol">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">find_lexicographic_tol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lookfor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/find_lexicographic_tol.html#find_lexicographic_tol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.find_lexicographic_tol" title="Link to this definition"></a></dt>
+<dd><p>Find specific rows of a matrix that is sorted lexicographically up to TOL.</p>
+<p>Finds a specific row vector in a matrix that is sorted lexicographically up to a
+given tolerance. The function uses binary search to efficiently locate the row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lookfor</strong><span class="classifier">array_like</span></dt><dd><p>The row vector to search for in the matrix.</p>
+</dd>
+<dt><strong>I</strong><span class="classifier">ndarray</span></dt><dd><p>The matrix to search in, assumed to be sorted lexicographically.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>The tolerance for testing equality between <cite>lookfor</cite> and rows of <cite>I</cite>.
+Default is 1e-14.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>found</strong><span class="classifier">bool</span></dt><dd><p>True if <cite>lookfor</cite> is found in <cite>I</cite> within the given tolerance, False otherwise.</p>
+</dd>
+<dt><strong>pos</strong><span class="classifier">int or list</span></dt><dd><p>The row number of <cite>lookfor</cite> in <cite>I</cite> if found, otherwise an empty list.</p>
+</dd>
+<dt><strong>iter</strong><span class="classifier">int</span></dt><dd><p>The number of iterations performed during the binary search.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function does not perform a preliminary check whether <cite>I</cite> is actually
+lexicographically sorted. The binary search guarantees a cost of ~log(nb_idx).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">multiidx_box_set</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">noise</span> <span class="o">=</span> <span class="mf">1e-13</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">I</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Inoisy</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="n">noise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">find_lexicographic_tol</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">Inoisy</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">))</span>  <span class="c1"># Should return True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">find_lexicographic_tol</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">Inoisy</span><span class="p">,</span> <span class="mf">1e-14</span><span class="p">))</span>  <span class="c1"># Should return False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.generate_pattern">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">generate_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/generate_pattern.html#generate_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.generate_pattern" title="Link to this definition"></a></dt>
+<dd><p>Generate a pattern matrix for the Cartesian product of sequences.</p>
+<p>This function generates a matrix that can be used to create the Cartesian product
+of sequences {1, 2, …, m1} x {1, 2, …, m2} x … x {1, 2, …, mN}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>m</strong><span class="classifier">array_like</span></dt><dd><p>Input array of integers representing the lengths of the sequences.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>pattern</strong><span class="classifier">ndarray</span></dt><dd><p>Matrix of indices for the Cartesian product. The shape is (N, prod(m)),
+where N is the length of m.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The function expects MATLAB 1-based indexing and returns 0-based indexing.</p></li>
+<li><p>The algorithm works one direction at a time, generating the n-th row of the pattern
+by repeating a base vector q times.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">generate_pattern</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="go">array([[0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],</span>
+<span class="go">       [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1],</span>
+<span class="go">       [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]], dtype=uint8)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.lookup_merge_and_diff">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">lookup_merge_and_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pts_list_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/lookup_merge_and_diff.html#lookup_merge_and_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.lookup_merge_and_diff" title="Link to this definition"></a></dt>
+<dd><p>Identify points to compute, recycle, and discard between two sparse grids.</p>
+<p>This function compares two sets of points (from new and old sparse grids)
+and categorizes them based on their presence in both grids, using a specified
+tolerance to determine equality. It is used in adaptive sparse grid algorithms
+to efficiently manage point evaluations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pts_list</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points from the new sparse grid (shape: N x d, where N is the number
+of points and d is the dimensionality).</p>
+</dd>
+<dt><strong>pts_list_old</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of points from the old sparse grid (shape: N_old x d).</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance for considering two points equal (default is 1e-14).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>tocomp_list</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Indices of points in pts_list that need to be evaluated (not present in old grid).</p>
+</dd>
+<dt><strong>recycle_list</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Indices of points in pts_list that can be recycled from old grid.</p>
+</dd>
+<dt><strong>recycle_list_old</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Corresponding indices in pts_list_old for recycled points.</p>
+</dd>
+<dt><strong>discard_list</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Indices of points in pts_list_old that are no longer in the new grid.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The function uses lexicographic sorting with tolerance to identify matching points.</p></li>
+<li><p>For non-nested grids, some points from the old grid may be discarded.</p></li>
+<li><p>The function performs several sanity checks to ensure correctness.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.mysortrows">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">mysortrows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/mysortrows.html#mysortrows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.mysortrows" title="Link to this definition"></a></dt>
+<dd><p>Sort the rows of a matrix in lexicographic order with a tolerance.</p>
+<p>Given a matrix A of real numbers, sorts the rows in lexicographic order.
+Entries that differ less than Tol are treated as equal (default Tol is 1e-14).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A</strong><span class="classifier">array_like</span></dt><dd><p>Input matrix to be sorted.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance used to identify coincident entries (default 1e-14).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>B</strong><span class="classifier">ndarray</span></dt><dd><p>Sorted matrix.</p>
+</dd>
+<dt><strong>idx</strong><span class="classifier">ndarray</span></dt><dd><p>Index vector such that A[idx,:] = B.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.plot_idx_status">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">plot_idx_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_bin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/plot_idx_status.html#plot_idx_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.plot_idx_status" title="Link to this definition"></a></dt>
+<dd><p>Plot the status of a two-dimensional adaptive sparse grid.</p>
+<p>This function visualizes the indices used in the construction of a two-dimensional
+adaptive sparse grid. It plots four sets of points:
+- G: set of indices used to build the sparse grid
+- I: set of indices whose neighbors have been explored
+- idx_bin: set of indices whose neighbors have not been explored
+- idx: next index to be considered</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>G</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (n, 2) containing the indices used to build the sparse grid.</p>
+</dd>
+<dt><strong>I</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (m, 2) containing the indices whose neighbors have been explored.</p>
+</dd>
+<dt><strong>idx_bin</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (p, 2) containing the indices whose neighbors have not been explored.</p>
+</dd>
+<dt><strong>idx</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of shape (2,) containing the next index to be considered.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.src.tensor_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.src.</span></span><span class="sig-name descname"><span class="pre">tensor_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/src/tensor_grid.html#tensor_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.src.tensor_grid" title="Link to this definition"></a></dt>
+<dd><p>Generate a tensor grid and compute the corresponding weights.</p>
+<p>This function creates a tensor grid in N dimensions with M=[m1, m2, …, mN] points
+in each direction. The knots can be specified either as a cell array of functions
+(one for each dimension) or as a single function to be used for all dimensions.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions.</p>
+</dd>
+<dt><strong>m</strong><span class="classifier">array_like</span></dt><dd><p>Number of points in each dimension.</p>
+</dd>
+<dt><strong>knots</strong><span class="classifier">callable or array_like of callables</span></dt><dd><p>Function(s) to generate the knots in each direction. If a single function is provided,
+it is replicated for all dimensions. Each function should have the signature
+x, w = knots_function(m).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>S</strong><span class="classifier">Struct</span></dt><dd><p>A structure containing the tensor grid information:
+- knots : ndarray</p>
+<blockquote>
+<div><p>Vector containing the tensor grid knots.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>weights<span class="classifier">ndarray</span></dt><dd><p>Vector containing the corresponding weights.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>size<span class="classifier">int</span></dt><dd><p>Size of the tensor grid, equal to the product of m.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>knots_per_dim<span class="classifier">list</span></dt><dd><p>List of N components, each containing the set of 1D knots used to build the tensor grid.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>m<span class="classifier">ndarray</span></dt><dd><p>Input vector m, where m[i] is the length of knots_per_dim[i].</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.main.html" class="btn btn-neutral float-left" title="sgpykit.main" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.tools.html" class="btn btn-neutral float-right" title="sgpykit.tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

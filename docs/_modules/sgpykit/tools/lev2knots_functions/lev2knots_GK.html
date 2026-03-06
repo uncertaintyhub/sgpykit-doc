@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.lev2knots_functions.lev2knots_GK &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.lev2knots_functions.lev2knots_GK</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.tools.lev2knots_functions.lev2knots_GK</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.GK_lev_table</span><span class="w"> </span><span class="kn">import</span> <span class="n">GK_lev_table</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.checks</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_number_or_list_of_numbers_nonnegative</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="lev2knots_GK">
+<a class="viewcode-back" href="../../../../_autosummary/sgpykit.tools.lev2knots_functions.html#sgpykit.tools.lev2knots_functions.lev2knots_GK">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">lev2knots_GK</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Map sparse-grid levels to the corresponding number of knots using the Genz-Keister (GK) table.</span>
+
+<span class="sd">    This function returns the number of knots corresponding to the given level(s) I,</span>
+<span class="sd">    using the pre-tabulated GK_lev_table. For levels beyond the table&#39;s range,</span>
+<span class="sd">    a warning is logged and -1 is stored as a sentinel value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    I : int or array_like</span>
+<span class="sd">        Level(s) for which to compute the number of knots. Must be non-negative.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    nb_knots : int or ndarray</span>
+<span class="sd">        Number of knots corresponding to the input level(s). If I is a scalar, returns a scalar.</span>
+<span class="sd">        If I is an array, returns an array of the same shape. For non-tabulated levels, -1 is stored.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The GK_lev_table is a pre-computed lookup table that maps levels to knot counts and quadrature orders.</span>
+<span class="sd">    Levels greater than 5 are not tabulated and will result in a warning and a stored value of -1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># nb_knots = lev2knots_GK(I)</span>
+    <span class="c1"># returns the number of knots corresponding to the i-level i,</span>
+    <span class="c1"># via the i2l map tabulated as in GK_lev_table</span>
+    <span class="k">assert</span> <span class="n">is_number_or_list_of_numbers_nonnegative</span><span class="p">(</span><span class="n">I</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">I</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">I</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">isarray</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">I</span> <span class="o">&gt;</span> <span class="mi">5</span>
+    <span class="c1"># are there non tabulated levels?</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="c1"># nb knots is a vector after this instruction; I is understood coloumnwise as I(:)</span>
+        <span class="c1"># Note that I want to access rows I+1, because minimum value for level is 0,</span>
+        <span class="c1"># whose data are stored in row 1</span>
+        <span class="n">nb_knots</span> <span class="o">=</span> <span class="n">GK_lev_table</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;GKNonTab: asking for non tabulated levels&#39;</span><span class="p">)</span>
+        <span class="n">I</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># @NOTE: no nullable integer data type in numpy. pandas has one Int64 but is experimental and incomplete</span>
+        <span class="n">vect_nb_knots</span> <span class="o">=</span> <span class="n">GK_lev_table</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># pd.array(GK_lev_table(I,2), dtype=pd.Int64Dtype())</span>
+        <span class="c1"># @NOTE: np.inf does not work here (GK_lev_table are integers), would cast to float otherwise</span>
+        <span class="n">vect_nb_knots</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">nb_knots</span> <span class="o">=</span> <span class="n">vect_nb_knots</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nb_knots</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">isarray</span> <span class="k">else</span> <span class="n">nb_knots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

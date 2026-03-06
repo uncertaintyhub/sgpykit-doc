@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">sgpykit</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit">
+<span id="sgpykit"></span><h1>sgpykit<a class="headerlink" href="#module-sgpykit" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">GK_lev_table</span></code>(row_idx, col_idx)</p></td>
+<td><p>Return entries from the Gauss-Kronrod level table.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">adapt_sparse_grid</span></code>(f, N_full, knots, ...)</p></td>
+<td><p>Compute an adaptive sparse grid approximation of a function f.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">asreduced</span></code>(pts_list[, wgs_list])</p></td>
+<td><p>Construct a reduced sparse grid structure from given points and weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cheb_eval</span></code>(x, k, a, b)</p></td>
+<td><p>Evaluate the k-th Chebyshev polynomial of the first kind on [a,b].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cheb_eval_multidim</span></code>(X, k, a, b)</p></td>
+<td><p>Evaluate the multidimensional Chebyshev polynomial of the first kind of order k (multi-index) on [a,b]^N.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_index_admissibility</span></code>(idx, idx_set[, ...])</p></td>
+<td><p>Check if a multiindex is admissible with respect to an index set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_set_admissibility</span></code>(I[, matlab_idx])</p></td>
+<td><p>Check if a given index set is admissible and return the admissible set.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">combination_technique</span></code>(I)</p></td>
+<td><p>Compute the coefficients of the combination technique expression of a sparse grid.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_sparse_grids</span></code>(S, Sr, S_old, Sr_old[, tol])</p></td>
+<td><p>Compare the points of two sparse grids.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_modal_tensor</span></code>(S, S_values, domain, flags)</p></td>
+<td><p>Convert a tensor grid interpolant to a modal expansion in orthogonal polynomials.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_sobol_indices_from_sparse_grid</span></code>(S, ...)</p></td>
+<td><p>Compute Sobol indices from a sparse grid approximation of a scalar-valued function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_to_modal</span></code>(S, Sr, nodal_values, ...)</p></td>
+<td><p>Convert a sparse grid interpolant to a modal (spectral) expansion.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid</span></code>(N, w, knots, lev2knots[, ...])</p></td>
+<td><p>Generate a sparse grid (and corresponding quadrature weights) as a linear combination of full tensor grids, employing formula (2.9) of [Nobile-Tempone-Webster, SINUM 46/5, pages 2309-2345].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_add_multiidx</span></code>(new_idx, ...)</p></td>
+<td><p>Produce a grid obtained by adding a single multi-idx to a previously existing grid.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_multiidx_set</span></code>(C, knots, ...)</p></td>
+<td><p>Create a sparse grid starting from a multiindex-set rather than from a rule IDXSET(I) &lt;= W.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_quick_preset</span></code>(N, w)</p></td>
+<td><p>Create a sparse grid with a quick preset configuration.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_functions_for_rule</span></code>(rule, input2)</p></td>
+<td><p>Define the level-to-knots and index set functions for a given sparse grid rule.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delta_to_combitec</span></code>(ii)</p></td>
+<td><p>Compute the combination technique contributions of a multi-index.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">derive_sparse_grid</span></code>(S, Sr, values_on_grid, ...)</p></td>
+<td><p>Compute derivatives (gradients) of a scalar-valued function f: R^N -&gt; R by centered finite differences formulas applied to the sparse grid approximation of f.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_insufficient_tolerance</span></code>(pts, tol)</p></td>
+<td><p>Check if the given tolerance is sufficient to detect identical points.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_on_sparse_grid</span></code>(f, S, Sr[, ...])</p></td>
+<td><p>Evaluate a function on a sparse grid, possibly recycling previous calls.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_sparse_grid_to_file</span></code>(Sr[, filename, ...])</p></td>
+<td><p>Save knots of a reduced sparse grid to an ASCII file.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fast_TD_set</span></code>(N, w[, base])</p></td>
+<td><p>Generate the total-degree multi-index set TD(w) in N dimensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">figure_create</span></code>([nrows, ncols, figsize, dims])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_lexicographic</span></code>(lookfor, I[, nocheck])</p></td>
+<td><p>Find specific rows of a matrix that is sorted lexicographically.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_lexicographic_tol</span></code>(lookfor, I[, tol])</p></td>
+<td><p>Find specific rows of a matrix that is sorted lexicographically up to TOL.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generalized_lagu_eval</span></code>(x, k, alpha, beta)</p></td>
+<td><p>Evaluate the k-th generalized Laguerre polynomial orthonormal in [0, +inf).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generalized_lagu_eval_multidim</span></code>(X, k, alpha, beta)</p></td>
+<td><p>Evaluate the multidimensional generalized Laguerre polynomial of order k (multi-index) orthonormal on [0, +inf)^N with respect to the weight function: rho = prod_i beta_i^(alpha_i+1)/Gamma(alpha_i+1) * x^alpha_i * exp(-beta_i * x), where alpha_i &gt; -1 and beta_i &gt; 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_pattern</span></code>(m)</p></td>
+<td><p>Generate a pattern matrix for the Cartesian product of sequences.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_interval_map</span></code>(a, b, type_)</p></td>
+<td><p>Build a mapping function to shift sparse grids from a reference domain to a target domain.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">herm_eval</span></code>(x, k, mi, sigma)</p></td>
+<td><p>Evaluate the k-th orthonormal Hermite polynomial at points x.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">herm_eval_multidim</span></code>(X, k, mu, sig)</p></td>
+<td><p>Evaluate the multidimensional Hermite polynomial of order k (multi-index) orthonormal on [-inf, +inf]^N with respect to the Gaussian weight function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hessian_sparse_grid</span></code>(S, Sr, values_on_grid, ...)</p></td>
+<td><p>Compute the Hessian of a scalar-valued function f: R^N -&gt; R by finite differences applied to the sparse grids approximation of f.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_on_sparse_grid</span></code>(S, Sr, ...)</p></td>
+<td><p>Interpolate a function on a sparse grid.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_sparse_grid</span></code>(S)</p></td>
+<td><p>Check if the input is a sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_tensor_grid</span></code>(S)</p></td>
+<td><p>Check if a given struct is a tensor grid or a tensor grid in a sparse grid struct.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isequal_sparse_grids</span></code>(S1, S2[, tol])</p></td>
+<td><p>Compare two sparse grids for equality.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isequal_tensor_grids</span></code>(T1, T2[, tol])</p></td>
+<td><p>Compare two tensor grids field by field, checking that the two grids are identical and accounting for numerical tolerance when comparing knots and weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">islexico</span></code>(a, b)</p></td>
+<td><p>Check lexicographic order of vectors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">islexico_tol</span></code>(a, b, tol)</p></td>
+<td><p>Check if vector a is lexicographically less-or-equal than vector b up to a numerical tolerance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isreduced</span></code>(S)</p></td>
+<td><p>Check if a given object is a reduced sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jacobi_prob_eval</span></code>(x, k, alpha, beta, a, b)</p></td>
+<td><p>Evaluate the k-th Jacobi probabilistic polynomial orthonormal in [a,b].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">jacobi_prob_eval_multidim</span></code>(X, k, alpha, beta, ...)</p></td>
+<td><p>Evaluate the multidimensional probabilistic Jacobi polynomial of order k (multi-index) orthonormal on [a1,b1] x [a2,b2] x [a3,b3] x .</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_CC</span></code>(nn, x_a, x_b[, whichrho])</p></td>
+<td><p>Calculate the collocation points and weights for the Clenshaw-Curtis integration formula.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_GK</span></code>(n, mi, sigma)</p></td>
+<td><p>Compute collocation points and weights for Genz-Keister quadrature.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_beta</span></code>(n, alpha, beta, x_a, x_b)</p></td>
+<td><p>Calculate the collocation points (x) and weights (w) for Gaussian integration with respect to the Beta distribution weight function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_beta_leja</span></code>(n, alpha, beta, x_a, x_b, type_)</p></td>
+<td><p>Compute the first n collocation points (x) and the corresponding weights (w) for the weighted Leja sequence for integration w.r.t to the weight function rho(x)=Gamma(alpha+beta+2)/ (Gamma(alpha+1)*Gamma(beta+1)*(x_b-x_a)^(alpha+beta+1)) * (x-x_a)^alpha * (x_b-x)^beta i.e. the density of a Beta random variable with range [x_a,x_b], alpha,beta&gt;-1.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_exponential</span></code>(n, lambda_)</p></td>
+<td><p>Compute collocation points and weights for Gaussian integration with respect to the exponential weight function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_exponential_leja</span></code>(n, lambda_)</p></td>
+<td><p>Returns the collocation points (x) and the weights (w) for the weighted Leja sequence for integration with respect to the weight function rho(x) = exp(-lambda * abs(x)), lambda &gt; 0, i.e., the density of an exponential random variable with rate parameter lambda.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_gamma</span></code>(n, alpha, beta)</p></td>
+<td><p>Compute collocation points and weights for Gaussian integration w.r.t.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_gamma_leja</span></code>(n, alpha, beta[, saving_flag])</p></td>
+<td><p>Compute the first n collocation points and corresponding weights for the weighted Leja sequence for integration with respect to the Gamma density.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_leja</span></code>(n, x_a, x_b, type_[, whichrho])</p></td>
+<td><p>Compute Leja points and weights for numerical integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_midpoint</span></code>(n, x_a, x_b[, whichrho])</p></td>
+<td><p>Generate nodes and weights for the n-point midpoint quadrature rule.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_normal</span></code>(n, mi, sigma)</p></td>
+<td><p>Calculate the collocation points (x) and weights (w) for Gaussian integration with respect to the weight function rho(x) = 1/sqrt(2*pi*sigma^2) * exp(-(x-mi)^2 / (2*sigma^2)), i.e., the density of a Gaussian random variable with mean mi and standard deviation sigma.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_normal_leja</span></code>(n, mi, sigma, type_)</p></td>
+<td><p>Compute collocation points and weights for Gaussian-weighted Leja sequences.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_trap</span></code>(n, x_a, x_b[, whichrho])</p></td>
+<td><p>Compute knots and weights for the trapezoidal quadrature rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_triangular_leja</span></code>(n, a, b)</p></td>
+<td><p>Returns the collocation points (x) and the weights (w) for the weighted Leja sequence for integration with respect to the weight function rho(x) = 2/(b-a)^2 (b-x), i.e., a linear decreasing pdf over the interval [a, b].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_uniform</span></code>(n, x_a, x_b[, whichrho])</p></td>
+<td><p>Calculate collocation points and weights for Gaussian integration with respect to a uniform weight function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagr_eval</span></code>(current_knot, other_knots, ...)</p></td>
+<td><p>Evaluate the Lagrange basis polynomial at non-grid points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagr_eval_fast</span></code>(current_knot, other_knots, ...)</p></td>
+<td><p>Evaluate the Lagrange basis polynomial at non-grid points.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagr_eval_multidim</span></code>(current_knot, ...)</p></td>
+<td><p>Evaluate the multidimensional Lagrange function centered at current_knot in non_grid_points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagu_eval</span></code>(x, k, lambda_)</p></td>
+<td><p>Evaluate the k-th Laguerre polynomial orthonormal in [0, +inf) w.r.t.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagu_eval_multidim</span></code>(X, k, lambda_)</p></td>
+<td><p>Evaluate the multidimensional Laguerre polynomial of order k (multi-index) orthonormal on [0, +inf)^N with respect to rho=prod_i lambda_i*exp(-lambda_i*x), lambda_i&gt;0 on the list of points X (each column is a point in R^N).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lege_eval</span></code>(x, k, a, b)</p></td>
+<td><p>Evaluate the k-th orthonormal Legendre polynomial on the interval [a, b].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lege_eval_multidim</span></code>(X, k, a, b)</p></td>
+<td><p>Evaluate the multidimensional Legendre polynomial of order k (multi-index) orthonormal on [a,b]^N on the list of points X (each column is a point in R^N).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_2step</span></code>(I)</p></td>
+<td><p>Convert level index to number of knots using the 2-step rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_GK</span></code>(I)</p></td>
+<td><p>Map sparse-grid levels to the corresponding number of knots using the Genz-Keister (GK) table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_doubling</span></code>(I)</p></td>
+<td><p>Convert level index to number of knots using a doubling rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_lin</span></code>(I)</p></td>
+<td><p>Relation between level and number of points for linear level-to-knots mapping.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_tripling</span></code>(I)</p></td>
+<td><p>Convert sparse-grid level index to number of knots using a tripling rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lookup_merge_and_diff</span></code>(pts_list, pts_list_old)</p></td>
+<td><p>Identify points to compute, recycle, and discard between two sparse grids.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiidx_box_set</span></code>(shape[, min_idx])</p></td>
+<td><p>Generate a set of multi-dimensional box indices up to a given shape.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiidx_gen</span></code>(N, rule, w[, base, multiidx, ...])</p></td>
+<td><p>Generate all multi-indexes of length N with elements such that rule(M_I) &lt;= w.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mysortrows</span></code>(A[, tol])</p></td>
+<td><p>Sort the rows of a matrix in lexicographic order with a tolerance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>(ax, x, y, *args, **kwargs)</p></td>
+<td><p>Plot data on a given axis with optional formatting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot3_sparse_grid</span></code>(S, dims, *args, **kwargs)</p></td>
+<td><p>Plot a sparse grid in 3D.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_idx_status</span></code>(G, I, idx_bin, idx)</p></td>
+<td><p>Plot the status of a two-dimensional adaptive sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_multiidx_set</span></code>(ax, I, *args, **kwargs)</p></td>
+<td><p>Plot the index set I for 2D and 3D cases.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sparse_grid</span></code>(ax, S, dims, *args, **kwargs)</p></td>
+<td><p>Plot object based on the provided structure S and dimensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sparse_grids_interpolant</span></code>(ax, S, Sr, ...)</p></td>
+<td><p>Plot the sparse grid interpolant of a function.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">quadrature_on_sparse_grid</span></code>(f, S, Sr[, ...])</p></td>
+<td><p>Compute the integral of a function using a sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reduce_sparse_grid</span></code>(S[, tol])</p></td>
+<td><p>Reduce a sparse grid by removing duplicate points within a given tolerance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">standard_lege_eval</span></code>(x, k)</p></td>
+<td><p>Evaluate the k-th standard Legendre polynomial.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_grid</span></code>(N, m, knots)</p></td>
+<td><p>Generate a tensor grid and compute the corresponding weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_to_sparse</span></code>(T[, idx])</p></td>
+<td><p>Convert a tensor grid into a sparse grid structure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">univariate_interpolant</span></code>(grid_points, ...)</p></td>
+<td><p>Interpolates values at non_grid_points using a Lagrange interpolant built from given grid_points and tabulated function_on_grid.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="sgpykit.main.html#module-sgpykit.main" title="sgpykit.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sgpykit.src.html#module-sgpykit.src" title="sgpykit.src"><code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="sgpykit.tools.html#module-sgpykit.tools" title="sgpykit.tools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tools</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sgpykit.util.html#module-sgpykit.util" title="sgpykit.util"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

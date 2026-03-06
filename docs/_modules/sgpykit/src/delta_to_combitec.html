@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.src.delta_to_combitec &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.src.delta_to_combitec</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.src.delta_to_combitec</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<div class="viewcode-block" id="delta_to_combitec">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.src.html#sgpykit.src.delta_to_combitec">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">delta_to_combitec</span><span class="p">(</span><span class="n">ii</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the combination technique contributions of a multi-index.</span>
+
+<span class="sd">    DELTA_TO_COMBITEC computes the combination technique contributions of a multi-index</span>
+<span class="sd">    I = delta_to_combitec(ii)</span>
+<span class="sd">    takes as input a multi-index (row-vector) ii that describes a delta operator in the sparse grids construction</span>
+<span class="sd">    and returns the set I of the corresponding quadrature/interpolation operators (lexicosorted). It does *not*</span>
+<span class="sd">    return instead the coefficient of the index in the combination technique, whose value is trivial to compute, see below.</span>
+<span class="sd">    In formulas,</span>
+<span class="sd">    Delta^ii = \\prod_{n=1}^N ( U_n^{ii_n} - U_n^{ii_n-1})</span>
+<span class="sd">    where U_n^{i_n} is the quadrature/interpolation operator along direction n at level i_n.</span>
+<span class="sd">    The Delta^ii can be expressed as linear combination of tensorized U_n operators:</span>
+<span class="sd">    Delta^ii = \\sum_{kk \\in K} c_kk \\prod_n U_n^{kk_n}</span>
+<span class="sd">    where c_kk = (-1)^sum(ii - kk);</span>
+<span class="sd">    and I = sortrows(K),  while c_kk is not returned</span>
+<span class="sd">    For instance</span>
+<span class="sd">    Delta^[1 2] = (U_1^1 -U_1^0) * (U_2^2 -U_2^1) = U_1^1 * U_2^2 - U_1^1 * U_2^1 - U_1^0 * U_2^2 + U_1^0 * U_2^1</span>
+<span class="sd">    and delta_to_combitec([1, 2]):</span>
+<span class="sd">    ```</span>
+<span class="sd">         0     1</span>
+<span class="sd">         0     2</span>
+<span class="sd">         1     1</span>
+<span class="sd">         1     2</span>
+<span class="sd">    ```</span>
+<span class="sd">    Of course whenever ii_n = 0 for some n,  we should not take the difference ( U_n^{ii_n} - U_n^{ii_n-1}); delta_to_combitec does this too:</span>
+<span class="sd">    delta_to_combitec([1, 1, 2]):</span>
+<span class="sd">    ```</span>
+<span class="sd">         0     0     1</span>
+<span class="sd">         0     0     2</span>
+<span class="sd">         0     1     1</span>
+<span class="sd">         0     1     2</span>
+<span class="sd">         1     0     1</span>
+<span class="sd">         1     0     2</span>
+<span class="sd">         1     1     1</span>
+<span class="sd">         1     1     2</span>
+<span class="sd">    ```</span>
+<span class="sd">    but delta_to_combitec([1, 0, 2]):</span>
+<span class="sd">    ```</span>
+<span class="sd">         0     0     1</span>
+<span class="sd">         0     0     2</span>
+<span class="sd">         1     0     1</span>
+<span class="sd">         1     0     2</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ii : array_like</span>
+<span class="sd">        Multi-index (row-vector) describing a delta operator in the sparse grids construction (0-based indexing).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    I : ndarray</span>
+<span class="sd">        Set of corresponding quadrature/interpolation operators (lexicosorted).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
+
+    <span class="c1"># I need to skip the components of ii equal to 0</span>
+    <span class="n">N_eff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ii</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># other implementation have similar runtimes, like length(find(ii&gt;0)) or sum(ii~=0)</span>
+
+    <span class="c1"># preallocate I</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">**</span> <span class="n">N_eff</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="n">k_eff</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># we work column-by-columns, i.e. loop over N</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="c1"># if the k-th component is not 0, replace the column of I, otherwise just leave the zeros. The columns is obtained by repeating T times</span>
+        <span class="c1"># the basic vector, which contains C copies of ii(k) and C copies of ii(k)-1.</span>
+        <span class="k">if</span> <span class="n">ii</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">k_eff</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">copies</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">N_eff</span> <span class="o">-</span> <span class="n">k_eff</span><span class="p">)</span>  <span class="c1"># 2 x copies x times = #rows =&gt; 2 x copies x 2^(k_eff - 1)  = 2^N_eff =&gt; copies = 2^N_eff  / 2^k_eff</span>
+
+            <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+                <span class="n">I</span><span class="p">[</span><span class="n">row</span><span class="p">:</span><span class="n">row</span> <span class="o">+</span> <span class="n">copies</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ii</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># &lt;--- in this way, it&#39;s already lexicosrted.</span>
+                <span class="n">I</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="n">copies</span><span class="p">:</span><span class="n">row</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">copies</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ii</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">copies</span>
+
+            <span class="n">k_eff</span> <span class="o">=</span> <span class="n">k_eff</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">I</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

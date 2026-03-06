@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.checks &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.util.create_sparse_grid_construct" href="sgpykit.util.create_sparse_grid_construct.html" />
+    <link rel="prev" title="sgpykit.util.cell" href="sgpykit.util.cell.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.cell.html">sgpykit.util.cell</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.util.checks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.contains_same_elements"><code class="docutils literal notranslate"><span class="pre">contains_same_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_array_like"><code class="docutils literal notranslate"><span class="pre">is_array_like()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_list_math_equal"><code class="docutils literal notranslate"><span class="pre">is_list_math_equal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_nparray_of_numbers"><code class="docutils literal notranslate"><span class="pre">is_nparray_of_numbers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_number_or_list_of_numbers_nonnegative"><code class="docutils literal notranslate"><span class="pre">is_number_or_list_of_numbers_nonnegative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_number_or_nparray_of_numbers"><code class="docutils literal notranslate"><span class="pre">is_number_or_nparray_of_numbers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_number_or_nparray_of_numbers_nonnegative"><code class="docutils literal notranslate"><span class="pre">is_number_or_nparray_of_numbers_nonnegative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.checks.is_numeric_scalar"><code class="docutils literal notranslate"><span class="pre">is_numeric_scalar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.create_sparse_grid_construct.html">sgpykit.util.create_sparse_grid_construct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.definitions.html">sgpykit.util.definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.log.html">sgpykit.util.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.matlab.html">sgpykit.util.matlab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.misc.html">sgpykit.util.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.plot.html">sgpykit.util.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct.html">sgpykit.util.struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct_array.html">sgpykit.util.struct_array</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.util.html">sgpykit.util</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.checks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.util.checks.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.util.checks">
+<span id="sgpykit-util-checks"></span><h1>sgpykit.util.checks<a class="headerlink" href="#module-sgpykit.util.checks" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.checks.contains_same_elements" title="sgpykit.util.checks.contains_same_elements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contains_same_elements</span></code></a>(obj1, obj2)</p></td>
+<td><p>Check if two objects contain the same elements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_array_like" title="sgpykit.util.checks.is_array_like"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_array_like</span></code></a>(obj)</p></td>
+<td><p>Check if an object is array-like.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_list_math_equal" title="sgpykit.util.checks.is_list_math_equal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_list_math_equal</span></code></a>(list1, list2[, tol])</p></td>
+<td><p>Recursively compares two nested lists or arrays to check if they are equal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_nparray_of_numbers" title="sgpykit.util.checks.is_nparray_of_numbers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_nparray_of_numbers</span></code></a>(obj)</p></td>
+<td><p>Check if an object is a NumPy array of numbers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_number_or_list_of_numbers_nonnegative" title="sgpykit.util.checks.is_number_or_list_of_numbers_nonnegative"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_number_or_list_of_numbers_nonnegative</span></code></a>(obj)</p></td>
+<td><p>Check if an object is a non-negative number or a list of non-negative numbers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_number_or_nparray_of_numbers" title="sgpykit.util.checks.is_number_or_nparray_of_numbers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_number_or_nparray_of_numbers</span></code></a>(obj)</p></td>
+<td><p>Check if an object is a number or a NumPy array of numbers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_number_or_nparray_of_numbers_nonnegative" title="sgpykit.util.checks.is_number_or_nparray_of_numbers_nonnegative"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_number_or_nparray_of_numbers_nonnegative</span></code></a>(obj)</p></td>
+<td><p>Check if an object is a non-negative number or a NumPy array of non-negative numbers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.checks.is_numeric_scalar" title="sgpykit.util.checks.is_numeric_scalar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_numeric_scalar</span></code></a>(item)</p></td>
+<td><p>Check if an item is a numeric scalar.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.contains_same_elements">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">contains_same_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#contains_same_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.contains_same_elements" title="Link to this definition"></a></dt>
+<dd><p>Check if two objects contain the same elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj1</strong><span class="classifier">array_like</span></dt><dd><p>First object to compare.</p>
+</dd>
+<dt><strong>obj2</strong><span class="classifier">array_like</span></dt><dd><p>Second object to compare.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if both objects contain the same elements, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_array_like">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_array_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_array_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_array_like" title="Link to this definition"></a></dt>
+<dd><p>Check if an object is array-like.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">object</span></dt><dd><p>Object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the object is array-like, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_list_math_equal">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_list_math_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_list_math_equal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_list_math_equal" title="Link to this definition"></a></dt>
+<dd><p>Recursively compares two nested lists or arrays to check if they are equal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>list1</strong><span class="classifier">array_like</span></dt><dd><p>First list or array to compare.</p>
+</dd>
+<dt><strong>list2</strong><span class="classifier">array_like</span></dt><dd><p>Second list or array to compare.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance for floating-point comparison. Default is 1e-10.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the lists or arrays are equal within the specified tolerance, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p>If the lists or arrays are not equal.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_nparray_of_numbers">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_nparray_of_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_nparray_of_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_nparray_of_numbers" title="Link to this definition"></a></dt>
+<dd><p>Check if an object is a NumPy array of numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">object</span></dt><dd><p>Object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the object is a NumPy array of numbers, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_number_or_list_of_numbers_nonnegative">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_number_or_list_of_numbers_nonnegative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_number_or_list_of_numbers_nonnegative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_number_or_list_of_numbers_nonnegative" title="Link to this definition"></a></dt>
+<dd><p>Check if an object is a non-negative number or a list of non-negative numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">object</span></dt><dd><p>Object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the object is a non-negative number or a list of non-negative numbers, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_number_or_nparray_of_numbers">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_number_or_nparray_of_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_number_or_nparray_of_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_number_or_nparray_of_numbers" title="Link to this definition"></a></dt>
+<dd><p>Check if an object is a number or a NumPy array of numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">object</span></dt><dd><p>Object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the object is a number or a NumPy array of numbers, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_number_or_nparray_of_numbers_nonnegative">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_number_or_nparray_of_numbers_nonnegative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_number_or_nparray_of_numbers_nonnegative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_number_or_nparray_of_numbers_nonnegative" title="Link to this definition"></a></dt>
+<dd><p>Check if an object is a non-negative number or a NumPy array of non-negative numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">object</span></dt><dd><p>Object to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the object is a non-negative number or a NumPy array of non-negative numbers, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.checks.is_numeric_scalar">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.checks.</span></span><span class="sig-name descname"><span class="pre">is_numeric_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/checks.html#is_numeric_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.checks.is_numeric_scalar" title="Link to this definition"></a></dt>
+<dd><p>Check if an item is a numeric scalar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>item</strong><span class="classifier">object</span></dt><dd><p>Item to check.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the item is a numeric scalar, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.util.cell.html" class="btn btn-neutral float-left" title="sgpykit.util.cell" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.util.create_sparse_grid_construct.html" class="btn btn-neutral float-right" title="sgpykit.util.create_sparse_grid_construct" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

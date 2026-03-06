@@ -1,0 +1,25 @@
+sgpykit.tools
+=============
+
+.. automodule:: sgpykit.tools
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      WildcardImportWarning
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   converter_functions
+   idxset_functions
+   knots_functions
+   lev2knots_functions
+   polynomials_functions
+   rescaling_functions
+   type_and_property_check_functions

@@ -1,0 +1,20 @@
+sgpykit.util.struct\_array
+==========================
+
+.. automodule:: sgpykit.util.struct_array
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_shape_of_cells
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Cell
+      Struct
+      StructArray
+   

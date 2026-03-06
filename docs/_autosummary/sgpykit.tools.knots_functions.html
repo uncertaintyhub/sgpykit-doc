@@ -1,0 +1,841 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.knots_functions &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.tools.knots_functions.constants" href="sgpykit.tools.knots_functions.constants.html" />
+    <link rel="prev" title="sgpykit.tools.idxset_functions" href="sgpykit.tools.idxset_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.converter_functions.html">sgpykit.tools.converter_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.idxset_functions.html">sgpykit.tools.idxset_functions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.tools.knots_functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_CC"><code class="docutils literal notranslate"><span class="pre">knots_CC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_GK"><code class="docutils literal notranslate"><span class="pre">knots_GK()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_beta"><code class="docutils literal notranslate"><span class="pre">knots_beta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_beta_leja"><code class="docutils literal notranslate"><span class="pre">knots_beta_leja()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_exponential"><code class="docutils literal notranslate"><span class="pre">knots_exponential()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_exponential_leja"><code class="docutils literal notranslate"><span class="pre">knots_exponential_leja()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_gamma"><code class="docutils literal notranslate"><span class="pre">knots_gamma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_gamma_leja"><code class="docutils literal notranslate"><span class="pre">knots_gamma_leja()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_leja"><code class="docutils literal notranslate"><span class="pre">knots_leja()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_midpoint"><code class="docutils literal notranslate"><span class="pre">knots_midpoint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_normal"><code class="docutils literal notranslate"><span class="pre">knots_normal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_normal_leja"><code class="docutils literal notranslate"><span class="pre">knots_normal_leja()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_trap"><code class="docutils literal notranslate"><span class="pre">knots_trap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_triangular_leja"><code class="docutils literal notranslate"><span class="pre">knots_triangular_leja()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_uniform"><code class="docutils literal notranslate"><span class="pre">knots_uniform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sgpykit.tools.knots_functions.constants.html">sgpykit.tools.knots_functions.constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sgpykit.tools.knots_functions.constants_normal_leja.html">sgpykit.tools.knots_functions.constants_normal_leja</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.lev2knots_functions.html">sgpykit.tools.lev2knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.polynomials_functions.html">sgpykit.tools.polynomials_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.rescaling_functions.html">sgpykit.tools.rescaling_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.type_and_property_check_functions.html">sgpykit.tools.type_and_property_check_functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.tools.html">sgpykit.tools</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.knots_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.tools.knots_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.tools.knots_functions">
+<span id="sgpykit-tools-knots-functions"></span><h1>sgpykit.tools.knots_functions<a class="headerlink" href="#module-sgpykit.tools.knots_functions" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_CC" title="sgpykit.tools.knots_functions.knots_CC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_CC</span></code></a>(nn, x_a, x_b[, whichrho])</p></td>
+<td><p>Calculate the collocation points and weights for the Clenshaw-Curtis integration formula.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_GK" title="sgpykit.tools.knots_functions.knots_GK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_GK</span></code></a>(n, mi, sigma)</p></td>
+<td><p>Compute collocation points and weights for Genz-Keister quadrature.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_beta" title="sgpykit.tools.knots_functions.knots_beta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_beta</span></code></a>(n, alpha, beta, x_a, x_b)</p></td>
+<td><p>Calculate the collocation points (x) and weights (w) for Gaussian integration with respect to the Beta distribution weight function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_beta_leja" title="sgpykit.tools.knots_functions.knots_beta_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_beta_leja</span></code></a>(n, alpha, beta, x_a, x_b, type_)</p></td>
+<td><p>Compute the first n collocation points (x) and the corresponding weights (w) for the weighted Leja sequence for integration w.r.t to the weight function rho(x)=Gamma(alpha+beta+2)/ (Gamma(alpha+1)*Gamma(beta+1)*(x_b-x_a)^(alpha+beta+1)) * (x-x_a)^alpha * (x_b-x)^beta i.e. the density of a Beta random variable with range [x_a,x_b], alpha,beta&gt;-1.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_exponential" title="sgpykit.tools.knots_functions.knots_exponential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_exponential</span></code></a>(n, lambda_)</p></td>
+<td><p>Compute collocation points and weights for Gaussian integration with respect to the exponential weight function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_exponential_leja" title="sgpykit.tools.knots_functions.knots_exponential_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_exponential_leja</span></code></a>(n, lambda_)</p></td>
+<td><p>Returns the collocation points (x) and the weights (w) for the weighted Leja sequence for integration with respect to the weight function rho(x) = exp(-lambda * abs(x)), lambda &gt; 0, i.e., the density of an exponential random variable with rate parameter lambda.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_gamma" title="sgpykit.tools.knots_functions.knots_gamma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_gamma</span></code></a>(n, alpha, beta)</p></td>
+<td><p>Compute collocation points and weights for Gaussian integration w.r.t.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_gamma_leja" title="sgpykit.tools.knots_functions.knots_gamma_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_gamma_leja</span></code></a>(n, alpha, beta[, saving_flag])</p></td>
+<td><p>Compute the first n collocation points and corresponding weights for the weighted Leja sequence for integration with respect to the Gamma density.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_leja" title="sgpykit.tools.knots_functions.knots_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_leja</span></code></a>(n, x_a, x_b, type_[, whichrho])</p></td>
+<td><p>Compute Leja points and weights for numerical integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_midpoint" title="sgpykit.tools.knots_functions.knots_midpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_midpoint</span></code></a>(n, x_a, x_b[, whichrho])</p></td>
+<td><p>Generate nodes and weights for the n-point midpoint quadrature rule.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_normal" title="sgpykit.tools.knots_functions.knots_normal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_normal</span></code></a>(n, mi, sigma)</p></td>
+<td><p>Calculate the collocation points (x) and weights (w) for Gaussian integration with respect to the weight function rho(x) = 1/sqrt(2*pi*sigma^2) * exp(-(x-mi)^2 / (2*sigma^2)), i.e., the density of a Gaussian random variable with mean mi and standard deviation sigma.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_normal_leja" title="sgpykit.tools.knots_functions.knots_normal_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_normal_leja</span></code></a>(n, mi, sigma, type_)</p></td>
+<td><p>Compute collocation points and weights for Gaussian-weighted Leja sequences.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_trap" title="sgpykit.tools.knots_functions.knots_trap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_trap</span></code></a>(n, x_a, x_b[, whichrho])</p></td>
+<td><p>Compute knots and weights for the trapezoidal quadrature rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_triangular_leja" title="sgpykit.tools.knots_functions.knots_triangular_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_triangular_leja</span></code></a>(n, a, b)</p></td>
+<td><p>Returns the collocation points (x) and the weights (w) for the weighted Leja sequence for integration with respect to the weight function rho(x) = 2/(b-a)^2 (b-x), i.e., a linear decreasing pdf over the interval [a, b].</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.knots_functions.knots_uniform" title="sgpykit.tools.knots_functions.knots_uniform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knots_uniform</span></code></a>(n, x_a, x_b[, whichrho])</p></td>
+<td><p>Calculate collocation points and weights for Gaussian integration with respect to a uniform weight function.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_CC">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_CC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichrho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_CC.html#knots_CC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_CC" title="Link to this definition"></a></dt>
+<dd><p>Calculate the collocation points and weights for the Clenshaw-Curtis integration formula.</p>
+<p>This function computes the collocation points (x) and weights (w) for the Clenshaw-Curtis
+integration formula with respect to a specified weight function. The weight function can be
+either a uniform density (rho(x) = 1/(x_b - x_a)) or a uniform weight (rho(x) = 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>nn</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points. Must be an odd number for efficiency reasons.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+<dt><strong>whichrho</strong><span class="classifier">str, optional</span></dt><dd><p>Specifies the weight function. Options are:
+- ‘prob’ : Uniform density (default).
+- ‘nonprob’ : Uniform weight.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of weights corresponding to the collocation points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If <cite>nn</cite> is not an odd number or if <cite>whichrho</cite> is not recognized.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_GK">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_GK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_GK.html#knots_GK"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_GK" title="Link to this definition"></a></dt>
+<dd><p>Compute collocation points and weights for Genz-Keister quadrature.</p>
+<p>This function returns the collocation points (x) and the weights (w) of the
+Genz-Keister quadrature formula (also known as Kronrod-Patterson-Normal) for
+approximation of integrals with respect to the weight function:
+rho(x) = 1/sqrt(2*pi*sigma^2) * exp(-(x-mi)^2 / (2*sigma^2)),
+i.e., the density of a Gaussian random variable with mean mi and standard
+deviation sigma.</p>
+<p>Knots and weights have been precomputed (up to 35). An error is raised if the
+number of points requested is not available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>mi</strong><span class="classifier">float</span></dt><dd><p>Mean of the Gaussian distribution.</p>
+</dd>
+<dt><strong>sigma</strong><span class="classifier">float</span></dt><dd><p>Standard deviation of the Gaussian distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Weights corresponding to the collocation points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Florian Heiss, Viktor Winschel,
+Likelihood approximation by numerical integration on sparse grids,
+Journal of Econometrics,
+Volume 144, 2008, pages 62-80.</p>
+<p>Alan Genz, Bradley Keister,
+Fully symmetric interpolatory rules for multiple integrals
+over infinite regions with Gaussian weight,
+Journal of Computational and Applied Mathematics,
+Volume 71, 1996, pages 299-309.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_beta">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_beta.html#knots_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_beta" title="Link to this definition"></a></dt>
+<dd><p>Calculate the collocation points (x) and weights (w) for Gaussian integration
+with respect to the Beta distribution weight function.</p>
+<p>The weight function is defined as:
+rho(x) = Gamma(alpha+beta+2)/(Gamma(alpha+1)*Gamma(beta+1)*(x_b-x_a)^(alpha+beta+1)) *</p>
+<blockquote>
+<div><p>(x-x_a)^alpha * (x_b-x)^beta</p>
+</div></blockquote>
+<p>This corresponds to the density of a Beta random variable with range [x_a, x_b]
+and parameters alpha, beta &gt; -1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>First parameter of the Beta distribution.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">float</span></dt><dd><p>Second parameter of the Beta distribution.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Array of collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Array of corresponding weights.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For n=1, the standard node and weight are returned directly.
+For n&gt;1, the points and weights are derived from the eigenvalues and eigenvectors
+of the Jacobi matrix constructed from recurrence coefficients.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_beta_leja">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_beta_leja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saving_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_beta_leja.html#knots_beta_leja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_beta_leja" title="Link to this definition"></a></dt>
+<dd><p>Compute the first n collocation points (x) and the corresponding weights (w)
+for the weighted Leja sequence for integration w.r.t to the weight function
+rho(x)=Gamma(alpha+beta+2)/ (Gamma(alpha+1)*Gamma(beta+1)*(x_b-x_a)^(alpha+beta+1)) * (x-x_a)^alpha * (x_b-x)^beta
+i.e. the density of a Beta random variable with range [x_a,x_b], alpha,beta&gt;-1.</p>
+<p>Knots and weights are computed following the work
+A. Narayan, J. Jakeman, “Adaptive Leja sparse grid constructions for stochastic collocation and high-dimensional approximation”
+SIAM Journal on Scientific Computing,  Vol. 36, No. 6, pp. A2952–A2983, 2014</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Shape parameter of the Beta distribution.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">float</span></dt><dd><p>Shape parameter of the Beta distribution.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+<dt><strong>type_</strong><span class="classifier">str</span></dt><dd><p>Type of Leja sequence (‘line’ or ‘sym_line’).</p>
+</dd>
+<dt><strong>saving_flag</strong><span class="classifier">str, optional</span></dt><dd><p>Flag to save and load computed knots and weights (‘on_file’).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Corresponding weights.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Knots are sorted increasingly before returning (weights are returned in the corresponding order).
+if &lt;saving_flag&gt; is set to ‘on_file’, the function will compute max(n,50) knots and weights, store them in a MATLAB style .mat file
+in the local folder and load results at next calls with the same values of alpha and beta. Note that nodes on
+different intervals [x_a, x_b] can be obtained by linear translations from the reference interval [-1, 1],
+therefore calls like
+knots_beta_leja(n,alpha,beta,a1,b1,&lt;type&gt;,’on_file’)
+knots_beta_leja(n,alpha,beta,a2,b2,&lt;type&gt;,’on_file’)
+can use the same precomputed file.
+if no saving flag is provided, i.e., the function is called as knots_beta_leja(n,alpha,beta,x_a,x_b,&lt;type&gt;),
+computations of nodes and weights will not be saved. This might become time-consuming for large sparse grids
+(the computation of the Leja knots is done by brute-force optimization).
+Follows the description of the choices of &lt;type&gt;.
+———————————————————–
+[X,W] = KNOTS_BETA_LEJA(n,alpha,beta,x_a,x_b,’line’) given X(1)=(alpha+1)/(alpha+beta+2)</p>
+<blockquote>
+<div><dl class="simple">
+<dt>recursively defines the n-th point by</dt><dd><p>X_n= argmax_[x_a,x_b] prod_{k=1}^{n-1} abs(X-X_k)</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>[X,W] = KNOTS_BETA_LEJA(N,mi,sigma,’sym_line’) given X(1)=0 recursively</dt><dd><p>defines the n-th and (n+1)-th point by
+X_n= argmax prod_{k=1}^{n-1} abs(X-X_k)
+X_(n+1) = symmetric point of X_n with respect to 0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_exponential">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_exponential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_exponential.html#knots_exponential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_exponential" title="Link to this definition"></a></dt>
+<dd><p>Compute collocation points and weights for Gaussian integration with respect to the exponential weight function.</p>
+<p>This function returns the collocation points (x) and the weights (w) for Gaussian integration
+with respect to the weight function rho(x) = lambda * exp(-lambda * x), which is the density
+of an exponential random variable with rate parameter lambda.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>lambda_</strong><span class="classifier">float</span></dt><dd><p>Rate parameter of the exponential distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Weights for Gaussian integration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_exponential_leja">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_exponential_leja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_exponential_leja.html#knots_exponential_leja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_exponential_leja" title="Link to this definition"></a></dt>
+<dd><p>Returns the collocation points (x) and the weights (w) for the weighted
+Leja sequence for integration with respect to the weight function
+rho(x) = exp(-lambda * abs(x)), lambda &gt; 0, i.e., the density of an
+exponential random variable with rate parameter lambda.</p>
+<p>Knots and weights have been precomputed (up to 50) for the case lambda=1
+following the work:
+A. Narayan, J. Jakeman, “Adaptive Leja sparse grid constructions for
+stochastic collocation and high-dimensional approximation”, SIAM Journal on
+Scientific Computing, Vol. 36, No. 6, pp. A2952–A2983, 2014.</p>
+<p>An error is raised if more than 50 points are requested. Knots are sorted
+increasingly before returning (weights are returned in the corresponding
+order).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>lambda_</strong><span class="classifier">float</span></dt><dd><p>Rate parameter of the exponential distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Weights corresponding to the collocation points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If more than 50 points are requested.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_gamma">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_gamma.html#knots_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_gamma" title="Link to this definition"></a></dt>
+<dd><p>Compute collocation points and weights for Gaussian integration w.r.t. the Gamma density.</p>
+<p>Returns the collocation points (x) and the weights (w) for the Gaussian integration
+with respect to the weight function:
+rho(x) = beta^(alpha+1)/Gamma(alpha+1) * x^alpha * exp(-beta*x)
+i.e., the density of a Gamma random variable with range [0,inf), alpha &gt; -1, beta &gt; 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Shape parameter of the Gamma distribution.</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">float</span></dt><dd><p>Rate parameter of the Gamma distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Weights for Gaussian integration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_gamma_leja">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_gamma_leja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saving_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_gamma_leja.html#knots_gamma_leja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_gamma_leja" title="Link to this definition"></a></dt>
+<dd><p>Compute the first n collocation points and corresponding weights for the weighted Leja sequence for integration with respect to the Gamma density.</p>
+<p>This function returns the first n collocation points (x) and the corresponding weights (w),
+for the weighted Leja sequence for integration with respect to the weight function
+rho(x) = beta^(alpha+1)/Gamma(alpha+1) * x^alpha * exp(-beta*x),
+i.e., the density of a standard Gamma random variable with range [0, +inf), alpha &gt; -1, beta &gt; 0.</p>
+<p>Knots and weights are computed following the work:
+A. Narayan, J. Jakeman, “Adaptive Leja sparse grid constructions for stochastic collocation and high-dimensional approximation”
+SIAM Journal on Scientific Computing, Vol. 36, No. 6, pp. A2952–A2983, 2014.</p>
+<p>The knots are computed over the interval [0, 300]. This choice of interval is compatible with -1 &lt; alpha &lt;= 30.
+If alpha &gt; 30, a larger interval is required and an error is raised.
+The maximum number of points that can be computed is 50, for compatibility with the interval [0, 300].</p>
+<p>If &lt;saving_flag&gt; is set to ‘on_file’, the function will compute 50 knots and weights, store them in a MATLAB style .mat file
+in the local folder and load results at next calls with the same values of alpha. Note that different values of beta
+act only as a rescaling factor, therefore the calls
+knots_gamma_leja(n, alpha, beta1, ‘on_file’)
+knots_gamma_leja(n, alpha, beta2, ‘on_file’)
+can use the same precomputed file.
+If no saving flag is provided, i.e., the function is called as knots_gamma_leja(n, alpha, beta),
+computations of nodes and weights will not be saved. This might become time-consuming for large sparse grids
+(the computation of the Leja knots is done by brute-force optimization).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points to compute.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Shape parameter of the Gamma distribution (alpha &gt; -1).</p>
+</dd>
+<dt><strong>beta</strong><span class="classifier">float</span></dt><dd><p>Rate parameter of the Gamma distribution (beta &gt; 0).</p>
+</dd>
+<dt><strong>saving_flag</strong><span class="classifier">str, optional</span></dt><dd><p>Flag to enable saving and loading of precomputed knots and weights. If ‘on_file’, the function will save and load from a .mat file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Array of collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Array of corresponding weights.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p>If n &lt;= 0.</p>
+</dd>
+<dt>NotImplementedError</dt><dd><p>If alpha &gt; 30.</p>
+</dd>
+<dt>Exception</dt><dd><p>If n &gt; 50.</p>
+</dd>
+<dt>ValueError</dt><dd><p>If saving_flag is not ‘on_file’.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_leja">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_leja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichrho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_leja.html#knots_leja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_leja" title="Link to this definition"></a></dt>
+<dd><p>Compute Leja points and weights for numerical integration.</p>
+<p>This function returns N Leja points of a specified type between A and B,
+along with corresponding weights for numerical integration. The points and
+weights can be used to approximate integrals of the form:</p>
+<ul class="simple">
+<li><p>For ‘prob’: int_a^b f(x) * 1/(b-a) dx</p></li>
+<li><p>For ‘nonprob’: int_a^b f(x) dx</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of Leja points to generate.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+<dt><strong>type_</strong><span class="classifier">str</span></dt><dd><p>Type of Leja points to generate. Options are:
+- ‘line’: Points are generated starting from B, then A, then (A+B)/2, etc.
+- ‘sym_line’: Points are generated symmetrically around (A+B)/2.
+- ‘p_disk’: Points are generated on the complex unit ball and projected to [-1,1].</p>
+</dd>
+<dt><strong>whichrho</strong><span class="classifier">str, optional</span></dt><dd><p>Type of weight function. Options are:
+- ‘prob’: Probabilistic weight function (default).
+- ‘nonprob’: Non-probabilistic weight function.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of Leja points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of corresponding weights.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Exception</dt><dd><p>If n &gt; 31, as the precomputed tables only support up to 31 points.</p>
+</dd>
+<dt>ValueError</dt><dd><p>If the specified Leja type is unknown or if the 4th argument is not ‘prob’ or ‘nonprob’.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_midpoint">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_midpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichrho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_midpoint.html#knots_midpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_midpoint" title="Link to this definition"></a></dt>
+<dd><p>Generate nodes and weights for the n-point midpoint quadrature rule.</p>
+<p>This function implements the univariate n-points midpoint quadrature rule,
+dividing the interval [x_a, x_b] into n subintervals of length h = (x_b - x_a)/n
+and returning the vector of midpoints as nodes. The weights are all equal to 1/n
+(probability weight function rho(x) = 1/(x_b-x_a)) or (x_b-x_a)/n (non-probability
+weight function rho(x) = 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of points in the quadrature rule.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Left endpoint of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Right endpoint of the interval.</p>
+</dd>
+<dt><strong>whichrho</strong><span class="classifier">str, optional</span></dt><dd><p>Type of weight function. Options are:
+- ‘prob’ (default): Probability weight function (weights sum to 1).
+- ‘nonprob’: Non-probability weight function (weights sum to (x_b - x_a)).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of nodes (midpoints of subintervals).</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of weights corresponding to the nodes.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the 4th input (whichrho) is not recognized.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_normal">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_normal.html#knots_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_normal" title="Link to this definition"></a></dt>
+<dd><p>Calculate the collocation points (x) and weights (w) for Gaussian integration
+with respect to the weight function rho(x) = 1/sqrt(2*pi*sigma^2) * exp(-(x-mi)^2 / (2*sigma^2)),
+i.e., the density of a Gaussian random variable with mean mi and standard deviation sigma.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>mi</strong><span class="classifier">float</span></dt><dd><p>Mean of the Gaussian distribution.</p>
+</dd>
+<dt><strong>sigma</strong><span class="classifier">float</span></dt><dd><p>Standard deviation of the Gaussian distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Weights for Gaussian integration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_normal_leja">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_normal_leja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_normal_leja.html#knots_normal_leja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_normal_leja" title="Link to this definition"></a></dt>
+<dd><p>Compute collocation points and weights for Gaussian-weighted Leja sequences.</p>
+<p>This function returns the collocation points (x) and the weights (w) for the
+weighted Leja sequence for integration with respect to the weight function
+rho(x) = 1/sqrt(2*pi*sigma^2) * exp(-(x-mi)^2 / (2*sigma^2)), i.e., the
+density of a Gaussian random variable with mean mi and standard deviation sigma.</p>
+<p>Knots and weights have been precomputed (up to 150) for the case mi=0 and
+sigma=1 following the work of A. Narayan and J. Jakeman, “Adaptive Leja sparse
+grid constructions for stochastic collocation and high-dimensional approximation”,
+SIAM Journal on Scientific Computing, Vol. 36, No. 6, pp. A2952–A2983, 2014.</p>
+<p>If mi != 0 and sigma != 1, the precomputed knots are modified as follows:
+x = mi + sigma*x. The weights are unaffected.</p>
+<p>An error is raised if more than 150 points are requested. Knots are sorted
+increasingly before returning (weights are returned in the corresponding order).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>mi</strong><span class="classifier">float</span></dt><dd><p>Mean of the Gaussian distribution.</p>
+</dd>
+<dt><strong>sigma</strong><span class="classifier">float</span></dt><dd><p>Standard deviation of the Gaussian distribution.</p>
+</dd>
+<dt><strong>type_</strong><span class="classifier">str</span></dt><dd><p>Type of Leja sequence. Supported types are:
+- ‘line’: Given X(1)=0, recursively defines the n-th point by</p>
+<blockquote>
+<div><p>X_n = argmax sqrt(rho(X)) * prod_{k=1}^{n-1} abs(X-X_k)</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>‘sym_line’: Given X(1)=0, recursively defines the n-th and (n+1)-th
+point by X_n = argmax sqrt(rho(X)) * prod_{k=1}^{n-1} abs(X-X_k) and
+X_{n+1} = symmetric point of X_n with respect to 0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Weights corresponding to the collocation points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Exception</dt><dd><p>If more than 150 points are requested.</p>
+</dd>
+<dt>ValueError</dt><dd><p>If an unknown Leja type is provided.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_trap">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_trap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichrho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_trap.html#knots_trap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_trap" title="Link to this definition"></a></dt>
+<dd><p>Compute knots and weights for the trapezoidal quadrature rule.</p>
+<p>This function implements the univariate n-points trapezoidal quadrature rule
+with weight function rho(x) = 1/(x_b-x_a), i.e., x = linspace(x_a,x_b,n)
+and w = 1/(x_b - x_a) * [h/2 h h … h h/2], with h = (x_b - x_a)/(n-1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of points in the quadrature rule.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+<dt><strong>whichrho</strong><span class="classifier">str, optional</span></dt><dd><p>Type of weight function. Options are:
+- ‘prob’: weights are normalized by the interval length (default).
+- ‘nonprob’: weights are not normalized.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of knots (quadrature points).</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Array of weights.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For n=1, the midpoint rule is used.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_triangular_leja">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_triangular_leja</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_triangular_leja.html#knots_triangular_leja"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_triangular_leja" title="Link to this definition"></a></dt>
+<dd><p>Returns the collocation points (x) and the weights (w) for the weighted Leja
+sequence for integration with respect to the weight function rho(x) = 2/(b-a)^2 (b-x),
+i.e., a linear decreasing pdf over the interval [a, b].</p>
+<p>Knots and weights have been precomputed (up to 50) following the work of
+A. Narayan, J. Jakeman, “Adaptive Leja sparse grid constructions for stochastic collocation
+and high-dimensional approximation”, SIAM Journal on Scientific Computing, Vol. 36, No. 6,
+pp. A2952–A2983, 2014.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Weights corresponding to the collocation points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Exception</dt><dd><p>If more than 50 points are requested.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.knots_functions.knots_uniform">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.knots_functions.</span></span><span class="sig-name descname"><span class="pre">knots_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichrho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/knots_functions/knots_uniform.html#knots_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.knots_functions.knots_uniform" title="Link to this definition"></a></dt>
+<dd><p>Calculate collocation points and weights for Gaussian integration with respect to a uniform weight function.</p>
+<p>This function computes the collocation points (x) and weights (w) for Gaussian integration
+with respect to the weight function rho(x) = 1/(b-a), which corresponds to the density of a
+uniform random variable on the interval [x_a, x_b].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of collocation points.</p>
+</dd>
+<dt><strong>x_a</strong><span class="classifier">float</span></dt><dd><p>Lower bound of the interval.</p>
+</dd>
+<dt><strong>x_b</strong><span class="classifier">float</span></dt><dd><p>Upper bound of the interval.</p>
+</dd>
+<dt><strong>whichrho</strong><span class="classifier">str, optional</span></dt><dd><p>Type of weight function. Options are:
+- ‘prob’ (default): Weight function rho(x) = 1/(b-a).
+- ‘nonprob’: Weight function rho(x) = 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Array of collocation points.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">ndarray</span></dt><dd><p>Array of corresponding weights.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For n=1, the collocation point is the midpoint of the interval, and the weight is 1.
+For n&gt;1, the collocation points and weights are computed using the eigenvalues and eigenvectors
+of the Jacobi matrix derived from the recurrence coefficients of the Legendre polynomials.</p>
+</dd></dl>
+
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="sgpykit.tools.knots_functions.constants.html#module-sgpykit.tools.knots_functions.constants" title="sgpykit.tools.knots_functions.constants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constants</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sgpykit.tools.knots_functions.constants_normal_leja.html#module-sgpykit.tools.knots_functions.constants_normal_leja" title="sgpykit.tools.knots_functions.constants_normal_leja"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constants_normal_leja</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.tools.idxset_functions.html" class="btn btn-neutral float-left" title="sgpykit.tools.idxset_functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.tools.knots_functions.constants.html" class="btn btn-neutral float-right" title="sgpykit.tools.knots_functions.constants" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.lev2knots_functions &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.tools.polynomials_functions" href="sgpykit.tools.polynomials_functions.html" />
+    <link rel="prev" title="sgpykit.tools.knots_functions.constants_normal_leja" href="sgpykit.tools.knots_functions.constants_normal_leja.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.converter_functions.html">sgpykit.tools.converter_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.idxset_functions.html">sgpykit.tools.idxset_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.knots_functions.html">sgpykit.tools.knots_functions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.tools.lev2knots_functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_2step"><code class="docutils literal notranslate"><span class="pre">lev2knots_2step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_GK"><code class="docutils literal notranslate"><span class="pre">lev2knots_GK()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_doubling"><code class="docutils literal notranslate"><span class="pre">lev2knots_doubling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_lin"><code class="docutils literal notranslate"><span class="pre">lev2knots_lin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_tripling"><code class="docutils literal notranslate"><span class="pre">lev2knots_tripling()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.polynomials_functions.html">sgpykit.tools.polynomials_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.rescaling_functions.html">sgpykit.tools.rescaling_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.type_and_property_check_functions.html">sgpykit.tools.type_and_property_check_functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.tools.html">sgpykit.tools</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.lev2knots_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.tools.lev2knots_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.tools.lev2knots_functions">
+<span id="sgpykit-tools-lev2knots-functions"></span><h1>sgpykit.tools.lev2knots_functions<a class="headerlink" href="#module-sgpykit.tools.lev2knots_functions" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_2step" title="sgpykit.tools.lev2knots_functions.lev2knots_2step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_2step</span></code></a>(I)</p></td>
+<td><p>Convert level index to number of knots using the 2-step rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_GK" title="sgpykit.tools.lev2knots_functions.lev2knots_GK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_GK</span></code></a>(I)</p></td>
+<td><p>Map sparse-grid levels to the corresponding number of knots using the Genz-Keister (GK) table.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_doubling" title="sgpykit.tools.lev2knots_functions.lev2knots_doubling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_doubling</span></code></a>(I)</p></td>
+<td><p>Convert level index to number of knots using a doubling rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_lin" title="sgpykit.tools.lev2knots_functions.lev2knots_lin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_lin</span></code></a>(I)</p></td>
+<td><p>Relation between level and number of points for linear level-to-knots mapping.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.lev2knots_functions.lev2knots_tripling" title="sgpykit.tools.lev2knots_functions.lev2knots_tripling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lev2knots_tripling</span></code></a>(I)</p></td>
+<td><p>Convert sparse-grid level index to number of knots using a tripling rule.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.lev2knots_functions.lev2knots_2step">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.lev2knots_functions.</span></span><span class="sig-name descname"><span class="pre">lev2knots_2step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/lev2knots_functions/lev2knots_2step.html#lev2knots_2step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.lev2knots_functions.lev2knots_2step" title="Link to this definition"></a></dt>
+<dd><p>Convert level index to number of knots using the 2-step rule.</p>
+<p>The 2-step rule defines the number of knots as m = 2(i-1)+1 for i &gt; 0,
+resulting in an odd number of points (1, 3, 5, …).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">int or array_like</span></dt><dd><p>Level(s) for which to compute the number of knots. Must be numeric.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>m</strong><span class="classifier">int or ndarray</span></dt><dd><p>Number of points to be used in each direction. If input is scalar,
+returns scalar. If input is array, returns array of same shape.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>For i &lt;= 0, the output is 0.</p></li>
+<li><p>The function preserves the input type (scalar or array).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.lev2knots_functions.lev2knots_GK">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.lev2knots_functions.</span></span><span class="sig-name descname"><span class="pre">lev2knots_GK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/lev2knots_functions/lev2knots_GK.html#lev2knots_GK"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.lev2knots_functions.lev2knots_GK" title="Link to this definition"></a></dt>
+<dd><p>Map sparse-grid levels to the corresponding number of knots using the Genz-Keister (GK) table.</p>
+<p>This function returns the number of knots corresponding to the given level(s) I,
+using the pre-tabulated GK_lev_table. For levels beyond the table’s range,
+a warning is logged and -1 is stored as a sentinel value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">int or array_like</span></dt><dd><p>Level(s) for which to compute the number of knots. Must be non-negative.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>nb_knots</strong><span class="classifier">int or ndarray</span></dt><dd><p>Number of knots corresponding to the input level(s). If I is a scalar, returns a scalar.
+If I is an array, returns an array of the same shape. For non-tabulated levels, -1 is stored.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The GK_lev_table is a pre-computed lookup table that maps levels to knot counts and quadrature orders.
+Levels greater than 5 are not tabulated and will result in a warning and a stored value of -1.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.lev2knots_functions.lev2knots_doubling">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.lev2knots_functions.</span></span><span class="sig-name descname"><span class="pre">lev2knots_doubling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/lev2knots_functions/lev2knots_doubling.html#lev2knots_doubling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.lev2knots_functions.lev2knots_doubling" title="Link to this definition"></a></dt>
+<dd><p>Convert level index to number of knots using a doubling rule.</p>
+<p>This function maps a level index (or an array of indices) to the corresponding
+number of knots based on a doubling rule. The mapping is defined as:</p>
+<blockquote>
+<div><p>m = 2^{i-1} + 1 for i &gt; 1
+m = 1 for i = 1
+m = 0 for i = 0</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">int or array_like</span></dt><dd><p>Level(s) for which to compute the number of knots. Must be numeric.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>m</strong><span class="classifier">int or ndarray</span></dt><dd><p>Number of knots corresponding to the input level(s). If <cite>I</cite> is a scalar,
+returns a scalar. If <cite>I</cite> is an array, returns an array of the same shape.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function handles both scalar and array inputs. For array inputs, the output
+array will have the same shape as the input array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.lev2knots_functions.lev2knots_lin">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.lev2knots_functions.</span></span><span class="sig-name descname"><span class="pre">lev2knots_lin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/lev2knots_functions/lev2knots_lin.html#lev2knots_lin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.lev2knots_functions.lev2knots_lin" title="Link to this definition"></a></dt>
+<dd><p>Relation between level and number of points for linear level-to-knots mapping.</p>
+<p>This function maps a given level <cite>I</cite> to the number of points <cite>m</cite> by simply
+returning the same integer (i.e., <cite>m = I</cite>). It is intended for use in
+constructing sparse grids where a linear level-to-knots mapping is needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">int or array-like</span></dt><dd><p>Level(s) for which to compute the number of knots.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>m</strong><span class="classifier">int or array-like</span></dt><dd><p>Number of points to be used in each direction.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>The relationship between level and number of points is given by:</dt><dd><p>m = I</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.lev2knots_functions.lev2knots_tripling">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.lev2knots_functions.</span></span><span class="sig-name descname"><span class="pre">lev2knots_tripling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/lev2knots_functions/lev2knots_tripling.html#lev2knots_tripling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.lev2knots_functions.lev2knots_tripling" title="Link to this definition"></a></dt>
+<dd><p>Convert sparse-grid level index to number of knots using a tripling rule.</p>
+<p>This function maps a given level index (or array of indices) to the corresponding
+number of knots based on the tripling rule: m = 3^{i-1} for i &gt; 0, and m = 0
+for i = 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">int or array_like</span></dt><dd><p>Level(s) for which to compute the number of knots. Must be non-negative. Must be numeric.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>m</strong><span class="classifier">int or ndarray</span></dt><dd><p>Number of knots corresponding to the input level(s). Returns a scalar if input
+is a scalar, otherwise returns a NumPy array of int64 values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The tripling rule results in the following sequence of knot counts:
+- i = 0 -&gt; m = 0
+- i = 1 -&gt; m = 1
+- i = 2 -&gt; m = 3
+- i = 3 -&gt; m = 9
+- i = 4 -&gt; m = 27
+- etc.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.tools.knots_functions.constants_normal_leja.html" class="btn btn-neutral float-left" title="sgpykit.tools.knots_functions.constants_normal_leja" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.tools.polynomials_functions.html" class="btn btn-neutral float-right" title="sgpykit.tools.polynomials_functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

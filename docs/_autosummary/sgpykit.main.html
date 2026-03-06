@@ -1,0 +1,1113 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.src" href="sgpykit.src.html" />
+    <link rel="prev" title="sgpykit API" href="../modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sgpykit.main</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.adapt_sparse_grid"><code class="docutils literal notranslate"><span class="pre">adapt_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.compute_sobol_indices_from_sparse_grid"><code class="docutils literal notranslate"><span class="pre">compute_sobol_indices_from_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.convert_to_modal"><code class="docutils literal notranslate"><span class="pre">convert_to_modal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.create_sparse_grid"><code class="docutils literal notranslate"><span class="pre">create_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.create_sparse_grid_add_multiidx"><code class="docutils literal notranslate"><span class="pre">create_sparse_grid_add_multiidx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.create_sparse_grid_multiidx_set"><code class="docutils literal notranslate"><span class="pre">create_sparse_grid_multiidx_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.create_sparse_grid_quick_preset"><code class="docutils literal notranslate"><span class="pre">create_sparse_grid_quick_preset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.derive_sparse_grid"><code class="docutils literal notranslate"><span class="pre">derive_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.evaluate_on_sparse_grid"><code class="docutils literal notranslate"><span class="pre">evaluate_on_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.export_sparse_grid_to_file"><code class="docutils literal notranslate"><span class="pre">export_sparse_grid_to_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.hessian_sparse_grid"><code class="docutils literal notranslate"><span class="pre">hessian_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.interpolate_on_sparse_grid"><code class="docutils literal notranslate"><span class="pre">interpolate_on_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.plot3_sparse_grid"><code class="docutils literal notranslate"><span class="pre">plot3_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.plot_sparse_grid"><code class="docutils literal notranslate"><span class="pre">plot_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.plot_sparse_grids_interpolant"><code class="docutils literal notranslate"><span class="pre">plot_sparse_grids_interpolant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.quadrature_on_sparse_grid"><code class="docutils literal notranslate"><span class="pre">quadrature_on_sparse_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sgpykit.main.reduce_sparse_grid"><code class="docutils literal notranslate"><span class="pre">reduce_sparse_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+      <li class="breadcrumb-item active">sgpykit.main</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.main.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.main">
+<span id="sgpykit-main"></span><h1>sgpykit.main<a class="headerlink" href="#module-sgpykit.main" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.adapt_sparse_grid" title="sgpykit.main.adapt_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adapt_sparse_grid</span></code></a>(f, N_full, knots, ...)</p></td>
+<td><p>Compute an adaptive sparse grid approximation of a function f.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.compute_sobol_indices_from_sparse_grid" title="sgpykit.main.compute_sobol_indices_from_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_sobol_indices_from_sparse_grid</span></code></a>(S, ...)</p></td>
+<td><p>Compute Sobol indices from a sparse grid approximation of a scalar-valued function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.convert_to_modal" title="sgpykit.main.convert_to_modal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_to_modal</span></code></a>(S, Sr, nodal_values, ...)</p></td>
+<td><p>Convert a sparse grid interpolant to a modal (spectral) expansion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.create_sparse_grid" title="sgpykit.main.create_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid</span></code></a>(N, w, knots, lev2knots[, ...])</p></td>
+<td><p>Generate a sparse grid (and corresponding quadrature weights) as a linear combination of full tensor grids, employing formula (2.9) of [Nobile-Tempone-Webster, SINUM 46/5, pages 2309-2345].</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.create_sparse_grid_add_multiidx" title="sgpykit.main.create_sparse_grid_add_multiidx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_add_multiidx</span></code></a>(new_idx, ...)</p></td>
+<td><p>Produce a grid obtained by adding a single multi-idx to a previously existing grid.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.create_sparse_grid_multiidx_set" title="sgpykit.main.create_sparse_grid_multiidx_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_multiidx_set</span></code></a>(C, knots, ...)</p></td>
+<td><p>Create a sparse grid starting from a multiindex-set rather than from a rule IDXSET(I) &lt;= W.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.create_sparse_grid_quick_preset" title="sgpykit.main.create_sparse_grid_quick_preset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid_quick_preset</span></code></a>(N, w)</p></td>
+<td><p>Create a sparse grid with a quick preset configuration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.derive_sparse_grid" title="sgpykit.main.derive_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">derive_sparse_grid</span></code></a>(S, Sr, values_on_grid, ...)</p></td>
+<td><p>Compute derivatives (gradients) of a scalar-valued function f: R^N -&gt; R by centered finite differences formulas applied to the sparse grid approximation of f.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.evaluate_on_sparse_grid" title="sgpykit.main.evaluate_on_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_on_sparse_grid</span></code></a>(f, S, Sr[, ...])</p></td>
+<td><p>Evaluate a function on a sparse grid, possibly recycling previous calls.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.export_sparse_grid_to_file" title="sgpykit.main.export_sparse_grid_to_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_sparse_grid_to_file</span></code></a>(Sr[, filename, ...])</p></td>
+<td><p>Save knots of a reduced sparse grid to an ASCII file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.hessian_sparse_grid" title="sgpykit.main.hessian_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hessian_sparse_grid</span></code></a>(S, Sr, values_on_grid, ...)</p></td>
+<td><p>Compute the Hessian of a scalar-valued function f: R^N -&gt; R by finite differences applied to the sparse grids approximation of f.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.interpolate_on_sparse_grid" title="sgpykit.main.interpolate_on_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_on_sparse_grid</span></code></a>(S, Sr, ...)</p></td>
+<td><p>Interpolate a function on a sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.plot3_sparse_grid" title="sgpykit.main.plot3_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot3_sparse_grid</span></code></a>(S, dims, *args, **kwargs)</p></td>
+<td><p>Plot a sparse grid in 3D.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.plot_sparse_grid" title="sgpykit.main.plot_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sparse_grid</span></code></a>(ax, S, dims, *args, **kwargs)</p></td>
+<td><p>Plot object based on the provided structure S and dimensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.plot_sparse_grids_interpolant" title="sgpykit.main.plot_sparse_grids_interpolant"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sparse_grids_interpolant</span></code></a>(ax, S, Sr, ...)</p></td>
+<td><p>Plot the sparse grid interpolant of a function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.main.quadrature_on_sparse_grid" title="sgpykit.main.quadrature_on_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quadrature_on_sparse_grid</span></code></a>(f, S, Sr[, ...])</p></td>
+<td><p>Compute the integral of a function using a sparse grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.main.reduce_sparse_grid" title="sgpykit.main.reduce_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reduce_sparse_grid</span></code></a>(S[, tol])</p></td>
+<td><p>Reduce a sparse grid by removing duplicate points within a given tolerance.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.adapt_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">adapt_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_full</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lev2knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_adapt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/adapt_sparse_grid.html#adapt_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.adapt_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Compute an adaptive sparse grid approximation of a function f.</p>
+<p>This function computes a sparse grid adapted to the approximation of a function F: Gamma subset R^N_full -&gt; R^V
+according to some profit indicator. The implementation closely resembles the algorithm proposed in</p>
+<ol class="upperalpha simple" start="20">
+<li><p>Gerstner, M. Griebel, Dimension-Adaptive Tensor-Product Quadrature, Computing 71, 65-87 (2003)</p></li>
+</ol>
+<p>and the various definitions of profits are discussed in</p>
+<p>F. Nobile, L. Tamellini, F. Tesei, and R. Tempone, An Adaptive Sparse Grid Algorithm for Elliptic PDEs
+with Lognormal Diffusion Coefficient, Sparse Grids and Applications - Stuttgart 2014,
+Lecture Notes in Computational Science and Engineering 109, p. 191-220,
+Springer International Publishing Switzerland 2016</p>
+<p>Roughly speaking, at each iteration the algorithm considers the multiidx with the highest profit
+among those already explored, adds it to the sparse grid, computes the profits of all its neighbouring
+indices (see controls.prof) and adds them to the list of explored indices.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>f</strong><span class="classifier">callable</span></dt><dd><p>A function-handle, taking as input a column vector (N_full components) and returning a column-vector value (V components).</p>
+</dd>
+<dt><strong>N_full</strong><span class="classifier">int</span></dt><dd><p>A scalar, denotes the dimension of the space Gamma over which F and the sparse grid are defined.
+Note that this is the full dimension, yet the algorithm might explore a smaller subset of variables to
+start with, N_curr, as specified in CONTROLS.var_buffer_size (see below)</p>
+</dd>
+<dt><strong>knots</strong><span class="classifier">callable or list of callables</span></dt><dd><p>KNOTS can be a function handle or a cell arrays of function handles to differentiate between directions, but they must be
+either all nested or all non-nested formulae (the code cannot work partially with nested and partially with non-nested points)
+KNOTS cannot be used with the ‘nonprob’ option if later the “buffer” controls functionality is used, see later</p>
+</dd>
+<dt><strong>lev2knots</strong><span class="classifier">callable</span></dt><dd><p>LEV2KNOTS must be a single function handle, i.e., it is not possible to use
+e.g., lev2knots_2step in one direction and lev2knots_lin in the next one.</p>
+<p>For instance, in N=2, the following setups are ok:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">knots</span> <span class="pre">=</span> <span class="pre">[lambda</span> <span class="pre">n:</span> <span class="pre">knots_uniform(n,</span> <span class="pre">0,</span> <span class="pre">1),</span> <span class="pre">lambda</span> <span class="pre">n:</span> <span class="pre">knots_uniform(n,</span> <span class="pre">3,</span> <span class="pre">5)]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lev2knots</span> <span class="pre">=</span> <span class="pre">lev2knots_lin</span></code> (same family on different intervals, same lev2knots)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knots</span> <span class="pre">=</span> <span class="pre">[lambda</span> <span class="pre">n:</span> <span class="pre">knots_CC(n,</span> <span class="pre">0,</span> <span class="pre">1),</span> <span class="pre">lambda</span> <span class="pre">n:</span> <span class="pre">knots_CC(n,</span> <span class="pre">3,</span> <span class="pre">5)]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lev2knots</span> <span class="pre">=</span> <span class="pre">lev2knots_doubling</span></code> (same family on different intervals, same lev2knots)</p></li>
+</ul>
+<p>while the following ones are not:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">knots</span> <span class="pre">=</span> <span class="pre">[lambda</span> <span class="pre">n:</span> <span class="pre">knots_uniform(n,</span> <span class="pre">0,</span> <span class="pre">1),</span> <span class="pre">lambda</span> <span class="pre">n:</span> <span class="pre">knots_CC(n,</span> <span class="pre">3,</span> <span class="pre">5)]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lev2knots</span> <span class="pre">=</span> <span class="pre">lev2knots_doubling</span></code> (one nested family, one non-nested family)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knots</span> <span class="pre">=</span> <span class="pre">[lambda</span> <span class="pre">n:</span> <span class="pre">knots_uniform(n,</span> <span class="pre">0,</span> <span class="pre">1),</span> <span class="pre">lambda</span> <span class="pre">n:</span> <span class="pre">knots_uniform(n,</span> <span class="pre">3,</span> <span class="pre">5)]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lev2knots</span> <span class="pre">=</span> <span class="pre">[lev2knots_lin,</span> <span class="pre">lev2knots_doubling]</span></code> (different lev2knots in different directions)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knots</span> <span class="pre">=</span> <span class="pre">[lambda</span> <span class="pre">n:</span> <span class="pre">knots_CC(n,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">'nonprob'),</span> <span class="pre">lambda</span> <span class="pre">n:</span> <span class="pre">knots_CC(n,</span> <span class="pre">3,</span> <span class="pre">5,</span> <span class="pre">'nonprob')]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lev2knots</span> <span class="pre">=</span> <span class="pre">lev2knots_doubling</span></code> (nonprob weights, cannot be used together with buffer)</p></li>
+</ul>
+<p>See tutorial_adaptive.ipynb for an example that shows this.</p>
+</dd>
+<dt><strong>prev_adapt</strong><span class="classifier">dict or None</span></dt><dd><p>By setting PREV_ADAPT as the output ADAPTED of a previous computation, the new computation
+will resume from where the previous one left. Set PREV_ADAPT = None for a fresh start</p>
+</dd>
+<dt><strong>controls</strong><span class="classifier">dict</span></dt><dd><p>A struct defining several parameters that control the algorithm flow. It is possible to
+define only some (or none) of these parameters, the others will be set to default value. Only
+the parameter ‘nested’ is mandatory. The parameter ‘pdf’ is mandatory only if controls.prof is
+set to any of the ‘weighted*’ choices (see below). For safety, ‘pdf’ is not set to default and
+an error will be raised if the field is not set
+controls.nested : bool</p>
+<blockquote>
+<div><p>(mandatory) true if nested points will be used, false otherwise</p>
+</div></blockquote>
+<dl>
+<dt>controls.max_pts<span class="classifier">int</span></dt><dd><p>is the maximum number of points the adapted sparse grid can have (default 1000).
+Observe that if the max nb of points is reached while checking the neighbours
+of the current idx, the algorithm will not be interrupted.</p>
+</dd>
+<dt>controls.prof_tol<span class="classifier">float</span></dt><dd><p>the algorithm will stop as soon as profit of the considered idx is smaller
+then prof_tol (default 1e-14)</p>
+</dd>
+<dt>controls.recycling<span class="classifier">str</span></dt><dd><p>can be set to ‘priority_to_evaluation’ (default) or ‘priority_to_recycling’. This affects
+only when non-nested points are used. Because in this case points enter and exit
+from the sparse grid, we should keep a record of all points that have been
+evaluated and recycle from it whenever possible. However, doing this exactly is <strong>very
+expensive</strong> in terms of computational cost with the current data structure if N is
+large. So, unless your function evaluation is <strong>very</strong> expensive, we recommend to
+leave the default setting, which does a “partial search”, i.e. searches for
+recycling only in the previous grid (instead than on the entire sparse grid
+history) and therefore implies that the same point might be evaluated multiple times.</p>
+</dd>
+<dt>controls.prof<span class="classifier">str</span></dt><dd><p>chooses how to compute the profit of an idx. In general, this entails comparing
+the sparse grids approximation of f <em>before</em> adding idx to the sparse grids (call
+this approximation S) and <em>after</em> having added it (call this approximation T).
+Note that S, T are actually functions of y in Gamma and return a vector with V components
+(same as f, the function to be approximated). In general, profit takes either of the two forms
+P(idx) = Op_y ( Op_vect(S,T) ) , P(idx) = Op_vect ( Op_y(S,T) )
+where Op_vect acts as a “vector norm” over the V components of S,T (e.g., the euclidean norm for
+fixed y), and Op_y acts as a norm over Gamma (e.g. the maximum over a discrete set of values of y).
+Currently, the choices below are available. In all of these choices, Op_vect can
+be changed by setting the field controls.op_vect (see below)</p>
+<dl class="simple">
+<dt>‘Linf’ :</dt><dd><p>P(idx) = Op_y( Op_vect(S(y),T(y) ) where
+Op_vect(S(y),T(y)) = euclidean norm of S(y) - T(y) for a fixed y;
+Op_y = max over a discrete set of points of Gamma.
+For nested points, the algorithm considers the points that would
+be added to the grid by the considered idx,
+evalutes the function and the previous sparse grid on such
+points, and takes the max of such difference
+as profit estimate. For non-nested points, the sparse grid approx
+is not interpolant, hence we consider the difference between both the
+<em>new</em> and the previous sparse grids on the new points.</p>
+</dd>
+<dt>‘Linf/new_points’ (default) :</dt><dd><p>the ‘Linf’ profit estimate above is further divided
+by the number of new points considered
+(i.e. gain-cost ratio). For non-nested points, this is actually
+the cost of the tensor grid associated to the current midx (see
+Nobile Tamellini Tempone, <a href="#id1"><span class="problematic" id="id2">``</span></a>Convergence of quasi optimal sparse
+grid approximation …’’</p>
+</dd>
+<dt>‘weighted Linf’ :</dt><dd><p>same as ‘Linf’, but the difference between
+previous sparse grid and function evaluation (or between new and
+old sparse grids, depending whether nested or non-nested points are used) is
+multiplied by the probability density function (see below for details).
+Useful when considering sparse grids on unbounded domains.</p>
+</dd>
+<dt>‘weighted Linf/new_points’ :</dt><dd><p>the ‘weighted Linf’ profit estimate is divided by the number of new points</p>
+</dd>
+<dt>‘deltaint’ :</dt><dd><p>P(idx) = Op_vect ( Op_y(S,T) ) = euclidean_norm( expct(S) - expct(T))
+i.e. the profit estimate is the euclidean norm of the difference of the
+quadratures using the sparse grids with and without the given idx</p>
+</dd>
+<dt>‘deltaint/new_points’ :</dt><dd><p>the ‘deltaint’ profit estimate is divided by the number of new points</p>
+</dd>
+</dl>
+</dd>
+<dt>controls.op_vect<span class="classifier">callable</span></dt><dd><p>changes the operator op_vect above. It is defined as a handle function
+lambda A, B: some_function_of_(A, B)
+where A B are two matrices with V rows, containing the evaluation of the two operators S T discussed above
+as columns, e.g. A=[S(y1) S(y2) S(y3) …], B=[T(y1) T(y2) T(y3) …]</p>
+</dd>
+<dt>controls.pts_tol<span class="classifier">float</span></dt><dd><p>is the tolerance used by evaluate_on_sparse_grid to check for equal points (default 1e-14)</p>
+</dd>
+<dt>controls.pdf<span class="classifier">callable</span></dt><dd><p>pdf over Gamma subset R^N_full, the set over which the sparse
+of the random variables, to be used in weighted* profits. It must be provided
+as a function handle that takes as input a matrix with N rows (for generic N), i.e. where each column is a point
+where the pdf must be evaluated. For instance, if the weight is the standard gaussian
+pdf on each direction, controls.pdf = lambda Y: np.prod(norm.pdf(Y, 0, 1), axis=0), with Y matrix with N
+rows. For safety, ‘pdf’ is not set to default and an error will be raised if the field is not set</p>
+</dd>
+<dt>controls.var_buffer_size<span class="classifier">int</span></dt><dd><p>The algorithm starts exploring N_curr = &lt;var_buffer_size&gt; dimensions. As soon as
+points are placed in one dimension, a new dimension is added to the set of
+explored variables, i.e., N_curr = N_curr+1. In this way we ensure that there
+are always &lt;var_buffer_size&gt; explored but “non-activated” variables, i.e.,
+along which no point is placed (default N_full).</p>
+<p><strong>IMPORTANT NOTE</strong>: Use this option with care! Is evaluating the function at a
+subset of variables equivalent to evaluating the function at the entire set of
+variables, where the ones outside the buffer are fixed at the mid-point of the
+interval? If this is not the case, the buffer cannot be used.</p>
+<p>For instance:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">f1</span> <span class="pre">=</span> <span class="pre">1/exp(y1*c1</span> <span class="pre">+</span> <span class="pre">y2*c2</span> <span class="pre">+</span> <span class="pre">y3*c3)</span></code>, with y1,y2 in [-0.5,0.5], y3 in [-0.2,0.2]
+This function is OK because f1 restricted to y1,y2 is y1*c1 + y2*c2 =
+y1*c1 + y2*c2 + 0*c3 = y1*c1 + y2*c2 + y3*c3 with y3 held at midpoint</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f2</span> <span class="pre">=</span> <span class="pre">1/exp(y1*c1</span> <span class="pre">+</span> <span class="pre">y2*c2</span> <span class="pre">+</span> <span class="pre">y3*c3)</span></code>, with y1,y2,y3 in [0,1] (note the interval not centered in 0)
+This function is NOT OK because f1 restricted to y1,y2 is y1*c1 + y2*c2 ≠
+y1*c1 + y2*c2 + 0.5*c3 = y1*c1 + y2*c2 + y3*c3 with y3 held at midpoint</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f3</span> <span class="pre">=</span> <span class="pre">y1</span> <span class="pre">*</span> <span class="pre">y2</span> <span class="pre">*</span> <span class="pre">y3</span></code>, with y1,y2,y3 in [0,1]
+Is NOT OK because f1 restricted to y1,y2 is y1*y2 ≠ y1*y2*0.5 =
+y1*y2*y3 with y3 held at midpoint</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f4</span> <span class="pre">=</span> <span class="pre">cos(y1)</span> <span class="pre">+</span> <span class="pre">cos(y2)</span> <span class="pre">+</span> <span class="pre">cos(y3)</span></code>, with y1,y2,y3 in [-1,1]
+Is NOT OK because f1 restricted to y1,y2 is cos(y1) + cos(y2) ≠
+cos(y1) + cos(y2) + 1 = cos(y1) + cos(y2) + cos(y3) with y3 held at midpoint</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f5</span> <span class="pre">=</span> <span class="pre">y1</span> <span class="pre">*</span> <span class="pre">y2</span> <span class="pre">*</span> <span class="pre">y3</span></code>, with y1,y2,y3 in [0,2]
+Is OK because f1 restricted to y1,y2 is y1*y2 = y1*y2*1 =
+y1*y2*y3 with y3 held at midpoint</p></li>
+</ul>
+<p>See tutorial_adaptive.ipynb for an example that shows this.</p>
+</dd>
+<dt>controls.plot<span class="classifier">bool</span></dt><dd><p>plot multiidx set and pause (default false)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>adapted</strong><span class="classifier">dict</span></dt><dd><p>A struct containing the results of the algorithms. The same structure can be passed
+as input (PREV_ADAPT) to resume the computation. Its fields are
+adapted.S : the adapted sparse grid (built over both all indices whose profit has been computed,</p>
+<blockquote>
+<div><p>even those whose profit hasn’t yet been chosen as the best one, i.e. those whose
+neighbours haven’t been explored yet).</p>
+</div></blockquote>
+<p>adapted.Sr : its reduced version;
+adapted.f_on_Sr : the evaluations of f over the list of points contained in Sr;
+adapted.nb_pts : the number of points in Sr;
+adapted.nested : true if points used are nested
+adapted.nb_pts_visited : the number of points visited while building the sparse grid. For non-nested</p>
+<blockquote>
+<div><p>points, this will be larger than nb_pts, because some points enter and then exit
+the grid when the corresponding idx exits from the combination technique.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>adapted.num_evals<span class="classifier">the number of function evaluations done to compute the sparse grid. This is not</span></dt><dd><p>necessarily equal to the previous one, because for speed reasons (looking for
+points in expensive for N large) sometimes one point might be recomputed twice</p>
+</dd>
+</dl>
+<p>adapted.N : the current number of dimensions considered for exploration
+adapted.private : a structure contained more detailed information on the status of the adaptive algorithm, that is needed</p>
+<blockquote>
+<div><p>to resume the computation. In particular, the needed data structure consists of:
+private.G : the multi-idx set used to build the sparse grid. This is called</p>
+<blockquote>
+<div><p>I in Gerstner-Griebel paper.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>private.I<span class="classifier">the set of explored indices; G = I plus the neighbours of I.</span></dt><dd><p>This is called O in Gerstner-Griebel paper. I is sorted
+lexicographically</p>
+</dd>
+<dt>private.G_log<span class="classifier">same as private.G, but sorted in the order with which indices</span></dt><dd><p>are added to G insted of lexicographic</p>
+</dd>
+<dt>private.I_log<span class="classifier">same as private.I, but sorted in the order with which indices</span></dt><dd><p>are added to I insted of lexicographic</p>
+</dd>
+</dl>
+<p>private.coeff_G : the coefficients of the indices in private.G in the combination technique
+private.N_log : for each iteration, the value of N_curr
+private.idx=idx : the idx whose neighbour is the next to be explored
+private.maxprof : the corresponding profit
+private.profits : the set of idx whose profit has been computed. They have been added to the grid</p>
+<blockquote>
+<div><p>but their neighbour is yet to be explored.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>private.idx_bin<span class="classifier">the corresponding set of profits. This is called A in</span></dt><dd><p>Gerstner-Griebel paper</p>
+</dd>
+<dt>private.var_with_pts<span class="classifier">vector of variables in which we have actually put points.</span></dt><dd><p>length(var_with_pts) + controls.var_buffer_size = N_curr</p>
+</dd>
+</dl>
+<p>private.nb_pts_log : for each iteration, the current nb_pts
+private.Hr : for non-nested points, the list of points visited by the</p>
+<blockquote>
+<div><p>algorithm. Empty for nested-points</p>
+</div></blockquote>
+<p>private.f_on_Hr : for non-nested points, the evaluations of f on Hr. Empty for nested-points</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.compute_sobol_indices_from_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">compute_sobol_indices_from_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodal_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/compute_sobol_indices_from_sparse_grid.html#compute_sobol_indices_from_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.compute_sobol_indices_from_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Compute Sobol indices from a sparse grid approximation of a scalar-valued function.</p>
+<p>This function computes the Sobol indices of a scalar-valued function f:R^N -&gt; R in two steps:
+1) Converts the sparse grid approximation of that function into its equivalent Polynomial Chaos Expansion (PCE).
+2) Performs algebraic manipulations of the PCE coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">dict</span></dt><dd><p>Sparse grid structure.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">dict</span></dt><dd><p>Reduced sparse grid structure.</p>
+</dd>
+<dt><strong>nodal_values</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Nodal values of the function on the sparse grid.</p>
+</dd>
+<dt><strong>domain</strong><span class="classifier">dict</span></dt><dd><p>Domain information.</p>
+</dd>
+<dt><strong>flags</strong><span class="classifier">dict</span></dt><dd><p>Flags for the conversion to modal.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Sob_i</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Principal Sobol indices.</p>
+</dd>
+<dt><strong>Tot_Sob_i</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Total Sobol indices.</p>
+</dd>
+<dt><strong>Mean</strong><span class="classifier">float</span></dt><dd><p>Expected value of the function.</p>
+</dd>
+<dt><strong>Var</strong><span class="classifier">float</span></dt><dd><p>Variance of the function.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.convert_to_modal">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">convert_to_modal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodal_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/convert_to_modal.html#convert_to_modal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.convert_to_modal" title="Link to this definition"></a></dt>
+<dd><p>Convert a sparse grid interpolant to a modal (spectral) expansion.</p>
+<p>This function recasts a sparse grid interpolant as a sum of orthogonal polynomials,
+i.e., computes the spectral expansion of the interpolant.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>S</strong><span class="classifier">array_like</span></dt><dd><p>Sparse grid structure.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">array_like</span></dt><dd><p>Reduced sparse grid structure.</p>
+</dd>
+<dt><strong>nodal_values</strong><span class="classifier">array_like</span></dt><dd><p>Values of the target function evaluated on the reduced sparse grid.
+If the function is vector-valued (F: R^N -&gt; R^V), then nodal_values
+is a matrix of size V x M, where M is the number of points in Sr.knots.
+If the function is scalar-valued, nodal_values is a row vector.</p>
+</dd>
+<dt><strong>domain</strong><span class="classifier">array_like</span></dt><dd><p>Domain specification for the sparse grid. The format depends on the
+polynomial family:
+- For ‘legendre’, ‘chebyshev’: 2xN matrix [a1, a2, …; b1, b2, …]</p>
+<blockquote>
+<div><p>defining the hyper-rectangle bounds.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>For ‘hermite’: 2xN matrix [mu1, mu2, …; sigma1, sigma2, …]
+defining normal distribution parameters.</p></li>
+<li><p>For ‘laguerre’: 1xN matrix [lambda1, lambda2, …] defining
+exponential distribution parameters.</p></li>
+<li><p>For ‘generalized laguerre’: 2xN matrix [alpha1, alpha2, …; beta1, beta2, …]
+defining Gamma distribution parameters.</p></li>
+<li><p>For ‘jacobi’: 4xN matrix [alpha1, alpha2, …; beta1, beta2, …; a1, a2, …; b1, b2, …]
+defining Beta distribution parameters on intervals [a_n, b_n].</p></li>
+<li><p>For mixed families: cell array of length N, where each cell contains the parameters
+for the corresponding polynomial family.</p></li>
+</ul>
+</dd>
+<dt><strong>flags</strong><span class="classifier">str or list of str</span></dt><dd><p>Polynomial family or families to use for the expansion. Supported values are:
+‘legendre’, ‘chebyshev’, ‘hermite’, ‘laguerre’, ‘generalized laguerre’, ‘jacobi’.
+For mixed families, provide a list of strings.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>modal_coeffs</strong><span class="classifier">ndarray</span></dt><dd><p>Matrix of modal coefficients. Each row corresponds to a multi-index and has V components.</p>
+</dd>
+<dt><strong>K</strong><span class="classifier">ndarray</span></dt><dd><p>Matrix of multi-indices, one per row.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function processes each tensor grid in the sparse grid, computes the modal
+coefficients for each grid, and aggregates the coefficients by summing those with
+identical multi-indices.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.create_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">create_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lev2knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idxset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/create_sparse_grid.html#create_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.create_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Generate a sparse grid (and corresponding quadrature weights) as a linear
+combination of full tensor grids, employing formula (2.9) of
+[Nobile-Tempone-Webster, SINUM 46/5, pages 2309-2345].</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">int</span></dt><dd><p>Integer non-negative value defining the multiindex set.</p>
+</dd>
+<dt><strong>knots</strong><span class="classifier">callable or list of callables</span></dt><dd><p>Function(s) to generate knots in each direction. If a single function,
+it is used in every direction. The header of knots_function is
+[x,w]=knots_function(m).</p>
+</dd>
+<dt><strong>lev2knots</strong><span class="classifier">callable or list of callables</span></dt><dd><p>Function(s) defining the relation between level and number of knots.
+If a single function, it is used in every direction. The header of
+m_function is m=m_function(i).</p>
+</dd>
+<dt><strong>idxset</strong><span class="classifier">callable, optional</span></dt><dd><p>Function defining the multiindex set. Default is sum(i-1).</p>
+</dd>
+<dt><strong>S2</strong><span class="classifier">StructArray, optional</span></dt><dd><p>Another sparse grid to recycle tensor grids from.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>S</strong><span class="classifier">StructArray</span></dt><dd><p>Structure containing the information on the sparse grid (vector of
+tensor grids). Each tensor grid S[j] is a structure with the following
+fields:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>knots<span class="classifier">ndarray</span></dt><dd><p>Vector containing the tensor grid knots.</p>
+</dd>
+<dt>weights<span class="classifier">ndarray</span></dt><dd><p>Vector containing the corresponding weights.</p>
+</dd>
+<dt>size<span class="classifier">int</span></dt><dd><p>Size of the tensor grid, S[j].size = prod(m).</p>
+</dd>
+<dt>knots_per_dim<span class="classifier">list</span></dt><dd><p>Cell array (N components), each component is the set of 1D knots
+used to build the tensor grid.</p>
+</dd>
+<dt>m<span class="classifier">ndarray</span></dt><dd><p>The input vector m, m == lev2knots(idx), m(i)==length(S[j].knots_per_dim[i]).</p>
+</dd>
+<dt>coeff<span class="classifier">int</span></dt><dd><p>How many times the tensor grid appears in the sparse grid (with sign).</p>
+</dd>
+<dt>idx<span class="classifier">ndarray</span></dt><dd><p>The multiidx vector corresponding to the current grid.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt><strong>C</strong><span class="classifier">ndarray</span></dt><dd><p>Multi-index set used to generate the sparse grid. It is sorted
+lexicographically and contains all multi-indices, even those whose
+coefficient in the combination technique is 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The reduced multi-idx set D with only the indices with non-zero coefficient
+can be obtained as:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">nb_idx</span> <span class="pre">=</span> <span class="pre">len(S)</span>
+<span class="pre">D</span> <span class="pre">=</span> <span class="pre">np.vstack(S.idx).T</span> <span class="pre">#</span> <span class="pre">D.shape</span> <span class="pre">is</span> <span class="pre">(N,</span> <span class="pre">nb_idx)</span>
+<span class="pre">`</span></code>
+and will be lexicographic sorted as well.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.create_sparse_grid_add_multiidx">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">create_sparse_grid_add_multiidx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lev2knots</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/create_sparse_grid_add_multiidx.html#create_sparse_grid_add_multiidx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.create_sparse_grid_add_multiidx" title="Link to this definition"></a></dt>
+<dd><p>Produce a grid obtained by adding a single multi-idx to a previously existing grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>new_idx</strong><span class="classifier">array_like</span></dt><dd><p>An index that must be admissible with respect to the index set I_in.
+This condition won’t be checked by the function.</p>
+</dd>
+<dt><strong>S_in</strong><span class="classifier">array_like</span></dt><dd><p>A sparse grid to which new_idx should be added.</p>
+</dd>
+<dt><strong>I_in</strong><span class="classifier">array_like</span></dt><dd><p>The index set that was used to create S_in, either implicitly (by defining
+the rule in CREATE_SPARSE_GRID) or explicitly (by using
+CREATE_SPARSE_GRID_MULTIIDX). Note that this cannot be produced as the
+union of the indices S_in.idx, because S_in contains only tensors whose
+coefficient in the combination technique is non-zero, while here we need
+them all.</p>
+</dd>
+<dt><strong>coeff_in</strong><span class="classifier">array_like</span></dt><dd><p>The vector of coefficients of the combination technique obtained on I_in.
+Note that this vector of coefficients <em>MUST</em> include also zeros if a row
+of I_in has coeff zero in the combination technique. Therefore, coeff_in
+cannot be taken as [S_in.coeff]. Instead, use coeff_in =
+COMBINATION_TECHNIQUE(I_in).</p>
+</dd>
+<dt><strong>knots</strong><span class="classifier">array_like or callable</span></dt><dd><p>The usual argument to specify knots.</p>
+</dd>
+<dt><strong>lev2knots</strong><span class="classifier">array_like or callable</span></dt><dd><p>The usual argument to specify lev2knots.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">array_like</span></dt><dd><p>The new sparse grid.</p>
+</dd>
+<dt><strong>I</strong><span class="classifier">array_like</span></dt><dd><p>The new multiidx set, i.e., I = sortrows([I_in; new_idx]).</p>
+</dd>
+<dt><strong>coeff</strong><span class="classifier">array_like</span></dt><dd><p>The updated vector of coefficients of the combination technique.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.create_sparse_grid_multiidx_set">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">create_sparse_grid_multiidx_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lev2knots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/create_sparse_grid_multiidx_set.html#create_sparse_grid_multiidx_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.create_sparse_grid_multiidx_set" title="Link to this definition"></a></dt>
+<dd><p>Create a sparse grid starting from a multiindex-set rather than from a rule IDXSET(I) &lt;= W.</p>
+<p>This function produces a sparse grid starting from a multiindex-set rather than
+from a rule IDXSET(I) &lt;= W.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>C</strong><span class="classifier">array_like</span></dt><dd><p>The multiindex set C. C must be in lexicographic order and admissible.</p>
+</dd>
+<dt><strong>knots</strong><span class="classifier">callable or list of callable</span></dt><dd><p>Function(s) to generate knots for each dimension.</p>
+</dd>
+<dt><strong>lev2knots</strong><span class="classifier">callable</span></dt><dd><p>Function to map levels to number of knots.</p>
+</dd>
+<dt><strong>S2</strong><span class="classifier">dict, optional</span></dt><dd><p>Another sparse grid. If provided, the function tries to recycle tensor grids
+from S2 to build those of S instead of recomputing them. This can be helpful
+whenever sequences of sparse grids are generated. Note that <em>NO</em> check will be
+performed whether S2 was generated with the same lev2knots as the one given as
+input. S2 can also be empty, S2=[].</p>
+</dd>
+<dt><strong>base</strong><span class="classifier">int, optional</span></dt><dd><p>if matrix C is using 1-based indexing</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">dict</span></dt><dd><p>The sparse grid structure.</p>
+</dd>
+<dt><strong>C</strong><span class="classifier">array_like</span></dt><dd><p>The multiindex set C, possibly modified.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_set_admissibility</span></code></dt><dd><p>For admissibility check.</p>
+</dd>
+<dt><a class="reference internal" href="#sgpykit.main.create_sparse_grid" title="sgpykit.main.create_sparse_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_sparse_grid</span></code></a></dt><dd><p>For further information on KNOTS, LEV2KNOTS, and on the sparse grid data structure S.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.create_sparse_grid_quick_preset">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">create_sparse_grid_quick_preset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/create_sparse_grid_quick_preset.html#create_sparse_grid_quick_preset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.create_sparse_grid_quick_preset" title="Link to this definition"></a></dt>
+<dd><p>Create a sparse grid with a quick preset configuration.</p>
+<p>This function creates a “vanilla” sparse grid using Clenshaw-Curtis points
+in the interval [-1, 1] with the lev2knots_doubling rule and a multi-index
+set defined by sum(ii) &lt;= w. It is a shortcut for the following operations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">knots</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">knots_CC</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">S</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="n">create_sparse_grid</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">knots</span><span class="p">,</span> <span class="n">lev2knots_doubling</span><span class="p">)</span>
+<span class="n">Sr</span> <span class="o">=</span> <span class="n">reduce_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">int</span></dt><dd><p>Level of the sparse grid.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>The full sparse grid structure.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">struct</span></dt><dd><p>The reduced sparse grid structure.</p>
+</dd>
+<dt><strong>C</strong><span class="classifier">ndarray</span></dt><dd><p>Coefficient matrix for the combination technique.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function is equivalent to using the ‘SM’ (Smolyak) rule in
+define_functions_for_rule.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.derive_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">derive_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values_on_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/derive_sparse_grid.html#derive_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.derive_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Compute derivatives (gradients) of a scalar-valued function f: R^N -&gt; R
+by centered finite differences formulas applied to the sparse grid approximation of f.
+The gradients can be computed at <em>several</em> points simultaneously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>Sparse grid struct.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">struct</span></dt><dd><p>Reduced version of S.</p>
+</dd>
+<dt><strong>values_on_grid</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the interpolated function on Sr (VALUES_ON_GRID is a vector,
+because the function is scalar-valued).</p>
+</dd>
+<dt><strong>domain</strong><span class="classifier">ndarray</span></dt><dd><p>2xN matrix = [a1, a2, a3, …; b1, b2, b3, …] defining the lower and upper bound of the
+hyper-rectangle on which the sparse grid is defined.</p>
+</dd>
+<dt><strong>eval_points</strong><span class="classifier">ndarray</span></dt><dd><p>Points where the derivative must be evaluated. It is a matrix with points stored as
+columns, following the convention of the package.</p>
+</dd>
+<dt><strong>h</strong><span class="classifier">ndarray or float, optional</span></dt><dd><p>Finite differences increment. H can be a scalar or a vector, in which case the n-th entry
+will be used as increment to approximate the n-th component of the gradient.
+If None, the increment size is chosen according to the length of each interval [an bn] as
+h_n = (b_n - a_n)/1E5.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>grads</strong><span class="classifier">ndarray</span></dt><dd><p>Computed values of the derivatives (gradients). The gradients in each point are stored
+as columns of GRADS, i.e., size(GRADS) = N x size(EVAL_POINTS,2).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.evaluate_on_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">evaluate_on_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evals_old</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_old</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr_old</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/evaluate_on_sparse_grid.html#evaluate_on_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.evaluate_on_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Evaluate a function on a sparse grid, possibly recycling previous calls.</p>
+<p>Several input combinations are possible, every input from the 3rd on can be set to [].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>f</strong><span class="classifier">callable</span></dt><dd><p>Function to evaluate. Takes a column vector point and returns a scalar or column vector.</p>
+</dd>
+<dt><strong>S</strong><span class="classifier">sparse grid or None</span></dt><dd><p>Sparse grid structure. If None, Sr must be provided.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">reduced sparse grid or None</span></dt><dd><p>Reduced sparse grid structure. Must be provided if S is None.</p>
+</dd>
+<dt><strong>evals_old</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Matrix storing previous evaluations of f on Sr_old.</p>
+</dd>
+<dt><strong>S_old</strong><span class="classifier">sparse grid or None, optional</span></dt><dd><p>Previous sparse grid structure.</p>
+</dd>
+<dt><strong>Sr_old</strong><span class="classifier">reduced sparse grid or matrix, optional</span></dt><dd><p>Previous reduced sparse grid or matrix of points.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance for testing point equality (default 1e-14).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>f_eval</strong><span class="classifier">ndarray</span></dt><dd><p>Matrix storing evaluations of f on Sr.</p>
+</dd>
+<dt><strong>new_points</strong><span class="classifier">ndarray</span></dt><dd><p>Points where f has been evaluated (new points w.r.t. previous grid).</p>
+</dd>
+<dt><strong>tocomp_list</strong><span class="classifier">ndarray</span></dt><dd><p>Position of new_points in Sr.knots.</p>
+</dd>
+<dt><strong>discard_points</strong><span class="classifier">ndarray</span></dt><dd><p>Points of Sr_old that have been discarded.</p>
+</dd>
+<dt><strong>discard_list</strong><span class="classifier">ndarray</span></dt><dd><p>Index vector s.t. Sr_old.knots[:, discard_list] == discard_points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Possible calls:
+- res, <a href="#id3"><span class="problematic" id="id4">*</span></a>_ = evaluate_on_sparse_grid(f, S=None, Sr)
+- res, <a href="#id5"><span class="problematic" id="id6">*</span></a>_ = evaluate_on_sparse_grid(f, S, Sr, evals_old, S_old, Sr_old)
+- res, <a href="#id7"><span class="problematic" id="id8">*</span></a>_ = evaluate_on_sparse_grid(f, S, Sr)
+- res, <a href="#id9"><span class="problematic" id="id10">*</span></a>_ = evaluate_on_sparse_grid(f, S, Sr, evals_old, None, Sr_old)
+- res, <a href="#id11"><span class="problematic" id="id12">*</span></a>_ = evaluate_on_sparse_grid(f, S, Sr, evals_old, S_old, Sr_old, tol)</p>
+<p>API is like in evaluate_on_sparse_grid(). S or Sr have to be provided explicitly,
+opposed to SGMK.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.export_sparse_grid_to_file">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">export_sparse_grid_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'points.dat'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/export_sparse_grid_to_file.html#export_sparse_grid_to_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.export_sparse_grid_to_file" title="Link to this definition"></a></dt>
+<dd><p>Save knots of a reduced sparse grid to an ASCII file.</p>
+<p>The first line of the file shows the number of points in the grid and their dimension.
+Then, points are stored as lines. If with_weights is True, the corresponding weight
+is added as the last entry of the row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Sr</strong><span class="classifier">object</span></dt><dd><p>Reduced sparse grid object containing knots and weights.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the file to save the points to. Default is ‘points.dat’.</p>
+</dd>
+<dt><strong>with_weights</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, weights are saved alongside the points. Default is False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>If with_weights is False, the file format is:</dt><dd><p>num_points dimension
+coord1(P1) coord2(P1) … coordN(P1)
+coord1(P2) coord2(P2) … coordN(P2)
+…</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If with_weights is True, the file format is:</dt><dd><p>num_points dimension
+coord1(P1) coord2(P1) … coordN(P1) weight(P1)
+coord1(P2) coord2(P2) … coordN(P2) weight(P2)
+…</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.hessian_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">hessian_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values_on_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/hessian_sparse_grid.html#hessian_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.hessian_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Compute the Hessian of a scalar-valued function f: R^N -&gt; R by finite differences
+applied to the sparse grids approximation of f.</p>
+<p>This function can only be evaluated at a single point, unlike derive_sparse_grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>Sparse grid struct.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">struct</span></dt><dd><p>Reduced version of S.</p>
+</dd>
+<dt><strong>values_on_grid</strong><span class="classifier">ndarray</span></dt><dd><p>Values of the interpolated function on Sr.</p>
+</dd>
+<dt><strong>domain</strong><span class="classifier">ndarray</span></dt><dd><p>2xN matrix = [a1, a2, a3, …; b1, b2, b3, …] defining the lower and upper
+bound of the hyper-rectangle on which the sparse grid is defined.</p>
+</dd>
+<dt><strong>eval_point</strong><span class="classifier">ndarray</span></dt><dd><p>Column vector point where the derivative must be evaluated.</p>
+</dd>
+<dt><strong>h</strong><span class="classifier">scalar or ndarray, optional</span></dt><dd><p>Finite differences increment size. If None, the increment size is chosen according
+to the length of each interval [an bn] as h_n = (b_n - a_n)/1E5.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Hessian</strong><span class="classifier">ndarray</span></dt><dd><p>Hessian matrix, H(i,j) = partial_{y_i} partial_{y_j} sparse grid.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.interpolate_on_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">interpolate_on_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_on_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">non_grid_points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/interpolate_on_sparse_grid.html#interpolate_on_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.interpolate_on_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Interpolate a function on a sparse grid.</p>
+<p>Evaluates the sparse grid polynomial approximation (surrogate model) on a
+generic point of the parameters space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">list of Struct or Struct</span></dt><dd><p>Sparse grid structure(s). If a single Struct is provided, it is converted
+to a list.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">Struct</span></dt><dd><p>Reduced version of the sparse grid S.</p>
+</dd>
+<dt><strong>function_on_grid</strong><span class="classifier">ndarray</span></dt><dd><p>Matrix containing the evaluation of the function on the points of Sr.
+Dimensions: V x number_of_points_in_the_sparse_grid.</p>
+</dd>
+<dt><strong>non_grid_points</strong><span class="classifier">ndarray</span></dt><dd><p>Set of points where the sparse grid polynomial approximation is to be
+evaluated. Each column is a different point.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray</dt><dd><p>Matrix containing the evaluation of the vector-valued function in each of
+the non_grid_points. Dimensions: V x number_of_non_grid_point.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.plot3_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">plot3_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/plot3_sparse_grid.html#plot3_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.plot3_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Plot a sparse grid in 3D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">StructArray</span></dt><dd><p>Sparse grid object to plot. S is a sparse grid in 3D. S can be either reduced or not. S can also be a tensor grid.</p>
+</dd>
+<dt><strong>dims</strong><span class="classifier">list</span></dt><dd><p>List of dimensions to plot. It plots the components d1, d2, d3 of the points in S if S is more than 3D. If empty, defaults to [0, 1, 2].</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Additional positional arguments for plot styling.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments for plot styling.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>h</strong><span class="classifier">object</span></dt><dd><p>Handle to the plot.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.plot_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">plot_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/plot_sparse_grid.html#plot_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.plot_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Plot object based on the provided structure S and dimensions.</p>
+<p>Plot a sparse grid in 2D or higher dimensions by selecting the specified
+dimensions. The sparse grid can be either reduced or not, or even a tensor
+grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes on which to plot.</p>
+</dd>
+<dt><strong>S</strong><span class="classifier">StructArray</span></dt><dd><p>An object containing ‘knots’ as an attribute. Typically a sparse grid
+structure.</p>
+</dd>
+<dt><strong>dims</strong><span class="classifier">list or None</span></dt><dd><p>Dimensions to plot (default is [1, 2]). If S is more than 2D, this
+specifies which dimensions to plot.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Additional positional arguments for plotting, such as format strings.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments for plotting, such as ‘color’, ‘marker’, etc.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>h</strong><span class="classifier">matplotlib.lines.Line2D</span></dt><dd><p>The handle to the plotted object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.plot_sparse_grids_interpolant">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">plot_sparse_grids_interpolant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/plot_sparse_grids_interpolant.html#plot_sparse_grids_interpolant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.plot_sparse_grids_interpolant" title="Link to this definition"></a></dt>
+<dd><p>Plot the sparse grid interpolant of a function.</p>
+<p>Different plots are produced depending on the number of dimensions of the sparse grid:
+- If N==2, a surf plot will be generated.
+- If N==3, a number of contourfs (i.e., flat surfaces colored according to the value of the interpolant)</p>
+<blockquote>
+<div><p>will be stacked over the same axes.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>If N&gt;3, a number of bidimensional cuts will be considered, and for each of them a surf will be generated.
+In other words, all variables but two will be frozen to their average value and the resulting
+two-dimensional plot will be produced.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes on which to plot.</p>
+</dd>
+<dt><strong>S</strong><span class="classifier">object</span></dt><dd><p>The sparse grid.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">object</span></dt><dd><p>The reduced sparse grid.</p>
+</dd>
+<dt><strong>domain</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>A matrix 2 x N, describing the domain where the sparse grids should be plotted.
+The first row contains the lower bounds, the second row the upper bounds.</p>
+</dd>
+<dt><strong>f_values</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The function values at the sparse grid points.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Additional arguments to control the behavior of the plots.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments to control the behavior of the plots.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>matplotlib.collections.PolyCollection or matplotlib.collections.LineCollection</dt><dd><p>The plot handle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Additional inputs can be passed to control the behavior of the plots. Any combination of these optional
+inputs is allowed:
+- ‘with_f_values’: Adds dots with the values of the sparse grids interpolant to the plots above (case N=2 and N&gt;3).</p>
+<blockquote>
+<div><p>For N==3, adds the sparse grid points in the 3D plot.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>‘nb_plot_pts’: Sets the number of points used in each direction for the surf/contourf plots (default 20).</p></li>
+<li><p>‘nb_contourfs’: Sets the number of contourfs in the vertical direction for the case N=3 (default 5).</p></li>
+<li><p>‘nb_contourf_lines’: Sets the number of contourf lines (default 10).</p></li>
+<li><p>‘two_dim_cuts’: Specifies the couples of variables to consider for the two-dimensional cuts when N&gt;3.
+C is a vector with 2*k components denoting the directions of the cuts.
+For instance, the default value is C = [0, 1, 2, …] and produces cut plots for (y1,y2)
+(y3,y4), (y5,y6).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.quadrature_on_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">quadrature_on_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evals_old</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S_old</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sr_old</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/quadrature_on_sparse_grid.html#quadrature_on_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.quadrature_on_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Compute the integral of a function using a sparse grid.</p>
+<p>This function behaves similarly to <cite>evaluate_on_sparse_grid</cite>, but returns the
+approximated integral of the function. See <cite>evaluate_on_sparse_grid</cite> for more
+information on inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>f</strong><span class="classifier">callable or array_like</span></dt><dd><p>Function handle or vector/matrix containing the evaluations of the function.</p>
+</dd>
+<dt><strong>S</strong><span class="classifier">object, optional</span></dt><dd><p>Sparse grid object.</p>
+</dd>
+<dt><strong>Sr</strong><span class="classifier">object</span></dt><dd><p>Reduced sparse grid object.</p>
+</dd>
+<dt><strong>evals_old</strong><span class="classifier">array_like, optional</span></dt><dd><p>Previous evaluations of the function.</p>
+</dd>
+<dt><strong>S_old</strong><span class="classifier">object, optional</span></dt><dd><p>Previous sparse grid object.</p>
+</dd>
+<dt><strong>Sr_old</strong><span class="classifier">object, optional</span></dt><dd><p>Previous reduced sparse grid object.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance for incremental updates.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>res</strong><span class="classifier">float</span></dt><dd><p>Approximated integral of the function.</p>
+</dd>
+<dt><strong>evals</strong><span class="classifier">array_like</span></dt><dd><p>Evaluations of the function over the points of the sparse grid.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Possible calls:
+- res, evals = quadrature_on_sparse_grid(f, S=None, Sr)
+- res, evals = quadrature_on_sparse_grid(f, S, Sr, evals_old, S_old, Sr_old)
+- res, evals = quadrature_on_sparse_grid(f, S, Sr)
+- res, evals = quadrature_on_sparse_grid(f, S, Sr, evals_old, None, Sr_old)
+- res, evals = quadrature_on_sparse_grid(f, S, Sr, evals_old, S_old, Sr_old, tol)</p>
+<p>API is like in evaluate_on_sparse_grid(). S or Sr have to be provided explicitly,
+opposed to SGMK.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.main.reduce_sparse_grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.main.</span></span><span class="sig-name descname"><span class="pre">reduce_sparse_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/main/reduce_sparse_grid.html#reduce_sparse_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.main.reduce_sparse_grid" title="Link to this definition"></a></dt>
+<dd><p>Reduce a sparse grid by removing duplicate points within a given tolerance.</p>
+<p>Given a sparse grid stored as a list of tensor grids, this function generates a
+reduced structure containing only non-repeated points and corresponding weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">dict or object</span></dt><dd><p>Sparse grid structure with fields:
+- knots: list of tensor grid knots
+- weights: list of corresponding weights</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Tolerance to identify coincident points (default is 1e-14)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Sr</strong><span class="classifier">dict or object</span></dt><dd><p>Reduced sparse grid structure with fields:
+- knots: list of non-repeated knots
+- weights: list of corresponding weights
+- size: number of non-repeated knots
+- n: forward map from [S.knots] to Sr.knots
+- m: inverse map from Sr.knots to [S.knots]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../modules.html" class="btn btn-neutral float-left" title="sgpykit API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.src.html" class="btn btn-neutral float-right" title="sgpykit.src" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

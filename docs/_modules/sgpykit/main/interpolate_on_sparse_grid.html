@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main.interpolate_on_sparse_grid &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.main.interpolate_on_sparse_grid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.main.interpolate_on_sparse_grid</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.lagr_eval_fast</span><span class="w"> </span><span class="kn">import</span> <span class="n">lagr_eval_fast</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.struct</span><span class="w"> </span><span class="kn">import</span> <span class="n">Struct</span>
+
+<div class="viewcode-block" id="interpolate_on_sparse_grid">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.main.html#sgpykit.main.interpolate_on_sparse_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">interpolate_on_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">function_on_grid</span><span class="p">,</span> <span class="n">non_grid_points</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interpolate a function on a sparse grid.</span>
+
+<span class="sd">    Evaluates the sparse grid polynomial approximation (surrogate model) on a</span>
+<span class="sd">    generic point of the parameters space.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    S : list of Struct or Struct</span>
+<span class="sd">        Sparse grid structure(s). If a single Struct is provided, it is converted</span>
+<span class="sd">        to a list.</span>
+<span class="sd">    Sr : Struct</span>
+<span class="sd">        Reduced version of the sparse grid S.</span>
+<span class="sd">    function_on_grid : ndarray</span>
+<span class="sd">        Matrix containing the evaluation of the function on the points of Sr.</span>
+<span class="sd">        Dimensions: V x number_of_points_in_the_sparse_grid.</span>
+<span class="sd">    non_grid_points : ndarray</span>
+<span class="sd">        Set of points where the sparse grid polynomial approximation is to be</span>
+<span class="sd">        evaluated. Each column is a different point.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Matrix containing the evaluation of the vector-valued function in each of</span>
+<span class="sd">        the non_grid_points. Dimensions: V x number_of_non_grid_point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">function_on_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">function_on_grid</span><span class="p">)</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">nb_points_Sr</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="n">function_on_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nb_points_Sr</span><span class="p">:</span>
+        <span class="c1"># if this condition is true, then function_on_grid stores</span>
+        <span class="c1"># evaluation as rows rather than as columns and we stop the</span>
+        <span class="c1"># function</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incompatible sizes.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># similarly, we have changed the dimensions of non_grid_points to follow</span>
+    <span class="c1"># the convention that points are stored as columns. Again, we throw an</span>
+    <span class="c1"># error if the other convention is detected (this also prevents accidental input errors)</span>
+    <span class="k">if</span> <span class="n">non_grid_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incompatible sizes.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># the other sizes.</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">function_on_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nb_pts</span> <span class="o">=</span> <span class="n">non_grid_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">f_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_pts</span><span class="p">,</span> <span class="n">V</span><span class="p">))</span>
+    <span class="n">function_on_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">function_on_grid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Struct</span><span class="p">):</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="p">[</span><span class="n">S</span><span class="p">]</span>
+    <span class="n">nb_grids</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="c1"># I need to go back from each point of each grid to its corresponding value in function_on_grid (F comes from an evaluation over a reduced grid)</span>
+    <span class="c1"># I only have a global mapping from [S.knots] to Sr.knots, so I need a global counter that scrolls [S.knots]</span>
+    <span class="n">global_knot_counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># loop over the grids</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_grids</span><span class="p">):</span>
+        <span class="c1"># some of the grids in S structure are empty, so I skip it</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># this is the set of points where I build the tensor lagrange function</span>
+        <span class="n">knots</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">knots</span>
+        <span class="c1"># I will need the knots in each dimension separately, to collocate the lagrange function.</span>
+        <span class="c1"># I compute them once for all. As the number of knots is different in each direction, I use a cell array</span>
+        <span class="c1"># we had here</span>
+        <span class="c1"># dimtot=size(knots,1);</span>
+        <span class="c1"># clearly dimtot==N, hence we sobstitute it everywhere</span>
+        <span class="c1"># the following lines are also no longer needed</span>
+        <span class="c1">#  knots_per_dim=np.zeros(N);</span>
+        <span class="c1">#  for dim=1:N</span>
+        <span class="c1">#      knots_per_dim{dim}=unique(knots[dim,:]);</span>
+        <span class="c1">#  end</span>
+        <span class="n">knots_per_dim</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">knots_per_dim</span>
+        <span class="c1"># I also have to take into account the coefficient of the sparse grid</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">coeff</span>
+        <span class="c1"># we could just loop on the interpolation points of the current tensor grid,</span>
+        <span class="c1"># and for each one evaluate the corresponding lagrangian polynomial on</span>
+        <span class="c1"># the set of non_grid_points, but this is not convenient. Actually doing this we recompute the same thing over and over!</span>
+        <span class="c1"># think e.g. of the lagrangian functions for the knot [x1 y1 z1] and</span>
+        <span class="c1"># for the knot [x1 y1 z2]: the parts on x and y are the same!</span>
+        <span class="c1"># Therefore we evaluate each monodim_lagr just once and save all these</span>
+        <span class="c1"># evaluations in a cell array. We will combine them suitably afterward.</span>
+        <span class="c1"># Such cell array stores one matrix per direction, i.e. N matrices.</span>
+        <span class="c1"># In turn, the n-th matrix contains the evaluations of each monodimensional lagrange polynomial</span>
+        <span class="c1"># in direction n on all the n-th coordinates of the non_grid_points.</span>
+        <span class="c1"># Its dimension will be therefore (number_of_points_to_evaluate) X (number_of_lagrangian_polynomials_in_the_nth_direction)</span>
+        <span class="c1"># This is actually all the information that we will need to combine to</span>
+        <span class="c1"># get the final interpolant value.</span>
+        <span class="n">mono_lagr_eval</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># loop on directions</span>
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="c1"># this is how many grid points in the current direction for the</span>
+            <span class="c1"># current tensor grid</span>
+            <span class="c1"># K=length(knots_per_dim{dim});</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
+            <span class="c1"># allocate space for evaluations. Since I will be accessing it one lagrangian polynomial at a time</span>
+            <span class="c1"># i.e. one knot at a time, it&#39;s better to have all information for the same lagrange polynomial</span>
+            <span class="c1"># on the same column, for speed purposes. Moreover, note that whenever K=1 (one point only in a direction)</span>
+            <span class="c1"># then the lagrange polynomial is identically one</span>
+            <span class="n">mono_lagr_eval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nb_pts</span><span class="p">,</span> <span class="n">K</span><span class="p">))</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># loop on each node of the current dimension and evaluate the corresponding monodim lagr polynomial.</span>
+                <span class="c1"># We will need an auxiliary vector to pick up the current knot (where the lagr pol is centered) and</span>
+                <span class="c1"># the remaining knots (where the lagr pol is zero). Here we see that mono_lagr_eval it&#39;s written</span>
+                <span class="c1"># one column at a time</span>
+                <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">aux</span><span class="p">:</span>
+                    <span class="n">current_knot</span> <span class="o">=</span> <span class="n">knots_per_dim</span><span class="p">[</span><span class="n">dim</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">other_knots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">knots_per_dim</span><span class="p">[</span><span class="n">dim</span><span class="p">])[</span><span class="n">aux</span> <span class="o">!=</span> <span class="n">k</span><span class="p">]</span>
+                    <span class="n">mono_lagr_eval</span><span class="p">[</span><span class="n">dim</span><span class="p">][:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">lagr_eval_fast</span><span class="p">(</span><span class="n">current_knot</span><span class="p">,</span> <span class="n">other_knots</span><span class="p">,</span>
+                                                               <span class="n">K</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">non_grid_points</span><span class="p">[</span><span class="n">dim</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">nb_pts</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># now put everything together. We have to take the tensor product of</span>
+        <span class="c1"># each of the monodim lagr pol we have evaluated. That is, we have to</span>
+        <span class="c1"># pick one column for each matrix in the cell array and dot-multiply them.</span>
+        <span class="c1"># all the possible combinations have to be generated !</span>
+        <span class="c1"># once this is done, we have the evaluation of each multidim lagr</span>
+        <span class="c1"># polynomial on the non_grid_points, which we will then multiply by the</span>
+        <span class="c1"># corresponding nodal value and eventually sum everything up.</span>
+        <span class="c1"># We start by generating the combination of column we need to take. We actually don&#39;t</span>
+        <span class="c1"># need to generate them, but only to recover it from the matrix knots,</span>
+        <span class="c1"># which already contains all the points of the grid, i.e. all the</span>
+        <span class="c1"># combinations of 1D points!</span>
+        <span class="c1"># Given a matrix of points like</span>
+        <span class="c1"># knots=[a1 a1 b1 b1 a1 a1 b1 b1 ...</span>
+        <span class="c1">#        a2 b2 a2 b2 .....</span>
+        <span class="c1"># combi is</span>
+        <span class="c1"># combi=[1 1 2 2 1 1 2 2 ...</span>
+        <span class="c1">#        1 2 1 2 ......</span>
+        <span class="c1"># again, we exploit the fact that the minimum entry of combi is 1 and that for many directions</span>
+        <span class="c1"># there is only one point, so if we init combi with ones we&#39;re good in many cases</span>
+        <span class="n">combi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span> <span class="c1">## used for indices, so start with 0</span>
+        <span class="c1"># the easiest way to recover combi from knots is to proceed one dimension at a time,</span>
+        <span class="c1"># and mark with a different label (1,2,...K) all the equal points. We need of course as many labels</span>
+        <span class="c1"># as the number of different points in each dir!</span>
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="c1"># this is how many points per direction</span>
+            <span class="c1"># K=length(knots_per_dim{dim});</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
+            <span class="c1"># we start from a row of zeroes and we place 1....K in the right</span>
+            <span class="c1"># positions by summations (each element of the row will be written</span>
+            <span class="c1"># only once!). Since 1 are already in place, we proceed to place 2 and higher, but only if needed</span>
+            <span class="k">if</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">K</span><span class="p">):</span>
+                    <span class="c1"># here we add to the row of &quot;1&quot; either 0 or (k-1) so we get k where needed</span>
+                    <span class="n">combi</span><span class="p">[</span><span class="n">dim</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">knots</span><span class="p">[</span><span class="n">dim</span><span class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="n">knots_per_dim</span><span class="p">[</span><span class="n">dim</span><span class="p">][</span><span class="n">k</span><span class="p">])</span>
+        <span class="c1"># Now we can do the dot-multiplications among rows, the</span>
+        <span class="c1"># multiplication by nodal values and the final sum! We proceed one</span>
+        <span class="c1"># knot at a time</span>
+        <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="c1"># dot-multiply all the lagrangian functions according to the</span>
+            <span class="c1"># combi represented by the current knot. The result F_LOC is a</span>
+            <span class="c1"># column vector</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mono_lagr_eval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">tmpidx</span> <span class="o">=</span> <span class="n">combi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">kk</span><span class="p">]</span>
+            <span class="n">f_loc</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="n">tmpidx</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+                <span class="n">f_loc</span> <span class="o">=</span> <span class="n">f_loc</span> <span class="o">*</span> <span class="n">mono_lagr_eval</span><span class="p">[</span><span class="n">dim</span><span class="p">][:,</span> <span class="n">combi</span><span class="p">[</span><span class="n">dim</span><span class="p">,</span> <span class="n">kk</span><span class="p">]]</span>
+            <span class="c1"># recover F, the corresponding value for the interpolating function in function_on_grid, with the global counter</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">global_knot_counter</span><span class="p">]</span>
+            <span class="n">F_value</span> <span class="o">=</span> <span class="n">function_on_grid</span><span class="p">[</span><span class="n">position</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="c1"># add the contribution of this knot to the sparse interpolation.</span>
+            <span class="c1"># Its contribution is a matrix, since I am evaluating it on a bunch</span>
+            <span class="c1"># of non_grid_points (one per row of f_values, will be trasposed later),</span>
+            <span class="c1"># and my function to be evaluated is vector-valued</span>
+            <span class="c1"># which gives a bunch of rows in columns in f_values.</span>
+            <span class="c1"># we generate this matrix as outer product of f_loc (column vector with lagr pol values) and F_value</span>
+            <span class="c1"># (row vector with function evaluations)</span>
+            <span class="n">f_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">f_loc</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># TODO: can we further simplify this part?</span>
+            <span class="n">F_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">F_value</span><span class="p">)</span>
+            <span class="n">f_values</span> <span class="o">=</span> <span class="n">f_values</span> <span class="o">+</span> <span class="n">coeff</span> <span class="o">*</span> <span class="n">f_loc</span> <span class="o">*</span> <span class="n">F_value</span>
+            <span class="c1"># update global counter</span>
+            <span class="n">global_knot_counter</span> <span class="o">=</span> <span class="n">global_knot_counter</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># finally, transpose to comply with output orientation</span>
+    <span class="n">f_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">f_values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f_values</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.plot &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.plot</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.util.plot</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_all_args_to_kwargs</span>
+
+<span class="n">logger_</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="grid">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">flag</span> <span class="o">!=</span> <span class="s1">&#39;on&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+    <span class="c1"># Turn on major gridlines with customization</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Optionally, turn on minor gridlines as well</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>  <span class="c1"># Enable minor ticks</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_legend">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.set_legend">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_legend</span><span class="p">(</span><span class="n">location</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the legend location in Matplotlib based on MATLAB&#39;s legend location strings.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    location : str</span>
+<span class="sd">        The desired location for the legend. Options include:</span>
+<span class="sd">        &#39;NorthEast&#39;, &#39;NorthWest&#39;, &#39;SouthEast&#39;, &#39;SouthWest&#39;,</span>
+<span class="sd">        &#39;North&#39;, &#39;South&#39;, &#39;East&#39;, &#39;West&#39;, &#39;Best&#39;,</span>
+<span class="sd">        &#39;NorthOutside&#39;, &#39;SouthOutside&#39;, &#39;EastOutside&#39;, &#39;WestOutside&#39;.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the provided location is not valid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Mapping MATLAB locations to Matplotlib locations</span>
+    <span class="n">location_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;NorthEast&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s1">&#39;NorthWest&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s1">&#39;SouthEast&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+        <span class="s1">&#39;SouthWest&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+        <span class="s1">&#39;North&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s1">&#39;South&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;lower center&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+        <span class="s1">&#39;East&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span>
+        <span class="s1">&#39;West&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;center right&#39;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span>
+        <span class="s1">&#39;Best&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span>  <span class="c1"># Best fits automatically</span>
+        <span class="s1">&#39;NorthOutside&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">)),</span>
+        <span class="s1">&#39;SouthOutside&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;upper center&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)),</span>
+        <span class="s1">&#39;EastOutside&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span>
+        <span class="s1">&#39;WestOutside&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;center right&#39;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">location_map</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid location &#39;</span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">&#39;. Valid options are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">location_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">loc</span><span class="p">,</span> <span class="n">bbox</span> <span class="o">=</span> <span class="n">location_map</span><span class="p">[</span><span class="n">location</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">loc</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="n">bbox</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="view">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.view">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">view</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the view angle for a 3D plot in Matplotlib.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    azimuth : float</span>
+<span class="sd">        The azimuthal angle in degrees.</span>
+<span class="sd">    elevation : float</span>
+<span class="sd">        The elevation angle in degrees.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="n">elevation</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="n">azimuth</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="clear">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.clear">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">():</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="gcf">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.gcf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">gcf</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="figure_create">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.figure_create">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">figure_create</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> <span class="c1"># TODO: dims -&gt; plot3d=False</span>
+    <span class="c1"># returns fig, axs (nrows x ncols array)</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;3d&#39;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span></div>
+
+
+
+<div class="viewcode-block" id="plot">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.plot">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot data on a given axis with optional formatting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axis to plot on.</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        The x-coordinates of the data points.</span>
+<span class="sd">    y : array_like</span>
+<span class="sd">        The y-coordinates of the data points.</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Additional positional arguments for formatting.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for formatting.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of matplotlib.lines.Line2D</span>
+<span class="sd">        The plotted line objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Plotting based on the number of arguments</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fmt</span><span class="p">,</span> <span class="n">mplargs</span> <span class="o">=</span> <span class="n">parse_matlab_plot_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fmt</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="o">**</span><span class="n">mplargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: ok? &lt;- default plot command should plot lines; user must specify other style explicitly</span>
+            <span class="c1"># fmt = &#39;&#39;</span>
+            <span class="c1"># if &#39;color&#39; not in mplargs.keys():</span>
+            <span class="c1">#     fmt += &#39;k&#39;</span>
+            <span class="c1"># if &#39;marker&#39; not in mplargs.keys():</span>
+            <span class="c1">#     fmt += &#39;o&#39;</span>
+            <span class="c1"># if fmt:</span>
+            <span class="c1">#     h = ax.plot(x, y, fmt, linestyle=&#39;none&#39;, **mplargs)</span>
+            <span class="c1"># else:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">mplargs</span><span class="p">)</span>
+        <span class="c1">#ax.set_title(axtitle)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">h</span></div>
+
+
+
+<div class="viewcode-block" id="plot_scatter_3d">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.plot_scatter_3d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_scatter_3d</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a 3D scatter plot on a given axis with optional formatting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes3D</span>
+<span class="sd">        The 3D axis to plot on.</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        The x-coordinates of the data points.</span>
+<span class="sd">    y : array_like</span>
+<span class="sd">        The y-coordinates of the data points.</span>
+<span class="sd">    z : array_like</span>
+<span class="sd">        The z-coordinates of the data points.</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Additional positional arguments for formatting.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for formatting.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.collections.PathCollection</span>
+<span class="sd">        The scatter plot object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Plotting based on the number of arguments</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter_3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fmt</span><span class="p">,</span> <span class="n">mplargs</span> <span class="o">=</span> <span class="n">parse_matlab_plot_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fmt</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter_3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">mplargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter_3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">mplargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">h</span></div>
+
+
+
+<div class="viewcode-block" id="plot_3d">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.plot_3d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_3d</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a 3D line plot on a given axis with optional formatting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes3D</span>
+<span class="sd">        The 3D axis to plot on.</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        The x-coordinates of the data points.</span>
+<span class="sd">    y : array_like</span>
+<span class="sd">        The y-coordinates of the data points.</span>
+<span class="sd">    z : array_like</span>
+<span class="sd">        The z-coordinates of the data points.</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Additional positional arguments for formatting.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for formatting.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.lines.Line2D</span>
+<span class="sd">        The plotted line object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Plotting based on the number of arguments</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fmt</span><span class="p">,</span> <span class="n">mplargs</span> <span class="o">=</span> <span class="n">parse_matlab_plot_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fmt</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="o">**</span><span class="n">mplargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">mplargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">h</span></div>
+
+
+
+<div class="viewcode-block" id="parse_matlab_plot_args">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.parse_matlab_plot_args">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_matlab_plot_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse MATLAB-style plot arguments into a format string and keyword arguments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Positional arguments for formatting.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Keyword arguments for formatting.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple containing the format string and a dictionary of keyword arguments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs_all</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">merge_all_args_to_kwargs</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">to_lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># axtitle = kwargs.pop(&#39;???&#39;, &#39;Figure&#39;)</span>
+    <span class="k">if</span> <span class="s1">&#39;displayname&#39;</span> <span class="ow">in</span> <span class="n">kwargs_all</span><span class="p">:</span>
+        <span class="n">kwargs_all</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_all</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;displayname&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">kwargs_all</span></div>
+
+
+
+<div class="viewcode-block" id="check_and_convert_to_fig3d">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.plot.html#sgpykit.util.plot.check_and_convert_to_fig3d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_and_convert_to_fig3d</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the given axis is a 3D axis, and convert it if necessary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axis to check and convert.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.axes.Axes3D</span>
+<span class="sd">        The 3D axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">Axes3D</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ax</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger_</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Please directly specify sg.figure_create(dims=3) when using 3d plots.&quot;</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span>
+        <span class="c1"># Create a new 3D Axes</span>
+        <span class="n">ax_3d</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_subplotspec</span><span class="p">(),</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+        <span class="n">ax_3d</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_title</span><span class="p">())</span>
+        <span class="c1"># TODO: more props to be copied?</span>
+        <span class="k">return</span> <span class="n">ax_3d</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

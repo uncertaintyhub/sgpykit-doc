@@ -1,0 +1,6 @@
+sgpykit.util.definitions
+========================
+
+.. automodule:: sgpykit.util.definitions
+
+   

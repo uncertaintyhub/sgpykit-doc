@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.src.compare_sparse_grids &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.src.compare_sparse_grids</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.src.compare_sparse_grids</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.find_lexicographic</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_lexicographic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.lookup_merge_and_diff</span><span class="w"> </span><span class="kn">import</span> <span class="n">lookup_merge_and_diff</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">INT_NAN_WORKAROUND</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_int_nan</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="compare_sparse_grids">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.src.html#sgpykit.src.compare_sparse_grids">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_sparse_grids</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">Sr</span><span class="p">,</span> <span class="n">S_old</span><span class="p">,</span> <span class="n">Sr_old</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare the points of two sparse grids.</span>
+
+<span class="sd">    This function compares the points in S and S_old, and determines those in common,</span>
+<span class="sd">    and those belonging exclusively to each of the two. Points are considered equal if</span>
+<span class="sd">    coordinate-wise they are closer than TOL. SR is the reduced version of S and SR_OLD</span>
+<span class="sd">    is the reduced version of S_OLD.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    S : array_like</span>
+<span class="sd">        Sparse grid structure.</span>
+<span class="sd">    Sr : array_like</span>
+<span class="sd">        Reduced version of S.</span>
+<span class="sd">    S_old : array_like</span>
+<span class="sd">        Old sparse grid structure.</span>
+<span class="sd">    Sr_old : array_like</span>
+<span class="sd">        Reduced version of S_old.</span>
+<span class="sd">    tol : float, optional</span>
+<span class="sd">        Tolerance for point comparison (default is 1e-14).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pts_in_S_only : ndarray</span>
+<span class="sd">        Column indices of points in SR.KNOTS that are not in the intersection of S and S_OLD.</span>
+<span class="sd">    pts_in_both_grids_S : ndarray</span>
+<span class="sd">        Column indices of points in SR.KNOTS that are also in SR_OLD.KNOTS.</span>
+<span class="sd">    pts_in_both_grids_S_old : ndarray</span>
+<span class="sd">        Column indices of points in SR_OLD.KNOTS that are also in SR.KNOTS.</span>
+<span class="sd">    pts_in_S_old_only : ndarray</span>
+<span class="sd">        Column indices of points in SR_OLD.KNOTS that are in SR_OLD but not in SR.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Suppose</span>
+<span class="sd">    SR.KNOTS =    [a b c d e;</span>
+<span class="sd">                   x y z w t]</span>
+<span class="sd">    SR_OLD.KNOTS =[a f b h;</span>
+<span class="sd">                   x s y r];</span>
+<span class="sd">    Then:</span>
+<span class="sd">    pts_in_S_only             = [3 4 5];</span>
+<span class="sd">    pts_in_both_grids_S       = [1 2];</span>
+<span class="sd">    pts_in_both_grids_S_old   = [1 3];</span>
+<span class="sd">    pts_in_S_old_only         = [2 4];</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The same results would happen if SR_OLD.KNOTS are perturbed by numerical noise below tol:</span>
+<span class="sd">    SR_OLD.KNOTS =[a+n f b    h;</span>
+<span class="sd">                   x   s y-n  r];</span>
+
+<span class="sd">    COMPARE_GRIDS is very efficient because it works with comparing integer indices coming from</span>
+<span class="sd">    the multiindices in S.IDX and S_OLD.IDX as much as possible. See also LOOKUP_MERGE_AND_DIFF</span>
+<span class="sd">    for the same kind of analysis based however on comparing the actual coordinates of the points.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># ------------------------------------------------------------------------------------</span>
+    <span class="c1">#</span>
+    <span class="c1">#                            PART I: looking for MULTI-IDX</span>
+    <span class="c1">#</span>
+    <span class="c1"># ------------------------------------------------------------------------------------</span>
+
+    <span class="c1"># to get good performance, we proceed by tensor grids: we identify which tensor grids are in common between S</span>
+    <span class="c1"># and S_old, and we classify the points of the two sparse grids depending whether they belong to tensor grids in</span>
+    <span class="c1"># common between the two sparse grids or not. Thus, the first thing to do is to recover the set of multiindices</span>
+    <span class="c1"># corresponding to the tensor grids stored in S and S_old. Note that these are subsets of the index sets that</span>
+    <span class="c1"># generated the grids (i.e, they are only those who &quot;survived&quot; the combination techinque selection)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># TODO: assumes a simple struct here, not an StructArray</span>
+    <span class="n">N_old</span> <span class="o">=</span> <span class="n">Sr_old</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># TODO: ^^^</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="o">!=</span> <span class="n">N_old</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Grids with different N&#39;</span><span class="p">)</span>
+
+    <span class="n">nb_idx_S</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="n">I_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+    <span class="n">nb_idx_S_old</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">S_old</span><span class="p">)</span>
+    <span class="n">I_S_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">S_old</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+    <span class="c1"># we now need to identify which multiindices (hence tensor grids) belongs to both sparse grids and which are</span>
+    <span class="c1"># in one grid only. To do so, we exploit the fact that I_S and I_S_old are lexicographically ordered: we pick</span>
+    <span class="c1"># the smallest of the two sets, and we look for all of its multiidx in the other set. We then generate 4</span>
+    <span class="c1"># vectors of indices that refer to the elements of I_S and I_S_old:</span>
+    <span class="c1"># idx_in_both</span>
+    <span class="c1"># idx_in_both_old</span>
+    <span class="c1"># idx_in_S_only</span>
+    <span class="c1"># idx_in_S_old_only</span>
+
+    <span class="k">if</span> <span class="n">nb_idx_S</span> <span class="o">&lt;</span> <span class="n">nb_idx_S_old</span><span class="p">:</span>
+        <span class="c1"># these are convenience counters</span>
+        <span class="n">ctr_S_only</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ctr_both</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># note that we do not need a counter for idx_in_S_old_only. This will be clearer in a moment</span>
+        <span class="c1"># these are the vector addressed with the increasing counters: every time the we find a multiidx in common, we</span>
+        <span class="c1"># append its location in both sets in the indices below. However, instead of actually appending and letting</span>
+        <span class="c1"># the vectors grow, we preallocate them to full length instead. We&#39;ll remove the extra components in one-shot at the end of the procedure</span>
+        <span class="n">idx_in_both</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_idx_S</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="n">idx_in_both_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_idx_S_old</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="n">idx_in_S_only</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_idx_S</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="c1"># idx_in_S_old_only is handled differently. Instead of appending to a vector if a multiidx from S_old is not found,</span>
+        <span class="c1"># we work on the complementary information: if we find a multiidx from S_old, it is marked as NaN in the right</span>
+        <span class="c1"># position of the vector below, and at the end those unmarked are those that haven&#39;t been found.</span>
+        <span class="n">idx_in_S_old_only</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nb_idx_S_old</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_idx_S</span><span class="p">):</span>
+            <span class="n">row_of_I_S</span> <span class="o">=</span> <span class="n">I_S</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+            <span class="c1"># this exploits that I_S_old is sorted lexicographically, so it&#39;s efficient</span>
+            <span class="n">found</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_lexicographic</span><span class="p">(</span><span class="n">row_of_I_S</span><span class="p">,</span> <span class="n">I_S_old</span><span class="p">,</span><span class="s1">&#39;nocheck&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="c1"># note that both this one and the next one are sorted because i is growing and the set is sorted so</span>
+                <span class="c1"># we look for higher and higher idx in a sorted searchee set so pos keeps increasing</span>
+                <span class="n">idx_in_both</span><span class="p">[</span><span class="n">ctr_both</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>  <span class="c1"># i started at 0</span>
+                <span class="n">idx_in_both_old</span><span class="p">[</span><span class="n">ctr_both</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+                <span class="n">ctr_both</span> <span class="o">=</span> <span class="n">ctr_both</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="c1"># if found, we need to mark the row of S_old as &quot;found&quot;, and at the end we will keep only the unmarked ones,</span>
+                <span class="c1"># which are those that we have not found during the process, i.e. the indices in I_S_old only</span>
+                <span class="n">idx_in_S_old_only</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">INT_NAN_WORKAROUND</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx_in_S_only</span><span class="p">[</span><span class="n">ctr_S_only</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>  <span class="c1"># i started at 0</span>
+                <span class="n">ctr_S_only</span> <span class="o">=</span> <span class="n">ctr_S_only</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># we remove the extra components as promised</span>
+        <span class="n">idx_in_both</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ctr_both</span><span class="p">)</span>
+        <span class="n">idx_in_both_old</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ctr_both</span><span class="p">)</span>
+        <span class="n">idx_in_S_only</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ctr_S_only</span><span class="p">)</span>
+        <span class="n">idx_in_S_old_only</span> <span class="o">=</span> <span class="n">idx_in_S_old_only</span><span class="p">[</span><span class="o">~</span><span class="n">is_int_nan</span><span class="p">(</span><span class="n">idx_in_S_old_only</span><span class="p">)</span> <span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ctr_S_old_only</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ctr_both</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">idx_in_both</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_idx_S</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="n">idx_in_both_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_idx_S_old</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="n">idx_in_S_only</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nb_idx_S</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="n">idx_in_S_old_only</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_idx_S_old</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_idx_S_old</span><span class="p">):</span>
+            <span class="n">row_of_I_S_old</span> <span class="o">=</span> <span class="n">I_S_old</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+            <span class="n">found</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_lexicographic</span><span class="p">(</span><span class="n">row_of_I_S_old</span><span class="p">,</span> <span class="n">I_S</span><span class="p">,</span><span class="s1">&#39;nocheck&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="n">idx_in_both</span><span class="p">[</span><span class="n">ctr_both</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+                <span class="n">idx_in_both_old</span><span class="p">[</span><span class="n">ctr_both</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>  <span class="c1"># i started at 0</span>
+                <span class="n">ctr_both</span> <span class="o">=</span> <span class="n">ctr_both</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">idx_in_S_only</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">INT_NAN_WORKAROUND</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx_in_S_old_only</span><span class="p">[</span><span class="n">ctr_S_old_only</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">ctr_S_old_only</span> <span class="o">=</span> <span class="n">ctr_S_old_only</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">idx_in_both</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ctr_both</span><span class="p">)</span>
+        <span class="n">idx_in_both_old</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ctr_both</span><span class="p">)</span>
+        <span class="n">idx_in_S_old_only</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ctr_S_old_only</span><span class="p">)</span>
+        <span class="n">idx_in_S_only</span> <span class="o">=</span> <span class="n">idx_in_S_only</span><span class="p">[</span><span class="o">~</span><span class="n">is_int_nan</span><span class="p">(</span><span class="n">idx_in_S_only</span><span class="p">)</span> <span class="p">]</span>
+
+    <span class="c1"># ------------------------------------------------------------------------------------</span>
+    <span class="c1">#</span>
+    <span class="c1">#                       PART II: classifying points based on their origin</span>
+    <span class="c1">#</span>
+    <span class="c1"># ------------------------------------------------------------------------------------</span>
+
+    <span class="c1"># now, we derive information about sparse grid points (i.e. whether points are in S, S_old, or both) from the multiindex information.</span>
+    <span class="c1"># At the end of this part, we will have split points in 4 categories, two for points in S and two for points</span>
+    <span class="c1"># in S_old</span>
+    <span class="c1"># pts_from_new_idx_in_Sr</span>
+    <span class="c1"># pts_from_common_idx_in_Sr</span>
+    <span class="c1"># pts_from_common_idx_in_Sr_old</span>
+    <span class="c1"># pts_from_old_idx_in_Sr_old</span>
+
+    <span class="c1"># --------------------------------- part II.a -------------------------------------------</span>
+
+    <span class="c1"># We begin by noting that points that belong to tensor grids associated to multiidx in both sparse grids will be necessarily</span>
+    <span class="c1"># present in both grids and we will return them as &quot;in_both_grids&quot;. For now, we collect their position in both grids,</span>
+    <span class="c1"># Sr and Sr_old, i.e. in which column of Sr.knots and Sr_old.knots they are.</span>
+
+    <span class="c1"># we start from Sr. This is the cointainer. Note that it will be not sorted at first, hence the name. we will</span>
+    <span class="c1"># sort it afterwards</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_in_both</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">:</span>
+        <span class="n">pts_from_common_idx_in_Sr_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="c1"># pos_end = -1</span>
+        <span class="c1"># i_prev = 0</span>
+        <span class="c1"># for each multiidx, we recover where the points of the associated tensor grid have been placed in Sr,</span>
+        <span class="c1"># thanks to the vector Sr.n, that says precisely this information. Of course, grids in common and not in</span>
+        <span class="c1"># common are interwined in Sr, so we need to use the S(i).size information to move to the correct fragment of</span>
+        <span class="c1"># Sr.n</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_in_both</span><span class="p">:</span>
+            <span class="c1">#pos = pos_end + np.sum([S[u].size for u in range(i_prev, i - 1)], dtype=&#39;int&#39;) + 1</span>
+            <span class="c1">#pos_end = pos + S[i].size</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">S</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+            <span class="n">pos_end</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+
+            <span class="n">pts_from_common_idx_in_Sr_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pts_from_common_idx_in_Sr_nosort</span><span class="p">,</span> <span class="n">Sr</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos_end</span><span class="p">]))</span>
+            <span class="c1"># i_prev = i</span>
+        <span class="c1"># the vector pts_from_common_idx_in_red_nosort is not uniqued, because points of different tensor grids</span>
+        <span class="c1"># might be mapped to the same point in Sr. We need them uniqued though, but the official unique is slow, so</span>
+        <span class="c1"># we reimplement it as follows:</span>
+        <span class="c1"># TODO: use unique() in python</span>
+        <span class="n">vs</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">pts_from_common_idx_in_Sr_nosort</span><span class="p">)</span>
+        <span class="n">vd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">matlab</span><span class="o">.</span><span class="n">logical</span><span class="p">(</span><span class="n">vd</span><span class="p">),[</span><span class="kc">True</span><span class="p">]))</span>
+        <span class="n">pts_from_common_idx_in_Sr</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pts_from_common_idx_in_Sr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="c1"># same procedure to locate the common points in SR_old starting from the common indices</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_in_both_old</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">:</span>
+        <span class="n">pts_from_common_idx_in_Sr_old_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="c1"># pos_end = 0</span>
+        <span class="c1"># i_prev = 0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_in_both_old</span><span class="p">:</span>
+            <span class="c1">#pos = pos_end + np.sum([S_old[u].size for u in range(i_prev + 1, i - 1+1)], dtype=&#39;int&#39;) + 1</span>
+            <span class="c1">#pos_end = pos + S_old[i].size - 1</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">S_old</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+            <span class="n">pos_end</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">S_old</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">pts_from_common_idx_in_Sr_old_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pts_from_common_idx_in_Sr_old_nosort</span><span class="p">,</span> <span class="n">Sr_old</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos_end</span><span class="p">]))</span>
+            <span class="c1"># i_prev = i</span>
+        <span class="n">vs</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">pts_from_common_idx_in_Sr_old_nosort</span><span class="p">)</span>
+        <span class="n">vd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">matlab</span><span class="o">.</span><span class="n">logical</span><span class="p">(</span><span class="n">vd</span><span class="p">),[</span><span class="kc">True</span><span class="p">]))</span>
+        <span class="n">pts_from_common_idx_in_Sr_old</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pts_from_common_idx_in_Sr_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="c1"># --------------------------------- part II.b -------------------------------------------</span>
+
+    <span class="c1"># next, we perform the complementary operation and identify the column index of the points in Sr</span>
+    <span class="c1"># corresponding to multiidx in S only, and same for S_old. Note that it&#39;s the multiidx that belongs to S only,</span>
+    <span class="c1"># not the point!  If the 1D knots have some degree of nestedness, it will actually happen that some of the</span>
+    <span class="c1"># points of multiidx in S_only will also be present in grid of midx in common.</span>
+    <span class="c1"># Pay attention however, it might happen that idx_in_S_only is empty, for instance if the &quot;old&quot; grid is</span>
+    <span class="c1"># actually larger. In this case, we throw an error</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_in_S_only</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;idx_in_S_only is empty - this case is not handled yet&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pts_from_new_idx_in_Sr_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="c1"># pos_end = 0</span>
+        <span class="c1"># i_prev = 0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_in_S_only</span><span class="p">:</span>
+            <span class="c1">#pos = pos_end + np.sum([S[u].size for u in range(i_prev + 1, i - 1 + 1)], dtype=&#39;int&#39;) + 1</span>
+            <span class="c1">#pos_end = pos + S[i].size - 1</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">S</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+            <span class="n">pos_end</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">pts_from_new_idx_in_Sr_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pts_from_new_idx_in_Sr_nosort</span><span class="p">,</span> <span class="n">Sr</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos_end</span><span class="p">]))</span>
+            <span class="c1"># i_prev = i</span>
+        <span class="n">vs</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">pts_from_new_idx_in_Sr_nosort</span><span class="p">)</span>
+        <span class="n">vd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">matlab</span><span class="o">.</span><span class="n">logical</span><span class="p">(</span><span class="n">vd</span><span class="p">),[</span><span class="kc">True</span><span class="p">]))</span>
+        <span class="n">pts_from_new_idx_in_Sr</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># now, the same for S_old, i.e. the column index of the points in Sr_old corresponding to multiidx in S_old</span>
+    <span class="c1"># only. Pay attention however, it might happen that idx_in_S_old_only is empty ...</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_in_S_old_only</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">:</span>
+        <span class="n">pts_from_old_idx_in_Sr_old_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_in_S_old_only</span><span class="p">:</span>
+            <span class="c1">#pos = np.sum([S_old[u].size for u in range(1, i - 1 + 1)], dtype=&#39;int&#39;)</span>
+            <span class="c1">#pos_end = pos + S_old[i].size - 1</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">S_old</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+            <span class="n">pos_end</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">S_old</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">pts_from_old_idx_in_Sr_old_nosort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pts_from_old_idx_in_Sr_old_nosort</span><span class="p">,</span> <span class="n">Sr_old</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos_end</span><span class="p">]))</span>
+        <span class="n">vs</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">pts_from_old_idx_in_Sr_old_nosort</span><span class="p">)</span>
+        <span class="n">vd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">matlab</span><span class="o">.</span><span class="n">logical</span><span class="p">(</span><span class="n">vd</span><span class="p">),[</span><span class="kc">True</span><span class="p">]))</span>
+        <span class="n">pts_from_old_idx_in_Sr_old</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pts_from_old_idx_in_Sr_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------------------------</span>
+    <span class="c1">#</span>
+    <span class="c1">#                       PART III: preparing the final outputs</span>
+    <span class="c1">#</span>
+    <span class="c1"># ------------------------------------------------------------------------------------</span>
+
+    <span class="c1"># here, we start from these vectors:</span>
+    <span class="c1">#</span>
+    <span class="c1"># -- pts_from_new_idx_in_Sr</span>
+    <span class="c1"># -- pts_from_common_idx_in_Sr</span>
+    <span class="c1"># -- pts_from_common_idx_in_Sr_old</span>
+    <span class="c1"># -- pts_from_old_idx_in_Sr_old</span>
+
+    <span class="c1"># and at the end of this section, we&#39;ll have points categorized in the final lists:</span>
+    <span class="c1">#</span>
+    <span class="c1"># -- pts_in_S_only</span>
+    <span class="c1"># -- pts_in_both_grids_S,</span>
+    <span class="c1"># -- pts_in_both_grids_S_old,</span>
+    <span class="c1"># -- pts_in_S_old_only</span>
+
+    <span class="c1"># we&#39;d like to proceed differently whether the points are nested or not, but that&#39;s not as easy as it seems.</span>
+    <span class="c1"># so we do not take this into account</span>
+
+    <span class="c1"># As we have said already points from new idx might need be new, but not necessarily. Indeed:</span>
+    <span class="c1"># --&gt; they might again be in the common points (imagine adding [5x1] grid to a [3x1]. the new index [5x1] is new,</span>
+    <span class="c1"># but some of its points might be in the [3x1] - actually, all of them if nested points!</span>
+    <span class="c1"># --&gt; they might be among the points of the idx we are trashing</span>
+    <span class="c1"># at the same time, points from old idx might also be in points from common idx!</span>
+
+    <span class="c1"># So, this is the strategy:</span>
+    <span class="c1"># before trashing points, we check if they are also in common. Otherwise, before trashing them, we make</span>
+    <span class="c1"># sure that they are not needed as points from new idx</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_in_S_old_only</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># if we are not trashing multiidx, then we init the set of new points as the set of points coming from new</span>
+        <span class="c1"># idx, we&#39;ll figure out soon which points are not really new ...  the rest of the outputs are empty for now</span>
+        <span class="n">pts_in_S_only</span> <span class="o">=</span> <span class="n">pts_from_new_idx_in_Sr</span>
+        <span class="n">pts_to_recycle_from_S_old_only_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">pts_to_recycle_from_S_old_only_list_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">pts_to_discard_from_S_old_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># first, we make sure that points coming from old idx in Sr_old are really going to be discarded,</span>
+        <span class="c1"># or if they are also in points in common</span>
+        <span class="n">__</span><span class="p">,</span> <span class="n">pos_in_arg1</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">pts_from_old_idx_in_Sr_old</span><span class="p">,</span> <span class="n">pts_from_common_idx_in_Sr_old</span><span class="p">)</span>
+        <span class="n">pts_from_old_idx_in_Sr_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pts_from_old_idx_in_Sr_old</span><span class="p">,</span> <span class="n">pos_in_arg1</span><span class="p">)</span>
+        <span class="c1"># now, depending whether pts_from_old_idx_in_Sr_old is still not empty or not, we behave differently</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts_from_old_idx_in_Sr_old</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">:</span>
+            <span class="c1"># if they really are going to be discarded, let&#39;s see if perhaps we can use them in the points of the new grid</span>
+            <span class="c1"># coming from new idx. Here we need to resort to comparing the coordinates ...</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;(hopefully) small local comparison between coordinates of points...&#39;</span><span class="p">)</span>
+            <span class="n">pts_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="p">[:,</span> <span class="n">pts_from_new_idx_in_Sr</span><span class="p">])</span>
+            <span class="n">pts_list_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Sr_old</span><span class="o">.</span><span class="n">knots</span><span class="p">[:,</span> <span class="n">pts_from_old_idx_in_Sr_old</span><span class="p">])</span>
+            <span class="c1"># do the comparison. Observe that the output give the position of the common points in the subparts of</span>
+            <span class="c1"># Sr.knots and SR_old.knots, so we need them to take them back to the &quot;global&quot; counting</span>
+            <span class="n">not_found_in_S_old_only_loc</span><span class="p">,</span> <span class="n">to_recycle_from_S_old_only_list_loc</span><span class="p">,</span> <span class="n">to_recycle_from_S_old_only_list_old_loc</span><span class="p">,</span> <span class="n">to_discard_from_S_old_list_loc</span> \
+                <span class="o">=</span> <span class="n">lookup_merge_and_diff</span><span class="p">(</span><span class="n">pts_list</span><span class="p">,</span> <span class="n">pts_list_old</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;...done. Overall statistics:&#39;</span><span class="p">)</span>
+            <span class="n">pts_in_S_only</span> <span class="o">=</span> <span class="n">pts_from_new_idx_in_Sr</span><span class="p">[</span><span class="n">not_found_in_S_old_only_loc</span><span class="p">]</span>
+            <span class="n">pts_to_recycle_from_S_old_only_list</span> <span class="o">=</span> <span class="n">pts_from_new_idx_in_Sr</span><span class="p">[</span><span class="n">to_recycle_from_S_old_only_list_loc</span><span class="p">]</span>
+            <span class="n">pts_to_recycle_from_S_old_only_list_old</span> <span class="o">=</span> <span class="n">pts_from_old_idx_in_Sr_old</span><span class="p">[</span><span class="n">to_recycle_from_S_old_only_list_old_loc</span><span class="p">]</span>
+            <span class="n">pts_to_discard_from_S_old_list</span> <span class="o">=</span> <span class="n">pts_from_old_idx_in_Sr_old</span><span class="p">[</span><span class="n">to_discard_from_S_old_list_loc</span><span class="p">]</span>
+            <span class="c1">#         # some of these to_discard might also be already in common, so although we discard it from here we&#39;re not</span>
+            <span class="c1">#         # really losing them... let&#39;s find out</span>
+            <span class="c1">#         [~, in_to_disc,~] = intersect(pts_to_discard_from_S_old_list, pts_from_common_idx_in_Sr_old);</span>
+            <span class="c1">#         pts_to_discard_from_S_old_list(in_to_disc)=[];</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if there are actually no points going to be lost, the init is like in the previous case, i.e.</span>
+            <span class="c1"># the set of new points is for now the set of points coming from new idx, and the rest of the outputs are empty for now</span>
+            <span class="n">pts_in_S_only</span> <span class="o">=</span> <span class="n">pts_from_new_idx_in_Sr</span>
+            <span class="n">pts_to_recycle_from_S_old_only_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">pts_to_recycle_from_S_old_only_list_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">pts_to_discard_from_S_old_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="c1"># in any case, we look we look whether some of the points from the new idx are already in the list of points</span>
+    <span class="c1"># from common idx, and remove them from the in_S_only list. We use this call</span>
+
+    <span class="c1"># [pts_to_comp_already_in_common, in_to_comp, in_com] = intersect(to_comp_list, pts_from_common_idx_in_red);</span>
+
+    <span class="c1"># but we actually care only about the second output:</span>
+    <span class="n">__</span><span class="p">,</span> <span class="n">in_to_comp</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">pts_in_S_only</span><span class="p">,</span> <span class="n">pts_from_common_idx_in_Sr</span><span class="p">)</span>
+    <span class="n">pts_in_S_only</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pts_in_S_only</span><span class="p">,</span> <span class="n">in_to_comp</span><span class="p">)</span>
+    <span class="c1"># note: the points to be recycled are alredy accounted for, no need to add them anywhere</span>
+    <span class="c1"># note (@@): the label of points in common doesn&#39;t really matter: they will in any case appear in both</span>
+    <span class="c1"># sets of indices!!</span>
+
+    <span class="c1"># we are done!! let&#39;s set the outputs</span>
+    <span class="n">pts_in_both_grids_S</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pts_to_recycle_from_S_old_only_list</span><span class="p">,</span> <span class="n">pts_from_common_idx_in_Sr</span><span class="p">)))</span>
+    <span class="n">pts_in_both_grids_S_old</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">pts_to_recycle_from_S_old_only_list_old</span><span class="p">,</span> <span class="n">pts_from_common_idx_in_Sr_old</span><span class="p">]))</span>
+    <span class="n">pts_in_S_old_only</span> <span class="o">=</span> <span class="n">pts_to_discard_from_S_old_list</span>
+    <span class="c1"># safety checks</span>
+
+    <span class="n">L1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts_in_S_only</span><span class="p">)</span>
+    <span class="n">L2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts_in_both_grids_S</span><span class="p">)</span>
+    <span class="n">L3</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts_in_both_grids_S_old</span><span class="p">)</span>
+    <span class="n">L4</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts_in_S_old_only</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">L3</span> <span class="o">+</span> <span class="n">L4</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Sr_old</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The code has lost track of some points of the old grid, i+discard~=N_old&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">L2</span> <span class="o">!=</span> <span class="n">L3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;mismatch between the two sets of recycling points. length(pts_in_both_grids_S)~=length(pts_in_both_grids_S_old)&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pts_in_S_only</span><span class="p">,</span> <span class="n">pts_in_both_grids_S</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Sr</span><span class="o">.</span><span class="n">knots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The code has lost track of some points of the new grid, or some points from the old grid have been mistaken as points of the new grid. Double check the values of tolerances use to detect identical points (both here and in reduce_sparse_grid) and try to rerun the code.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># show some statistics</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;new evaluation needed: </span><span class="si">{</span><span class="n">L1</span><span class="si">}</span><span class="s1"> recycled evaluations: </span><span class="si">{</span><span class="n">L2</span><span class="si">}</span><span class="s1"> discarded evaluations: </span><span class="si">{</span><span class="n">L4</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># if using_nested_points</span>
+
+    <span class="c1">#     # if we know that points are nested, then it&#39;s very easy! there are no points in S_old only,</span>
+    <span class="c1">#     # they are all in common with S. The pts_rom_new_idx_in_Sr conversely are a superset</span>
+    <span class="c1">#     # of the pts_from_common_idx_in_Sr, so we only need to take the setdiff.  However, note that</span>
+    <span class="c1">#     # reduce_sparse_grid might have mixed labels, i.e. some points from the new idx in common</span>
+    <span class="c1">#     # with common_idx might have received the label of the point in common. So we cannot rely</span>
+    <span class="c1">#     # here on the labels in pts_from_new_idx and we generate the entire set of labels, i.e.</span>
+    <span class="c1">#     # instead of</span>
+    <span class="c1">#     # pts_in_S_only = setdiff(pts_from_new_idx_in_Sr, pts_from_common_idx_in_Sr);</span>
+    <span class="c1">#     # we do</span>
+
+    <span class="c1">#     pts_in_S_only = setdiff((1:size(Sr.knots, 2))&#39;, pts_from_common_idx_in_Sr);</span>
+    <span class="c1">#     pts_in_both_grids_S = sort(pts_from_common_idx_in_Sr);</span>
+    <span class="c1">#     pts_in_both_grids_S_old = (1:size(Sr_old.knots, 2))&#39;;</span>
+    <span class="c1">#     pts_in_S_old_only = [];</span>
+    <span class="c1">#     # this trick is not needed below, where we compare more closely the sets (see comment row marked with @@</span>
+    <span class="c1">#     # below): indeed, regardless of the label they will in any case appear in both sets of indices, and we&#39;ll take</span>
+    <span class="c1">#     # intersect, not setdiff !!!</span>
+
+    <span class="c1"># else</span>
+    <span class="k">return</span> <span class="n">pts_in_S_only</span><span class="p">,</span> <span class="n">pts_in_both_grids_S</span><span class="p">,</span> <span class="n">pts_in_both_grids_S_old</span><span class="p">,</span> <span class="n">pts_in_S_old_only</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+sgpykit.tools.rescaling\_functions
+==================================
+
+.. automodule:: sgpykit.tools.rescaling_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_interval_map
+   

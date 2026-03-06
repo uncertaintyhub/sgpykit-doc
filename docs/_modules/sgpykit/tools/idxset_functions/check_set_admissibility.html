@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.idxset_functions.check_set_admissibility &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.idxset_functions.check_set_admissibility</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.tools.idxset_functions.check_set_admissibility</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.idxset_functions.check_index_admissibility</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_index_admissibility</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span><span class="p">,</span> <span class="n">misc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.checks</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_number_or_list_of_numbers_nonnegative</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab_to_python_index</span><span class="p">,</span> <span class="n">python_to_matlab_index</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="check_set_admissibility">
+<a class="viewcode-back" href="../../../../_autosummary/sgpykit.tools.idxset_functions.html#sgpykit.tools.idxset_functions.check_set_admissibility">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_set_admissibility</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">matlab_idx</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a given index set is admissible and return the admissible set.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    I : array_like</span>
+<span class="sd">        The index set to check for admissibility.</span>
+<span class="sd">    matlab_idx : bool, optional</span>
+<span class="sd">        If True, the input index set I is assumed to be in 1-based index format.</span>
+<span class="sd">        C will use 1-based indexing then.</span>
+<span class="sd">        Default is True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    adm : bool</span>
+<span class="sd">        True if the input index set is admissible, False otherwise.</span>
+<span class="sd">    C : ndarray</span>
+<span class="sd">        The admissible index set in lexicographic order. If the input set is not</span>
+<span class="sd">        admissible, the missing indices are added to make it admissible.</span>
+<span class="sd">        If matlab_idx is True, C will use 1-based indexing.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function checks each index in the set for admissibility and adds any missing</span>
+<span class="sd">    indices to ensure the set is admissible. A warning is logged if the set is not</span>
+<span class="sd">    admissible and indices are added.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># [adm,C] = CHECK_SET_ADMISSIBILITY(I) checks whether I is an admissible set.</span>
+    <span class="c1">#       If that is the case, adm=true and C contains I ordered in lexicographic order.</span>
+    <span class="c1">#       If not, adm=false and C contains I plus the multiindeces needed, again in lexicographic order</span>
+    <span class="k">assert</span> <span class="n">is_number_or_list_of_numbers_nonnegative</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">matlab_idx</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># from matlab index numbers to python (I represents an index set here)</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">matlab_to_python_index</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">isarray</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="c1"># now check amdissibility condition and add what&#39;s missing. Print a warning if needed</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">row_max</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">adm</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">## True</span>
+    <span class="k">while</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="n">row_max</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">row</span><span class="p">,:]</span> <span class="c1">#.copy() # [:] returns a view, but copy can be omitted here</span>
+        <span class="n">is_adm</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">missing_set</span> <span class="o">=</span> <span class="n">check_index_admissibility</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+        <span class="c1"># if it is not admissible, add what&#39;s needed to the bottom of C</span>
+        <span class="c1"># and increase row_max, so that the new indices will also be checked.</span>
+        <span class="c1"># So we don&#39;t sort the C after the update, otherwise I am not sure I am</span>
+        <span class="c1"># checking everything</span>
+        <span class="k">if</span> <span class="n">is_adm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># update C and counter</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">safe_vstack</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">missing_set</span><span class="p">)</span>
+            <span class="n">row_max</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># print a warning</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The set is not admissible. Adding: </span><span class="si">{</span><span class="n">python_to_matlab_index</span><span class="p">(</span><span class="n">missing_set</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">matlab_idx</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">missing_set</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># record non admissibility has been found</span>
+            <span class="n">adm</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">## False</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">isarray</span><span class="p">:</span>
+        <span class="c1"># finally, sort C</span>
+        <span class="n">C</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">sortrows</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">matlab_idx</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">python_to_matlab_index</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">adm</span><span class="p">,</span> <span class="n">C</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

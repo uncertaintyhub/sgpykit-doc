@@ -1,0 +1,18 @@
+sgpykit.util.struct
+===================
+
+.. automodule:: sgpykit.util.struct
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      is_list_math_equal
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Struct
+   

@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.converter_functions &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.tools.idxset_functions" href="sgpykit.tools.idxset_functions.html" />
+    <link rel="prev" title="sgpykit.tools" href="sgpykit.tools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.tools.converter_functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.converter_functions.asreduced"><code class="docutils literal notranslate"><span class="pre">asreduced()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.converter_functions.tensor_to_sparse"><code class="docutils literal notranslate"><span class="pre">tensor_to_sparse()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.idxset_functions.html">sgpykit.tools.idxset_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.knots_functions.html">sgpykit.tools.knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.lev2knots_functions.html">sgpykit.tools.lev2knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.polynomials_functions.html">sgpykit.tools.polynomials_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.rescaling_functions.html">sgpykit.tools.rescaling_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.type_and_property_check_functions.html">sgpykit.tools.type_and_property_check_functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.tools.html">sgpykit.tools</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.converter_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.tools.converter_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.tools.converter_functions">
+<span id="sgpykit-tools-converter-functions"></span><h1>sgpykit.tools.converter_functions<a class="headerlink" href="#module-sgpykit.tools.converter_functions" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.converter_functions.asreduced" title="sgpykit.tools.converter_functions.asreduced"><code class="xref py py-obj docutils literal notranslate"><span class="pre">asreduced</span></code></a>(pts_list[, wgs_list])</p></td>
+<td><p>Construct a reduced sparse grid structure from given points and weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.converter_functions.tensor_to_sparse" title="sgpykit.tools.converter_functions.tensor_to_sparse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_to_sparse</span></code></a>(T[, idx])</p></td>
+<td><p>Convert a tensor grid into a sparse grid structure.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.converter_functions.asreduced">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.converter_functions.</span></span><span class="sig-name descname"><span class="pre">asreduced</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgs_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/converter_functions/asreduced.html#asreduced"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.converter_functions.asreduced" title="Link to this definition"></a></dt>
+<dd><p>Construct a reduced sparse grid structure from given points and weights.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pts_list</strong><span class="classifier">array_like</span></dt><dd><p>List of knot points. The “knots” field of the returned
+sparse grid structure is set to this list.</p>
+</dd>
+<dt><strong>wgs_list</strong><span class="classifier">array_like, optional</span></dt><dd><p>List of weights corresponding to the knot points. If provided, the
+“weights” field of the returned sparse grid structure is set to this list. The
+default is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>S</strong><span class="classifier">struct</span></dt><dd><p>A reduced sparse grid structure with the following fields:
+- knots : array_like</p>
+<blockquote>
+<div><p>The knot points.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>weights<span class="classifier">array_like</span></dt><dd><p>The weights corresponding to the knot points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>size<span class="classifier">int</span></dt><dd><p>The number of knot points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n<span class="classifier">list</span></dt><dd><p>Empty list.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>m<span class="classifier">list</span></dt><dd><p>Empty list.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the number of points and weights are different.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The knots in pts_list are assumed to be all different; the list is not
+checked for duplicates.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.converter_functions.tensor_to_sparse">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.converter_functions.</span></span><span class="sig-name descname"><span class="pre">tensor_to_sparse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/converter_functions/tensor_to_sparse.html#tensor_to_sparse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.converter_functions.tensor_to_sparse" title="Link to this definition"></a></dt>
+<dd><p>Convert a tensor grid into a sparse grid structure.</p>
+<p>This function converts a tensor grid into a sparse grid structure of the same type
+as CREATE_SPARSE_GRID, by adding the missing fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>T</strong><span class="classifier">Struct</span></dt><dd><p>The tensor grid to be converted.</p>
+</dd>
+<dt><strong>idx</strong><span class="classifier">array_like, optional</span></dt><dd><p>The index vector. If not provided, it will be computed based on the knots per dimension.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>S</strong><span class="classifier">Struct or StructArray</span></dt><dd><p>The sparse grid structure with added fields.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>The function copies the fields of T into S and adds the following:</dt><dd><ul class="simple">
+<li><p>S.coeff = 1</p></li>
+<li><p>S.idx = vector with idx(i) = length(T.knots_per_dim{i}) if idx is not provided</p></li>
+<li><p>S.idx = idx if idx is provided</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.tools.html" class="btn btn-neutral float-left" title="sgpykit.tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.tools.idxset_functions.html" class="btn btn-neutral float-right" title="sgpykit.tools.idxset_functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.main.reduce_sparse_grid &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.main.reduce_sparse_grid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.main.reduce_sparse_grid</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.detect_insufficient_tolerance</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_insufficient_tolerance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.src.mysortrows</span><span class="w"> </span><span class="kn">import</span> <span class="n">mysortrows</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">matlab</span>
+
+
+<div class="viewcode-block" id="reduce_sparse_grid">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.main.html#sgpykit.main.reduce_sparse_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reduce_sparse_grid</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reduce a sparse grid by removing duplicate points within a given tolerance.</span>
+
+<span class="sd">    Given a sparse grid stored as a list of tensor grids, this function generates a</span>
+<span class="sd">    reduced structure containing only non-repeated points and corresponding weights.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    S : dict or object</span>
+<span class="sd">        Sparse grid structure with fields:</span>
+<span class="sd">        - knots: list of tensor grid knots</span>
+<span class="sd">        - weights: list of corresponding weights</span>
+<span class="sd">    tol : float, optional</span>
+<span class="sd">        Tolerance to identify coincident points (default is 1e-14)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Sr : dict or object</span>
+<span class="sd">        Reduced sparse grid structure with fields:</span>
+<span class="sd">        - knots: list of non-repeated knots</span>
+<span class="sd">        - weights: list of corresponding weights</span>
+<span class="sd">        - size: number of non-repeated knots</span>
+<span class="sd">        - n: forward map from [S.knots] to Sr.knots</span>
+<span class="sd">        - m: inverse map from Sr.knots to [S.knots]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">knots</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">knots_as_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">knots</span><span class="p">)</span>  <span class="c1"># TODO: check above might be not sufficient, need more like ismatrix(S.knots)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">knots_as_matrix</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">knots</span>
+    <span class="n">kk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">knots_as_matrix</span><span class="p">))</span>
+    <span class="n">ww</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">weights</span><span class="p">)))</span>
+    <span class="c1"># first of all, a safety check: are we using a sufficiently fine tol when detecting identical points?</span>
+    <span class="n">detect_insufficient_tolerance</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+    <span class="c1"># first, I order the rows of kk in lexicographic order. If I use mysortrows then two rows like</span>
+    <span class="c1"># [a b c d]</span>
+    <span class="c1"># [a-t b c+t d]</span>
+    <span class="c1"># are considered equal (if t &lt; tol ) and therefore placed one after the other</span>
+    <span class="c1">#[kk_ordered,i]=sortrows(kk);</span>
+    <span class="c1"># i is an index vector that maps kk into kk_ordered, i.e. kk[i,:]==kk_ordered</span>
+    <span class="c1">#[kk_ordered,i]=mysortrows(kk,tol/size(kk,2)); # this will not work properly if more than 10 rv are used, the</span>
+    <span class="c1">#tol will be too small!</span>
+    <span class="n">kk_ordered</span><span class="p">,</span><span class="n">i</span> <span class="o">=</span> <span class="n">mysortrows</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+
+    <span class="c1"># next I take the difference of two consecutive rows. if the difference is small, then the rows are the same, i.e. the knot is the same</span>
+    <span class="n">dkk_ordered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">kk_ordered</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># I measure the difference with infty norm instead of L2 norm:</span>
+    <span class="c1"># i take  the maximum component of each row (2 means &quot;operate on columns&quot;):</span>
+    <span class="c1">#       max(abs(dkk_ordered),[],2)</span>
+    <span class="c1"># then I want to see which ones have this max bigger than tol</span>
+    <span class="c1">#       j*=max(abs(dkk_ordered),[],2)&gt;tol</span>
+    <span class="c1"># this command returns a vector of True and false</span>
+    <span class="c1">#       j*=[1 1 0 1 1]</span>
+    <span class="c1"># this means that 2nd multiindex is different from 1st, 3rd from 2nd, but 4th is equal to 3rd ( diff(3)=v(4)-v(3) ). So I shouldn&#39;t take it.</span>
+    <span class="c1"># How do I use this j* to build a vector j with the rows that I have to select from kk?</span>
+    <span class="c1"># I could use only the rows of j* that are True</span>
+    <span class="c1">#       j=find((j*==True))</span>
+    <span class="c1">#       kk_reduced=kk_order[j,:],</span>
+    <span class="c1"># NB</span>
+    <span class="c1">#       I can shortcut find((j*==True)) with  find(j*)</span>
+    <span class="c1"># so that I take rows 1,2, 4 but not 3.</span>
+    <span class="c1"># If I do like this, I forget the last row!! (diff has 1 row less than kk). So I add a non zero difference at the end, and come to</span>
+    <span class="c1"># matlab: j=find([max(abs(dkk_ordered),[],2)&gt;tol;2*tol]);</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dkk_ordered</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">tol</span><span class="p">])))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#j=find([sqrt(sum(dkk_ordered.^2,2))&gt;tol;2*tol]); #L2 norm</span>
+
+    <span class="c1"># now I can create the reduced knots</span>
+    <span class="n">kk_reduced</span> <span class="o">=</span> <span class="n">kk_ordered</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span>
+    <span class="c1"># in the same way, I pick up only the j entries of the indeces vector i.</span>
+    <span class="n">index_reduced</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="c1"># in this way I have a mapping from the original set kk to the reduced set kk_reduced:</span>
+    <span class="c1"># i.e. kk[index_reduced,:]==kk_reduced.</span>
+    <span class="c1"># this means that:</span>
+    <span class="c1">#   -&gt; lenght(index_reduced) &lt; size(kk,1)</span>
+    <span class="c1">#   -&gt; index_reduced is not sorted</span>
+
+    <span class="c1"># I also need the inverse mapping, i.e. how to reconstruct the original kk given kk_reduced. This is needed for the computation of weights</span>
+    <span class="c1"># associated to each knot</span>
+
+    <span class="c1">### naif solution</span>
+
+    <span class="c1"># invindex has to be of the same length than kk and kk_ordered.</span>
+    <span class="c1"># NB: length(i)==size(kk,1) as it is the mapping from kk to kk_ordered</span>
+
+    <span class="n">invindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># I build invindex working on kk_ordered: if for example</span>
+    <span class="c1"># j=[1 2 4 5 7]</span>
+    <span class="c1"># then it means that knot 1 will be picked up, and placed in position 1  in kk_reduced. Same for knot 2.</span>
+    <span class="c1"># Conversely knot 3 won&#39;t be picked up, and 4 will be placed instead in position 3 ! Then it means that knot 3 and 4 will have a single</span>
+    <span class="c1"># instance in kk_reduced, and the position on this image in kk_reduced is written in invindex. i.e. so far</span>
+    <span class="c1"># invindex=[1 2 3 3 4 5 5].</span>
+    <span class="c1"># I read this as &quot;element in position k in kk_ordered becomes element invindex(k) in kk_reduced&quot;</span>
+
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">)):</span>
+        <span class="n">invindex</span><span class="p">[</span><span class="n">k</span><span class="p">:</span><span class="n">j</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># then I go back to the original kk. I go from kk to kk_ordered with the map i: kk[i,:]==kk_ordered.</span>
+    <span class="c1"># So far invindex goes from kk_ordered to kk_reduced, and I would like to permute invindex with i^-1, to go back</span>
+    <span class="c1"># to the order of kk:</span>
+    <span class="c1"># invindex_kk=invindex(i^-1). (@)</span>
+    <span class="c1"># I can do like this: say that</span>
+    <span class="c1"># i=[3 1 2], invindex=[1 1 2]</span>
+    <span class="c1"># then kk[3,:] is the 1st row of kk_ordered, and goes in the 1st row of kk_reduced. Then from position 1 of i and invindex I get</span>
+    <span class="c1"># invindex_kk(3)=invindex(1)</span>
+    <span class="c1"># and similar, 1st row of kk -&gt; 2nd row of kk_ordered -&gt; 1st row of kk_reduced, then</span>
+    <span class="c1"># invindex_kk(1)=invindex(2)</span>
+    <span class="c1"># therefore in general</span>
+    <span class="c1"># invindex_kk(i)=invindex (that is, inverting @)&lt;--------------- in short, invindex_kk permuted as i gives invindex</span>
+    <span class="c1"># Then, instead of building two vectors, invindex and invindex_kk, i overwrite the former with the latter</span>
+    <span class="c1">## copy required otherwise overlapping memory access will lead to wrong results (dont: invindex[i] = invindex)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">invindex</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">invindex</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="c1"># The usage of invindex is:</span>
+    <span class="c1"># &quot;element in position k of kk goes in position invindex(k) in kk_reduced&quot;</span>
+
+    <span class="n">nb_knots_reduced</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">index_reduced</span><span class="p">)</span>
+    <span class="n">Sr</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">struct</span><span class="p">(</span>
+        <span class="n">knots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">kk_reduced</span><span class="p">),</span>
+        <span class="n">m</span><span class="o">=</span><span class="n">index_reduced</span><span class="p">,</span> <span class="c1"># 0-based index</span>
+        <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nb_knots_reduced</span><span class="p">),</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">invindex</span><span class="p">,</span> <span class="c1"># 0-based index, finally, i use invindex to compute weights</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">nb_knots_reduced</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">idx_reduced</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">invindex</span><span class="p">):</span>
+        <span class="n">Sr</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">idx_reduced</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ww</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">Sr</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

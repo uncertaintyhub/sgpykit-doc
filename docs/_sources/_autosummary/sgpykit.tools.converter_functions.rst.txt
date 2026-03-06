@@ -1,0 +1,13 @@
+sgpykit.tools.converter\_functions
+==================================
+
+.. automodule:: sgpykit.tools.converter_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      asreduced
+      tensor_to_sparse
+   

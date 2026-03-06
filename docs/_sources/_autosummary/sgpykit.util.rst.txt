@@ -1,0 +1,28 @@
+sgpykit.util
+============
+
+.. automodule:: sgpykit.util
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      WildcardImportWarning
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   cell
+   checks
+   create_sparse_grid_construct
+   definitions
+   log
+   matlab
+   misc
+   plot
+   struct
+   struct_array

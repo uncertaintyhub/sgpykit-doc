@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.plot &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.util.struct" href="sgpykit.util.struct.html" />
+    <link rel="prev" title="sgpykit.util.misc" href="sgpykit.util.misc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.cell.html">sgpykit.util.cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.checks.html">sgpykit.util.checks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.create_sparse_grid_construct.html">sgpykit.util.create_sparse_grid_construct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.definitions.html">sgpykit.util.definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.log.html">sgpykit.util.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.matlab.html">sgpykit.util.matlab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.misc.html">sgpykit.util.misc</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.util.plot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.check_and_convert_to_fig3d"><code class="docutils literal notranslate"><span class="pre">check_and_convert_to_fig3d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.figure_create"><code class="docutils literal notranslate"><span class="pre">figure_create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.gcf"><code class="docutils literal notranslate"><span class="pre">gcf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.grid"><code class="docutils literal notranslate"><span class="pre">grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.parse_matlab_plot_args"><code class="docutils literal notranslate"><span class="pre">parse_matlab_plot_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.plot_3d"><code class="docutils literal notranslate"><span class="pre">plot_3d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.plot_scatter_3d"><code class="docutils literal notranslate"><span class="pre">plot_scatter_3d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.set_legend"><code class="docutils literal notranslate"><span class="pre">set_legend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.util.plot.view"><code class="docutils literal notranslate"><span class="pre">view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct.html">sgpykit.util.struct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.util.struct_array.html">sgpykit.util.struct_array</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.util.html">sgpykit.util</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.plot</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.util.plot.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.util.plot">
+<span id="sgpykit-util-plot"></span><h1>sgpykit.util.plot<a class="headerlink" href="#module-sgpykit.util.plot" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.plot.check_and_convert_to_fig3d" title="sgpykit.util.plot.check_and_convert_to_fig3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_and_convert_to_fig3d</span></code></a>(ax)</p></td>
+<td><p>Check if the given axis is a 3D axis, and convert it if necessary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.plot.clear" title="sgpykit.util.plot.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.plot.figure_create" title="sgpykit.util.plot.figure_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">figure_create</span></code></a>([nrows, ncols, figsize, dims])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.plot.gcf" title="sgpykit.util.plot.gcf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gcf</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.plot.grid" title="sgpykit.util.plot.grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid</span></code></a>([flag])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_all_args_to_kwargs</span></code>(args, kwargs[, ...])</p></td>
+<td><p>Merge positional and keyword arguments into a single dictionary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.plot.parse_matlab_plot_args" title="sgpykit.util.plot.parse_matlab_plot_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_matlab_plot_args</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Parse MATLAB-style plot arguments into a format string and keyword arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.plot.plot" title="sgpykit.util.plot.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(ax, x, y, *args, **kwargs)</p></td>
+<td><p>Plot data on a given axis with optional formatting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.plot.plot_3d" title="sgpykit.util.plot.plot_3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_3d</span></code></a>(ax, x, y, z, *args, **kwargs)</p></td>
+<td><p>Create a 3D line plot on a given axis with optional formatting.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.plot.plot_scatter_3d" title="sgpykit.util.plot.plot_scatter_3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_scatter_3d</span></code></a>(ax, x, y, z, *args, **kwargs)</p></td>
+<td><p>Create a 3D scatter plot on a given axis with optional formatting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.util.plot.set_legend" title="sgpykit.util.plot.set_legend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_legend</span></code></a>(location)</p></td>
+<td><p>Set the legend location in Matplotlib based on MATLAB's legend location strings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.util.plot.view" title="sgpykit.util.plot.view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">view</span></code></a>(azimuth, elevation)</p></td>
+<td><p>Set the view angle for a 3D plot in Matplotlib.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Axes3D</span></code>(fig[, rect, elev, azim, roll, ...])</p></td>
+<td><p>3D Axes object.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.check_and_convert_to_fig3d">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">check_and_convert_to_fig3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#check_and_convert_to_fig3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.check_and_convert_to_fig3d" title="Link to this definition"></a></dt>
+<dd><p>Check if the given axis is a 3D axis, and convert it if necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axis to check and convert.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>matplotlib.axes.Axes3D</dt><dd><p>The 3D axis.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.clear">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.figure_create">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">figure_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#figure_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.figure_create" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.gcf">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">gcf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#gcf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.gcf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.grid">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'on'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.grid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.parse_matlab_plot_args">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">parse_matlab_plot_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#parse_matlab_plot_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.parse_matlab_plot_args" title="Link to this definition"></a></dt>
+<dd><p>Parse MATLAB-style plot arguments into a format string and keyword arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Positional arguments for formatting.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Keyword arguments for formatting.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing the format string and a dictionary of keyword arguments.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.plot">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.plot" title="Link to this definition"></a></dt>
+<dd><p>Plot data on a given axis with optional formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axis to plot on.</p>
+</dd>
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The x-coordinates of the data points.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like</span></dt><dd><p>The y-coordinates of the data points.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Additional positional arguments for formatting.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments for formatting.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list of matplotlib.lines.Line2D</dt><dd><p>The plotted line objects.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.plot_3d">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">plot_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#plot_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.plot_3d" title="Link to this definition"></a></dt>
+<dd><p>Create a 3D line plot on a given axis with optional formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes3D</span></dt><dd><p>The 3D axis to plot on.</p>
+</dd>
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The x-coordinates of the data points.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like</span></dt><dd><p>The y-coordinates of the data points.</p>
+</dd>
+<dt><strong>z</strong><span class="classifier">array_like</span></dt><dd><p>The z-coordinates of the data points.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Additional positional arguments for formatting.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments for formatting.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>matplotlib.lines.Line2D</dt><dd><p>The plotted line object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.plot_scatter_3d">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">plot_scatter_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#plot_scatter_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.plot_scatter_3d" title="Link to this definition"></a></dt>
+<dd><p>Create a 3D scatter plot on a given axis with optional formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes3D</span></dt><dd><p>The 3D axis to plot on.</p>
+</dd>
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The x-coordinates of the data points.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like</span></dt><dd><p>The y-coordinates of the data points.</p>
+</dd>
+<dt><strong>z</strong><span class="classifier">array_like</span></dt><dd><p>The z-coordinates of the data points.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple</span></dt><dd><p>Additional positional arguments for formatting.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments for formatting.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>matplotlib.collections.PathCollection</dt><dd><p>The scatter plot object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.set_legend">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">set_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#set_legend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.set_legend" title="Link to this definition"></a></dt>
+<dd><p>Set the legend location in Matplotlib based on MATLAB’s legend location strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>location</strong><span class="classifier">str</span></dt><dd><p>The desired location for the legend. Options include:
+‘NorthEast’, ‘NorthWest’, ‘SouthEast’, ‘SouthWest’,
+‘North’, ‘South’, ‘East’, ‘West’, ‘Best’,
+‘NorthOutside’, ‘SouthOutside’, ‘EastOutside’, ‘WestOutside’.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the provided location is not valid.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.util.plot.view">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.util.plot.</span></span><span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">azimuth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/util/plot.html#view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.util.plot.view" title="Link to this definition"></a></dt>
+<dd><p>Set the view angle for a 3D plot in Matplotlib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>azimuth</strong><span class="classifier">float</span></dt><dd><p>The azimuthal angle in degrees.</p>
+</dd>
+<dt><strong>elevation</strong><span class="classifier">float</span></dt><dd><p>The elevation angle in degrees.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.util.misc.html" class="btn btn-neutral float-left" title="sgpykit.util.misc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.util.struct.html" class="btn btn-neutral float-right" title="sgpykit.util.struct" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+sgpykit.src
+===========
+
+.. automodule:: sgpykit.src
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      GK_lev_table
+      combination_technique
+      compare_sparse_grids
+      compute_modal_tensor
+      delta_to_combitec
+      detect_insufficient_tolerance
+      find_lexicographic
+      find_lexicographic_tol
+      generate_pattern
+      lookup_merge_and_diff
+      mysortrows
+      plot_idx_status
+      tensor_grid
+   

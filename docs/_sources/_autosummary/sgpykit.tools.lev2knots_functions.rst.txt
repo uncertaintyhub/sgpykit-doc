@@ -1,0 +1,16 @@
+sgpykit.tools.lev2knots\_functions
+==================================
+
+.. automodule:: sgpykit.tools.lev2knots_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      lev2knots_2step
+      lev2knots_GK
+      lev2knots_doubling
+      lev2knots_lin
+      lev2knots_tripling
+   

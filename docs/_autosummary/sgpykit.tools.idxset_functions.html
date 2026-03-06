@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.idxset_functions &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sgpykit.tools.knots_functions" href="sgpykit.tools.knots_functions.html" />
+    <link rel="prev" title="sgpykit.tools.converter_functions" href="sgpykit.tools.converter_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">sgpykit API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.main.html">sgpykit.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.src.html">sgpykit.src</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sgpykit.tools.html">sgpykit.tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.converter_functions.html">sgpykit.tools.converter_functions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgpykit.tools.idxset_functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.check_index_admissibility"><code class="docutils literal notranslate"><span class="pre">check_index_admissibility()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.check_set_admissibility"><code class="docutils literal notranslate"><span class="pre">check_set_admissibility()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.define_functions_for_rule"><code class="docutils literal notranslate"><span class="pre">define_functions_for_rule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.fast_TD_set"><code class="docutils literal notranslate"><span class="pre">fast_TD_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.multiidx_box_set"><code class="docutils literal notranslate"><span class="pre">multiidx_box_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.multiidx_gen"><code class="docutils literal notranslate"><span class="pre">multiidx_gen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sgpykit.tools.idxset_functions.plot_multiidx_set"><code class="docutils literal notranslate"><span class="pre">plot_multiidx_set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.knots_functions.html">sgpykit.tools.knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.lev2knots_functions.html">sgpykit.tools.lev2knots_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.polynomials_functions.html">sgpykit.tools.polynomials_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.rescaling_functions.html">sgpykit.tools.rescaling_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgpykit.tools.type_and_property_check_functions.html">sgpykit.tools.type_and_property_check_functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgpykit.util.html">sgpykit.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">sgpykit API</a></li>
+          <li class="breadcrumb-item"><a href="sgpykit.tools.html">sgpykit.tools</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.idxset_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/sgpykit.tools.idxset_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sgpykit.tools.idxset_functions">
+<span id="sgpykit-tools-idxset-functions"></span><h1>sgpykit.tools.idxset_functions<a class="headerlink" href="#module-sgpykit.tools.idxset_functions" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.check_index_admissibility" title="sgpykit.tools.idxset_functions.check_index_admissibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_index_admissibility</span></code></a>(idx, idx_set[, ...])</p></td>
+<td><p>Check if a multiindex is admissible with respect to an index set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.check_set_admissibility" title="sgpykit.tools.idxset_functions.check_set_admissibility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_set_admissibility</span></code></a>(I[, matlab_idx])</p></td>
+<td><p>Check if a given index set is admissible and return the admissible set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.define_functions_for_rule" title="sgpykit.tools.idxset_functions.define_functions_for_rule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_functions_for_rule</span></code></a>(rule, input2)</p></td>
+<td><p>Define the level-to-knots and index set functions for a given sparse grid rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.fast_TD_set" title="sgpykit.tools.idxset_functions.fast_TD_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fast_TD_set</span></code></a>(N, w[, base])</p></td>
+<td><p>Generate the total-degree multi-index set TD(w) in N dimensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.multiidx_box_set" title="sgpykit.tools.idxset_functions.multiidx_box_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiidx_box_set</span></code></a>(shape[, min_idx])</p></td>
+<td><p>Generate a set of multi-dimensional box indices up to a given shape.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.multiidx_gen" title="sgpykit.tools.idxset_functions.multiidx_gen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiidx_gen</span></code></a>(N, rule, w[, base, multiidx, ...])</p></td>
+<td><p>Generate all multi-indexes of length N with elements such that rule(M_I) &lt;= w.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sgpykit.tools.idxset_functions.plot_multiidx_set" title="sgpykit.tools.idxset_functions.plot_multiidx_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_multiidx_set</span></code></a>(ax, I, *args, **kwargs)</p></td>
+<td><p>Plot the index set I for 2D and 3D cases.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.check_index_admissibility">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">check_index_admissibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/check_index_admissibility.html#check_index_admissibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.check_index_admissibility" title="Link to this definition"></a></dt>
+<dd><p>Check if a multiindex is admissible with respect to an index set.</p>
+<p>Given a multiindex <cite>idx</cite> as a row vector, checks if it is admissible with
+respect to the index set <cite>idx_set</cite> (matrix with indices as rows). If it is
+admissible, returns <cite>is_adm = True</cite>. Otherwise, returns <cite>is_adm = False</cite>
+and the function will return the <cite>completed_set</cite> and a list of the indices
+added stored in <cite>missing_set</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>idx</strong><span class="classifier">array_like</span></dt><dd><p>Multiindex to check for admissibility.</p>
+</dd>
+<dt><strong>idx_set</strong><span class="classifier">array_like</span></dt><dd><p>Matrix of indices (rows) representing the index set.</p>
+</dd>
+<dt><strong>sort_option</strong><span class="classifier">str, optional</span></dt><dd><p>If ‘sorting’, returns <cite>completed_set</cite> and <cite>missing_set</cite> sorted in
+lexicographic order.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>is_adm</strong><span class="classifier">bool</span></dt><dd><p>True if the multiindex is admissible, False otherwise.</p>
+</dd>
+<dt><strong>completed_set</strong><span class="classifier">ndarray</span></dt><dd><p>The completed index set after adding missing indices.</p>
+</dd>
+<dt><strong>missing_set</strong><span class="classifier">ndarray</span></dt><dd><p>The list of indices added to make the set admissible.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The starting <cite>idx_set</cite> is assumed to be admissible, so its multi-indices
+will not be checked for admissibility. However, being admissible is not
+necessary for this function to work, since the core is <cite>setdiff</cite>, which does
+not assume any ordering.
+Assumes 0-based indexing.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.check_set_admissibility">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">check_set_admissibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matlab_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/check_set_admissibility.html#check_set_admissibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.check_set_admissibility" title="Link to this definition"></a></dt>
+<dd><p>Check if a given index set is admissible and return the admissible set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I</strong><span class="classifier">array_like</span></dt><dd><p>The index set to check for admissibility.</p>
+</dd>
+<dt><strong>matlab_idx</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, the input index set I is assumed to be in 1-based index format.
+C will use 1-based indexing then.
+Default is True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>adm</strong><span class="classifier">bool</span></dt><dd><p>True if the input index set is admissible, False otherwise.</p>
+</dd>
+<dt><strong>C</strong><span class="classifier">ndarray</span></dt><dd><p>The admissible index set in lexicographic order. If the input set is not
+admissible, the missing indices are added to make it admissible.
+If matlab_idx is True, C will use 1-based indexing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function checks each index in the set for admissibility and adds any missing
+indices to ensure the set is admissible. A warning is logged if the set is not
+admissible and indices are added.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.define_functions_for_rule">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">define_functions_for_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/define_functions_for_rule.html#define_functions_for_rule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.define_functions_for_rule" title="Link to this definition"></a></dt>
+<dd><p>Define the level-to-knots and index set functions for a given sparse grid rule.</p>
+<p>This function sets the functions <cite>lev2nodes</cite> and <cite>idxset</cite> to be used in
+<cite>create_sparse_grid</cite> to build the desired isotropic or anisotropic sparse grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rule</strong><span class="classifier">str</span></dt><dd><p>The rule for constructing the sparse grid. Can be one of the following:
+‘TP’, ‘TD’, ‘HC’, ‘SM’.</p>
+</dd>
+<dt><strong>input2</strong><span class="classifier">int or array_like</span></dt><dd><p>If scalar, the number of variables (N). If array_like, the rates vector
+for anisotropic sparse grids.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>lev2nodes</strong><span class="classifier">function</span></dt><dd><p>A function that maps a level to the number of knots.</p>
+</dd>
+<dt><strong>idxset</strong><span class="classifier">function</span></dt><dd><p>A function that computes the index set for a given multi-index.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the rule is unknown.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.fast_TD_set">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">fast_TD_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/fast_TD_set.html#fast_TD_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.fast_TD_set" title="Link to this definition"></a></dt>
+<dd><p>Generate the total-degree multi-index set TD(w) in N dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Number of dimensions.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">int</span></dt><dd><p>Total degree.</p>
+</dd>
+<dt><strong>base</strong><span class="classifier">int, optional</span></dt><dd><p>Base index to offset the multiindices (default is 0).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray or int</dt><dd><p>The multiindex set as a numpy array (or scalar if TDsize == 1 and N == 1).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.multiidx_box_set">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">multiidx_box_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/multiidx_box_set.html#multiidx_box_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.multiidx_box_set" title="Link to this definition"></a></dt>
+<dd><p>Generate a set of multi-dimensional box indices up to a given shape.</p>
+<p>Given an index <cite>shape</cite>, generates <cite>C_with</cite>, the box indices set up to that <cite>shape</cite>.
+<cite>min_idx</cite> is either 0 or 1. <cite>C_without</cite> is <cite>C_with</cite> without <cite>shape</cite> itself.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>shape</strong><span class="classifier">array_like</span></dt><dd><p>The shape of the box. Can be a scalar or a list/array of non-negative integers.</p>
+</dd>
+<dt><strong>min_idx</strong><span class="classifier">int</span></dt><dd><p>Minimum index value, either 0 or 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>tuple</dt><dd><p>A tuple containing two elements:
+- <cite>C_with</cite> : ndarray</p>
+<blockquote>
+<div><p>The full set of multi-indices up to <cite>shape</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt><cite>C_without</cite><span class="classifier">ndarray</span></dt><dd><p>The set of multi-indices without the last index.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If <cite>shape</cite> is a column vector with more than one entry, it is converted to a row vector
+with all entries equal to the minimum value of <cite>shape</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.multiidx_gen">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">multiidx_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiidx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MULTI_IDX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/multiidx_gen.html#multiidx_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.multiidx_gen" title="Link to this definition"></a></dt>
+<dd><p>Generate all multi-indexes of length N with elements such that rule(M_I) &lt;= w.</p>
+<p>This function recursively explores the tree of all possible multi-indexes and
+stores the valid ones as rows of the matrix MULTI_IDX. The indices start from
+the specified base (either 0 or 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>N</strong><span class="classifier">int</span></dt><dd><p>Length of the multi-index.</p>
+</dd>
+<dt><strong>rule</strong><span class="classifier">callable</span></dt><dd><p>Function that evaluates the rule for a given multi-index.</p>
+</dd>
+<dt><strong>w</strong><span class="classifier">float</span></dt><dd><p>Threshold for the rule.</p>
+</dd>
+<dt><strong>base</strong><span class="classifier">int, optional</span></dt><dd><p>Starting index for the multi-index elements (default is 0).</p>
+</dd>
+<dt><strong>multiidx</strong><span class="classifier">list, optional</span></dt><dd><p>Current multi-index being constructed (default is None).</p>
+</dd>
+<dt><strong>MULTI_IDX</strong><span class="classifier">list or numpy.ndarray, optional</span></dt><dd><p>Accumulator for valid multi-indexes (default is None).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray or int</dt><dd><p>Matrix of valid multi-indexes (or scalar if single element).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function works recursively, exploring in depth the tree of all possible
+multi-indexes. The starting point is the empty multi-index: [], and MULTI_IDX
+is empty at the first call of the function. That’s why the call from keyboard
+comes with [], [] as input argument: multiidx_gen(L,rule,w,[],[]).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sgpykit.tools.idxset_functions.plot_multiidx_set">
+<span class="sig-prename descclassname"><span class="pre">sgpykit.tools.idxset_functions.</span></span><span class="sig-name descname"><span class="pre">plot_multiidx_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sgpykit/tools/idxset_functions/plot_multiidx_set.html#plot_multiidx_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sgpykit.tools.idxset_functions.plot_multiidx_set" title="Link to this definition"></a></dt>
+<dd><p>Plot the index set I for 2D and 3D cases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>I</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The index set to plot, shape (n, N) where N is the dimension.</p>
+</dd>
+<dt><strong>*args</strong><span class="classifier">tuple, optional</span></dt><dd><p>Additional positional arguments passed to the plot function.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional keyword arguments passed to the plot function.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>h</strong><span class="classifier">matplotlib.collections.PathCollection or matplotlib.lines.Line2D</span></dt><dd><p>The plot handle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the dimension of I is greater than 3.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sgpykit.tools.converter_functions.html" class="btn btn-neutral float-left" title="sgpykit.tools.converter_functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sgpykit.tools.knots_functions.html" class="btn btn-neutral float-right" title="sgpykit.tools.knots_functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.util.matlab &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.util.matlab</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.util.matlab</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">savemat</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.checks</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_numeric_scalar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_shape_of_cells</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.struct</span><span class="w"> </span><span class="kn">import</span> <span class="n">Struct</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.util.struct_array</span><span class="w"> </span><span class="kn">import</span> <span class="n">StructArray</span>
+
+
+<div class="viewcode-block" id="struct">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.struct">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">struct</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a Struct or StructArray from given arguments.</span>
+
+<span class="sd">    This function mimics MATLAB&#39;s struct behavior. If keyword arguments are provided,</span>
+<span class="sd">    it creates a Struct with the given fields. If positional arguments are provided,</span>
+<span class="sd">    it creates a Struct with fields from the even-indexed arguments and values from</span>
+<span class="sd">    the odd-indexed arguments. If cells are detected, it creates a StructArray.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Positional arguments for field-value pairs.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Keyword arguments for field-value pairs.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Struct or StructArray</span>
+<span class="sd">        The created struct or struct array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># like matlab: check if there are cells given, otherwise return a single Struct</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cellshape</span> <span class="o">=</span> <span class="n">get_shape_of_cells</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cellshape</span> <span class="o">=</span> <span class="n">get_shape_of_cells</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cellshape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Struct</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Struct</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">args</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">StructArray</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fieldnames">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.fieldnames">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fieldnames</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the field names of a Struct or StructArray.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : Struct or StructArray</span>
+<span class="sd">        The struct or struct array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        The list of field names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Struct</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># 2D case</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">struct</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">struct</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="cell">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.cell">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cell</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an empty cell (numpy) array with the given shape (empty nD-matrix).</span>
+
+<span class="sd">    2D cell objects can be flat indexed, e.g. c[0,2] or c[2].</span>
+<span class="sd">    Higher dimensions than 2D are not supported.</span>
+<span class="sd">    If shape is a single integer N, create a NxN cell</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    shape : int or tuple</span>
+<span class="sd">        The shape of the cell array. If an integer, creates a square cell array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Cell</span>
+<span class="sd">        The empty cell array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Cell</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Cell</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ce">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.ce">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ce</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replacement for the matlab {} operator to create cells.</span>
+<span class="sd">    The cell elements must be of same data type.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Elements to be placed in the cell array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Cell</span>
+<span class="sd">        The created cell array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result_cell</span> <span class="o">=</span> <span class="n">Cell</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">result_cell</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg</span>
+    <span class="k">return</span> <span class="n">result_cell</span></div>
+
+
+
+<div class="viewcode-block" id="iscell">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.iscell">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">iscell</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the given variable is a Cell.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : any</span>
+<span class="sd">        The variable to check.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the variable is a Cell, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">Cell</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="isstruct">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.isstruct">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">isstruct</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the given variable is an instance of Struct or StructArray.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : any</span>
+<span class="sd">        The variable to check.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the variable is an instance of Struct or StructArray, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">Struct</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">StructArray</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="isfield">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.isfield">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">isfield</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">sel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the given field exists in the struct.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        The field name to check.</span>
+<span class="sd">    sel : Struct or StructArray</span>
+<span class="sd">        The struct or struct array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the field exists, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">fieldnames</span><span class="p">(</span><span class="n">sel</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="unique">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.unique">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Incomplete matlabs unique() function.</span>
+
+<span class="sd">    https://de.mathworks.com/help/matlab/ref/double.unique.html</span>
+<span class="sd">    - &#39;first&#39; and &#39;sorted&#39; are defaults</span>
+<span class="sd">    https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy-unique</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : array_like</span>
+<span class="sd">        Input array.</span>
+<span class="sd">    by : str, optional</span>
+<span class="sd">        The axis to return indices for repetitions. Default is None.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        The unique elements and their indices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">by</span> <span class="o">==</span> <span class="s1">&#39;first&#39;</span><span class="p">:</span>  <span class="c1"># which indices to return if repetitions</span>
+        <span class="n">by</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">by</span> <span class="o">==</span> <span class="s1">&#39;row&#39;</span><span class="p">:</span>
+        <span class="n">by</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">by</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.find">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find non-zero elements in an array.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : array_like</span>
+<span class="sd">        Input array.</span>
+<span class="sd">    n : int, optional</span>
+<span class="sd">        Maximum number of elements to return. Default is None.</span>
+<span class="sd">    direction : str, optional</span>
+<span class="sd">        Direction to search (&#39;first&#39; or &#39;last&#39;). Default is &#39;first&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Indices and values of non-zero elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># https://www.mathworks.com/help/matlab/ref/find.html?searchHighlight=find</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1">## Find non-zero elements</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="c1">## Sort based on direction</span>
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;last&#39;</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1">## Limit to n elements if specified</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">idx</span><span class="p">,</span> <span class="n">values</span></div>
+
+
+
+<div class="viewcode-block" id="setdiff">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.setdiff">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">setdiff</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;rows&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set difference of two arrays.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : array_like</span>
+<span class="sd">        First input array.</span>
+<span class="sd">    B : array_like</span>
+<span class="sd">        Second input array.</span>
+<span class="sd">    kind : str, optional</span>
+<span class="sd">        Type of set difference (&#39;rows&#39; or others). Default is &#39;rows&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        The set difference.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#return np.setdiff1d(var1, var2)</span>
+    <span class="k">if</span> <span class="s1">&#39;rows&#39;</span> <span class="ow">in</span> <span class="n">kind</span><span class="p">:</span>
+        <span class="c1"># Ensure A and B are numpy arrays</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+
+        <span class="c1"># Check if the number of columns in A and B are the same</span>
+        <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A and B must have the same number of columns.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Use a list comprehension to filter rows in A not in B</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">A</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">b_row</span><span class="p">)</span> <span class="k">for</span> <span class="n">b_row</span> <span class="ow">in</span> <span class="n">B</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">diff</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Not implemented yet.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="sortrows">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.sortrows">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sortrows</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sort rows of a matrix in ascending order.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : array_like</span>
+<span class="sd">        Input array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Sorted array and sorted indices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># matlab doc on sortrows(A):</span>
+    <span class="c1"># B = sortrows(A) sorts the rows of a matrix in ascending order based on the elements in the first column.</span>
+    <span class="c1"># When the first column contains repeated elements, sortrows sorts according to the values in the next column and</span>
+    <span class="c1"># repeats this behavior for succeeding equal values.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Reverse the order of columns for lexsort to sort by the first column first</span>
+    <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># Use these indices to sort the entire array</span>
+    <span class="n">sorted_array</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">sorted_array</span><span class="p">,</span> <span class="n">sorted_indices</span></div>
+
+
+
+<div class="viewcode-block" id="sort">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.sort">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;ascend&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sort an array in ascending or descending order.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arr : array_like</span>
+<span class="sd">        Input array.</span>
+<span class="sd">    axis : int, optional</span>
+<span class="sd">        Axis along which to sort. Default is None.</span>
+<span class="sd">    direction : str, optional</span>
+<span class="sd">        Direction to sort (&#39;ascend&#39; or &#39;descend&#39;). Default is &#39;ascend&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Sorted array and sorted indices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;ascend&#39;</span><span class="p">:</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s1">&#39;descend&#39;</span><span class="p">:</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;direction must be &#39;ascend&#39; or &#39;descend&#39;&quot;</span><span class="p">)</span>
+
+    <span class="n">sorted_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sorted_arr</span><span class="p">,</span> <span class="n">indices</span></div>
+
+
+
+<div class="viewcode-block" id="reshape">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.reshape">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reshape</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1"># TODO: to be removed</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reshape an array.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : array_like</span>
+<span class="sd">        Input array.</span>
+<span class="sd">    r : int or array_like</span>
+<span class="sd">        New shape or number of rows.</span>
+<span class="sd">    c : int, optional</span>
+<span class="sd">        Number of columns. Default is None.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Reshaped array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert input to numpy array if it&#39;s not already</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+    <span class="c1"># Flatten the input array</span>
+    <span class="c1"># @TODO: can we just use array.reshape() ?</span>
+    <span class="n">flat_arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">flat_arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot reshape array of size </span><span class="si">{</span><span class="n">flat_arr</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> into shape (</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">) (is </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2"> a list or nparray?)&quot;</span><span class="p">)</span>
+    <span class="c1"># Check if the total number of elements matches r * c</span>
+    <span class="k">if</span> <span class="n">flat_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">c</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot reshape array of size </span><span class="si">{</span><span class="n">flat_arr</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> into shape (</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Reshape the flattened array</span>
+    <span class="k">return</span> <span class="n">flat_arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="logical">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.logical">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">logical</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert array to boolean (0=false, else=true).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : array_like</span>
+<span class="sd">        Input array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Boolean array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># converts array to boolean (0=false, else=true)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="intersect">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.intersect">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">intersect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the intersection of two arrays.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        First input array.</span>
+<span class="sd">    y : array_like</span>
+<span class="sd">        Second input array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Common elements and their indices in the original arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Ensure inputs are NumPy arrays</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># Find unique elements in both arrays</span>
+    <span class="n">x_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># Find common elements</span>
+    <span class="n">common</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">x_unique</span><span class="p">,</span> <span class="n">y_unique</span><span class="p">)</span>
+
+    <span class="c1"># Find indices in original arrays</span>
+    <span class="n">x_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">x_unique</span><span class="p">,</span> <span class="n">common</span><span class="p">)</span>
+    <span class="n">y_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">y_unique</span><span class="p">,</span> <span class="n">common</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">common</span><span class="p">,</span> <span class="n">x_indices</span><span class="p">,</span> <span class="n">y_indices</span></div>
+
+
+
+<div class="viewcode-block" id="issorted">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.issorted">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">issorted</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;rows&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the matrix is sorted.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix : array_like</span>
+<span class="sd">        Input matrix.</span>
+<span class="sd">    typ : str, optional</span>
+<span class="sd">        Type of sorting to check. Default is &#39;rows&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the matrix is sorted, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if the matrix is empty</span>
+    <span class="k">if</span> <span class="n">matrix</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">typ</span> <span class="o">!=</span> <span class="s1">&#39;rows&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not implemented.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Lexicographical sort check using numpy&#39;s lexsort</span>
+    <span class="c1"># lexsort returns index list, and they should match index list 1:n when already sorted</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">)))</span></div>
+
+
+
+<span class="c1"># TODO: remove?</span>
+<div class="viewcode-block" id="fliplr">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.fliplr">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fliplr</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Flip the elements of the array from left to right.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arr : array_like</span>
+<span class="sd">        Input array to be flipped.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Flipped array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># For 1D arrays, simply reverse the array</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># For 2D arrays, flip each row from left to right</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input array must be 1D or 2D.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ifft">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.ifft">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ifft</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the inverse FFT of a 1D or 2D array, matching MATLAB&#39;s ifft() behavior.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arr : array_like</span>
+<span class="sd">        A 1D or 2D numpy array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        The inverse FFT of the input array.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the input array is not 1D or 2D.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># For 1D array, compute the inverse FFT</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># For 2D array, compute the inverse FFT of each column like MATLAB</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input array must be 1D or 2D.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="eig">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.eig">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">eig</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the eigenvalues and eigenvectors of a matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : array_like</span>
+<span class="sd">        Input matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Eigenvectors and eigenvalues.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># X are eigenvalues (already a vector of the diagonals)</span>
+    <span class="c1"># matlab would return X as matrix</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">x</span>  <span class="c1"># swap to get matlab behavior</span></div>
+
+
+
+<div class="viewcode-block" id="isnumeric">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.isnumeric">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">isnumeric</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the object is numeric.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : any</span>
+<span class="sd">        The object to check.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the object is numeric, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if the object is a NumPy array</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="c1"># Check if the dtype of the array is a numeric type</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="c1"># Check if the object is a single number (int, float, etc.)</span>
+    <span class="k">if</span> <span class="n">is_numeric_scalar</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Check if the object is a sequence (list, tuple, etc.) and all elements are numbers</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">is_numeric_scalar</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="save">
+<a class="viewcode-back" href="../../../_autosummary/sgpykit.util.matlab.html#sgpykit.util.matlab.save">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save NumPy arrays to a MATLAB file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The name of the file to save.</span>
+<span class="sd">    *args : tuple</span>
+<span class="sd">        Variable length argument list of strings and NumPy arrays.</span>
+<span class="sd">        The first argument is the filename, followed by pairs of variable names and arrays.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a dictionary to hold the data</span>
+    <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Iterate over the arguments in pairs</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">var_name</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">var_array</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">data_dict</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">var_array</span>
+
+    <span class="c1"># Save the dictionary to a MATLAB file</span>
+    <span class="n">savemat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

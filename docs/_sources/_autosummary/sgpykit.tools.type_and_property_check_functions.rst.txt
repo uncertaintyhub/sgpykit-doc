@@ -1,0 +1,18 @@
+sgpykit.tools.type\_and\_property\_check\_functions
+===================================================
+
+.. automodule:: sgpykit.tools.type_and_property_check_functions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      is_sparse_grid
+      is_tensor_grid
+      isequal_sparse_grids
+      isequal_tensor_grids
+      islexico
+      islexico_tol
+      isreduced
+   

@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sgpykit.tools.polynomials_functions.lagr_eval_multidim &mdash; sgpykit 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sgpykit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">sgpykit API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">sgpykit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sgpykit.tools.polynomials_functions.lagr_eval_multidim</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sgpykit.tools.polynomials_functions.lagr_eval_multidim</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sgpykit.tools.polynomials_functions.lagr_eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">lagr_eval</span>
+
+
+<div class="viewcode-block" id="lagr_eval_multidim">
+<a class="viewcode-back" href="../../../../_autosummary/sgpykit.tools.polynomials_functions.html#sgpykit.tools.polynomials_functions.lagr_eval_multidim">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">lagr_eval_multidim</span><span class="p">(</span><span class="n">current_knot</span><span class="p">,</span> <span class="n">knots_per_dim</span><span class="p">,</span> <span class="n">non_grid_points</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the multidimensional Lagrange function centered at current_knot in non_grid_points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    current_knot : array_like</span>
+<span class="sd">        The knot where the Lagrange function is centered.</span>
+<span class="sd">    knots_per_dim : list or array_like</span>
+<span class="sd">        List of arrays, where each array contains all the knots in each dimension.</span>
+<span class="sd">    non_grid_points : array_like</span>
+<span class="sd">        Matrix where each row is a point to be evaluated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    L : ndarray</span>
+<span class="sd">        The evaluated multidimensional Lagrange function at non_grid_points.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># L= LAGR_EVAL_MULTIDIM(current_knot,knots_per_dim,non_grid_points)</span>
+    <span class="c1"># evaluates the multidim Lagrange function L centered in current_knot  in non_grid_points.</span>
+    <span class="c1"># -&gt; non_grid_points is a matrix; each row is a point to be evaluated</span>
+    <span class="c1"># -&gt; knots_per_dim is a cell_array, that contains one array per cell. In the arrays are stored all the</span>
+    <span class="c1"># knots in each direction. E.g.</span>
+    <span class="c1"># knots_per_dim={[0 0.5 1],</span>
+    <span class="c1">#                [0 0.2 0.4 0.6 0.8 1] }</span>
+    <span class="c1"># it has to contain current_knot</span>
+    <span class="c1"># we are working on P points in N dimensions,</span>
+    <span class="n">P</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">non_grid_points</span><span class="o">.</span><span class="n">shape</span>
+    <span class="c1"># the lagrangian functions in N dim are products of lagrangian functions in 1 D , so I work dimension-wise:</span>
+    <span class="c1"># we evaluate the multidimensional lagrange function on the corresponding column of points non_grid_points</span>
+    <span class="c1"># one dimension at a time and then we multiply</span>
+    <span class="n">non_grid_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">non_grid_points</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c1">## transpose for column major access</span>
+    <span class="n">lagrange_monodim_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">P</span><span class="p">))</span>  <span class="c1">## N rows for broadcasting on P columns</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="c1"># these are the knots where the lagrange function is zero.</span>
+        <span class="c1"># I compute it discarding the knot where I&#39;m centering the multidim. lagr. function</span>
+        <span class="c1"># this is an expensive way, with setdiff:</span>
+        <span class="c1"># monodim_knots=setdiff(knots_per_dim{dim},current_knot(dim));</span>
+        <span class="c1"># this is much cheaper, with logical indexing</span>
+        <span class="n">monodim_knots_temp</span> <span class="o">=</span> <span class="n">knots_per_dim</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
+        <span class="n">monodim_knots</span> <span class="o">=</span> <span class="n">monodim_knots_temp</span><span class="p">[</span><span class="n">monodim_knots_temp</span> <span class="o">!=</span> <span class="n">current_knot</span><span class="p">[</span><span class="n">dim</span><span class="p">]]</span>
+        <span class="c1"># now i compute the lagrange function in the dim-th dimension and evaluate it in the points</span>
+        <span class="n">lagrange_monodim_eval</span><span class="p">[</span><span class="n">dim</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">lagr_eval</span><span class="p">(</span><span class="n">current_knot</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">monodim_knots</span><span class="p">,</span> <span class="n">non_grid_points</span><span class="p">[</span><span class="n">dim</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">lagrange_monodim_eval</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">L</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, sgpykit.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
